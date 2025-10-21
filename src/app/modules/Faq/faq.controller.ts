@@ -1,8 +1,8 @@
-import { Request, Response } from "express";
+import { Request, Response } from 'express';
 
-import { FaqService } from "./faq.service";
-import catchAsync from "../../utils/catchAsync";
-import sendResponse from "../../utils/sendResponse";
+import { FaqService } from './faq.service';
+import catchAsync from '../../utils/catchAsync';
+import sendResponse from '../../utils/sendResponse';
 
 const createFaq = catchAsync(async (req: Request, res: Response) => {
   const payload = req.body;
@@ -11,7 +11,7 @@ const createFaq = catchAsync(async (req: Request, res: Response) => {
   sendResponse(res, {
     statusCode: 200,
     success: true,
-    message: "Faq Created Successfully",
+    message: 'Faq Created Successfully',
     data: result,
   });
 });
@@ -24,7 +24,7 @@ const updateFaq = catchAsync(async (req: Request, res: Response) => {
   sendResponse(res, {
     statusCode: 200,
     success: true,
-    message: "Faq Updated Successfully",
+    message: 'Faq Updated Successfully',
     data: result,
   });
 });
@@ -36,7 +36,7 @@ const deleteFaq = catchAsync(async (req: Request, res: Response) => {
   sendResponse(res, {
     statusCode: 200,
     success: true,
-    message: "Faq Deleted Successfully",
+    message: 'Faq Deleted Successfully',
     data: result,
   });
 });
@@ -47,7 +47,7 @@ const getFaqs = catchAsync(async (req: Request, res: Response) => {
   sendResponse(res, {
     statusCode: 200,
     success: true,
-    message: "Faq retrieved Successfully",
+    message: 'Faq retrieved Successfully',
     data: result,
   });
 });

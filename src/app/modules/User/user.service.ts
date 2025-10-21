@@ -8,19 +8,15 @@ import { User } from './user.model';
 import { createToken } from '../Auth/auth.utils';
 import { sendImageToCloudinary } from '../../utils/sendImageToCloudinary';
 
-
 const createUserIntoDB = async (
   file: any,
   password: string,
   payload: TUser,
 ) => {
-
-
   //if password is not given , use default password
   payload.password = password || (config.default_password as string);
 
   try {
-
     if (file) {
       const imageName = `${payload?.name}-${payload.email}`;
       const path = file?.path;

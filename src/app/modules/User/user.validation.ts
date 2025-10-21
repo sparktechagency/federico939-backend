@@ -18,19 +18,18 @@ const changeStatusValidationSchema = z.object({
 
 const createUserValidationShema = z.object({
   body: z.object({
-    password: z.string().min(1, { message: "Password is required" }),
+    password: z.string().min(1, { message: 'Password is required' }),
     userData: z.object({
-      name: z.string().min(1, { message: "Name is required" }),
-      email: z.string().email({ message: "Invalid email address" }),
+      name: z.string().min(1, { message: 'Name is required' }),
+      email: z.string().email({ message: 'Invalid email address' }),
       profileImg: z.string().url().optional(), // Optional, must be valid URL if exists
       role: z.enum(['user', 'admin']),
-    })
-  })
+    }),
+  }),
 });
 
 export const UserValidation = {
   userValidationSchema,
   changeStatusValidationSchema,
-  createUserValidationShema
+  createUserValidationShema,
 };
-

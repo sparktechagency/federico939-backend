@@ -17,7 +17,7 @@ router.post(
   '/register',
   upload.fields([
     { name: 'file', maxCount: 1 },
-    { name: 'profileImg', maxCount: 1 }
+    { name: 'profileImg', maxCount: 1 },
   ]),
   (req: Request, res: Response, next: NextFunction) => {
     req.body = JSON.parse(req.body.data);

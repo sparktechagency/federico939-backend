@@ -1,15 +1,15 @@
-import { Request, Response } from "express";
-import morgan from "morgan";
-import config from "../config";
-import { errorLogger, logger } from "./logger";
+import { Request, Response } from 'express';
+import morgan from 'morgan';
+import config from '../config';
+import { errorLogger, logger } from './logger';
 
 morgan.token(
-  "message",
-  (req: Request, res: Response) => res?.locals.errorMessage || "",
+  'message',
+  (req: Request, res: Response) => res?.locals.errorMessage || '',
 );
 
 const getIpFormat = () =>
-  config.node_env === "development" ? ":remote-addr - " : "";
+  config.node_env === 'development' ? ':remote-addr - ' : '';
 const successResponseFormat = `${getIpFormat()}:method :url :status - :response-time ms`;
 const errorResponseFormat = `${getIpFormat()}:method :url :status - :response-time ms`;
 

@@ -34,8 +34,9 @@ const userSchema = new Schema<TUser, UserModel>(
     passwordChangedAt: {
       type: Date,
     },
-    profileImg: {
+    profileImage: {
       type: String,
+      default: '',
     },
     role: {
       type: String,

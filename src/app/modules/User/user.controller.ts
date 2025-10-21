@@ -14,7 +14,7 @@ const createUser = catchAsync(async (req, res) => {
   );
   const { refreshToken, accessToken, needsPasswordChange } = result;
   res.cookie('refreshToken', refreshToken, {
-    secure: config.NODE_ENV === 'production',
+    secure: config.node_env === 'production',
     httpOnly: true,
     sameSite: 'none',
     maxAge: 1000 * 60 * 60 * 24 * 365,
@@ -30,7 +30,6 @@ const createUser = catchAsync(async (req, res) => {
     },
   });
 });
-
 
 const getMe = catchAsync(async (req, res) => {
   const { userId } = req.user;

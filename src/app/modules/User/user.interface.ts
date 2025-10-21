@@ -8,9 +8,7 @@ export interface TRegisterUser {
   phone: string;
   password: string;
   address?: string;
-  profileImg?: string;
-  NIDnumber: string;
-  NIDOrPassportImg: string;
+  profileImage?: string;
 }
 
 export interface TUser {
@@ -25,7 +23,7 @@ export interface TUser {
   role: 'user' | 'admin';
   status: 'in-progress' | 'banned';
   isDeleted: boolean;
-  profileImg: string;
+  profileImage: string;
 }
 
 export interface UserModel extends Model<TUser> {

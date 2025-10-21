@@ -1,15 +1,15 @@
 {
-    "keep": {
-        "days": true,
-        "amount": 1
-    },
-    "auditLog": "D:\\Moshfiqur Rahman\\federico939-backend\\winston\\error\\.98d644082f07393c5df54537d2a649ad03d8c173-audit.json",
-    "files": [
-        {
-            "date": 1761039488079,
-            "name": "D:\\Moshfiqur Rahman\\federico939-backend\\winston\\error\\21-10-2025-15-error.log",
-            "hash": "a660e9e1a8f54cd0419ef6b0941610a20ce7efa39734bda9c7a4e0f4adb98772"
-        }
-    ],
-    "hashType": "sha256"
+  "keep": {
+    "days": true,
+    "amount": 1
+  },
+  "auditLog": "D:\\Moshfiqur Rahman\\federico939-backend\\winston\\error\\.98d644082f07393c5df54537d2a649ad03d8c173-audit.json",
+  "files": [
+    {
+      "date": 1761039488079,
+      "name": "D:\\Moshfiqur Rahman\\federico939-backend\\winston\\error\\21-10-2025-15-error.log",
+      "hash": "a660e9e1a8f54cd0419ef6b0941610a20ce7efa39734bda9c7a4e0f4adb98772"
+    }
+  ],
+  "hashType": "sha256"
 }
