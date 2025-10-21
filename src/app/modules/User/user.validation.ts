@@ -23,7 +23,7 @@ const createUserValidationShema = z.object({
       name: z.string().min(1, { message: "Name is required" }),
       email: z.string().email({ message: "Invalid email address" }),
       profileImg: z.string().url().optional(), // Optional, must be valid URL if exists
-      role: z.enum(['student', 'teacher']),
+      role: z.enum(['user', 'admin']),
     })
   })
 });
