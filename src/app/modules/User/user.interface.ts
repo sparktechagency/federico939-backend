@@ -22,7 +22,7 @@ export interface TUser {
   password: string;
   needsPasswordChange: boolean;
   passwordChangedAt?: Date;
-  role: 'student' | 'teacher';
+  role: 'user' | 'admin';
   status: 'in-progress' | 'banned';
   isDeleted: boolean;
   profileImg: string;
