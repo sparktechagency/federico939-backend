@@ -1,90 +1,83 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable no-unused-vars */
-import { ErrorRequestHandler, NextFunction } from 'express';
-import { ZodError } from 'zod';
-import config from '../config';
-import AppError from '../errors/AppError';
-import handleCastError from '../errors/handleCastError';
-import handleDuplicateError from '../errors/handleDuplicateError';
-import handleValidationError from '../errors/handleValidationError';
-import handleZodError from '../errors/handleZodError';
-import { TErrorSources } from '../interface/error';
+import { ErrorRequestHandler } from "express";
 
-const globalErrorHandler: ErrorRequestHandler = (
-  err,
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
-  console.log(err.statusCode);
-  //setting default values
+import { StatusCodes } from "http-status-codes";
+import config from "../config";
+import { errorLogger } from "../shared/logger";
+import AppError from "../errors/AppError";
+import { IErrorMessage } from "../types/error.types";
+import handleValidationError from "../errors/handleZodError";
+
+const globalErrorHandler: ErrorRequestHandler = (error, req, res, next) => {
+  config.node_env === "development"
+    ? console.log("🚨 globalErrorHandler", error)
+    : errorLogger.error("🚨 globalErrorHandler", error);
+
   let statusCode = 500;
-  let message = 'Something went wrong!';
-  let errorSources: TErrorSources = [
-    {
-      path: '',
-      message: 'Something went wrong',
-    },
-  ];
+  let message = "Something went wrong";
+  let errorMessages: IErrorMessage[] = [];
 
-  if (err instanceof ZodError) {
-    const simplifiedError = handleZodError(err);
-    statusCode = simplifiedError?.statusCode;
-    message = simplifiedError?.message;
-    errorSources = simplifiedError?.errorSources;
-  } else if (err?.name === 'ValidationError') {
-    const simplifiedError = handleValidationError(err);
-    statusCode = simplifiedError?.statusCode;
-    message = simplifiedError?.message;
-    errorSources = simplifiedError?.errorSources;
-  } else if (err?.name === 'CastError') {
-    const simplifiedError = handleCastError(err);
-    statusCode = simplifiedError?.statusCode;
-    message = simplifiedError?.message;
-    errorSources = simplifiedError?.errorSources;
-  } else if (err?.code === 11000) {
-    const simplifiedError = handleDuplicateError(err);
-    statusCode = simplifiedError?.statusCode;
-    message = simplifiedError?.message;
-    errorSources = simplifiedError?.errorSources;
-  } else if (err instanceof AppError) {
-    statusCode = err?.statusCode;
-    message = err.message;
-    errorSources = [
-      {
-        path: '',
-        message: err?.message,
-      },
-    ];
-  } else if (err instanceof Error) {
-    message = err.message;
-    errorSources = [
-      {
-        path: '',
-        message: err?.message,
-      },
-    ];
+  if (error.name === "ZodError") {
+    const simplifiedError = handleValidationError(error);
+    statusCode = simplifiedError.statusCode;
+    message = simplifiedError.message;
+    errorMessages = simplifiedError.errorMessages;
+  } else if (error.name === "ValidationError") {
+    const simplifiedError = handleValidationError(error);
+    statusCode = simplifiedError.statusCode;
+    message = simplifiedError.message;
+    errorMessages = simplifiedError.errorMessages;
+  } else if (error.name === "TokenExpiredError") {
+    statusCode = StatusCodes.UNAUTHORIZED;
+    message = "Session Expired";
+    errorMessages = error?.message
+      ? [
+          {
+            path: "",
+            message:
+              "Your session has expired. Please log in again to continue.",
+          },
+        ]
+      : [];
+  } else if (error.name === "JsonWebTokenError") {
+    statusCode = StatusCodes.UNAUTHORIZED;
+    message = "Invalid Token";
+    errorMessages = error?.message
+      ? [
+          {
+            path: "",
+            message: "Your token is invalid. Please log in again to continue.",
+          },
+        ]
+      : [];
+  } else if (error instanceof AppError) {
+    statusCode = error.statusCode;
+    message = error.message;
+    errorMessages = error.message
+      ? [
+          {
+            path: "",
+            message: error.message,
+          },
+        ]
+      : [];
+  } else if (error instanceof Error) {
+    message = error.message;
+    errorMessages = error.message
+      ? [
+          {
+            path: "",
+            message: error?.message,
+          },
+        ]
+      : [];
   }
 
-  //ultimate return
-  return res.status(statusCode).json({
+  res.status(statusCode).json({
     success: false,
     message,
-    errorSources,
-    err,
-    stack: config.NODE_ENV === 'development' ? err?.stack : null,
+    errorMessages,
+    stack: config.node_env !== "production" ? error?.stack : undefined,
   });
 };
 
 export default globalErrorHandler;
-
-//pattern
-/*
-success
-message
-errorSources:[
-  path:'',
-  message:''
-]
-stack
-*/

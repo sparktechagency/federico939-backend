@@ -1,15 +1,30 @@
 {
-  "keep": {
-    "days": true,
-    "amount": 1
-  },
-  "auditLog": "D:\\Moshfiqur Rahman\\federico939-backend\\winston\\success\\.e3f287bd4545fa0d9ee6326e2c9c5a5ed138a755-audit.json",
-  "files": [
-    {
-      "date": 1761039488076,
-      "name": "D:\\Moshfiqur Rahman\\federico939-backend\\winston\\success\\21-10-2025-15-success.log",
-      "hash": "af49957cfdc925f6c7de552af654147dad1bece30f54137373d9edd311ddfed9"
-    }
-  ],
-  "hashType": "sha256"
+    "keep": {
+        "days": true,
+        "amount": 1
+    },
+    "auditLog": "D:\\Moshfiqur Rahman\\federico939-backend\\winston\\success\\.e3f287bd4545fa0d9ee6326e2c9c5a5ed138a755-audit.json",
+    "files": [
+        {
+            "date": 1761039488076,
+            "name": "D:\\Moshfiqur Rahman\\federico939-backend\\winston\\success\\21-10-2025-15-success.log",
+            "hash": "af49957cfdc925f6c7de552af654147dad1bece30f54137373d9edd311ddfed9"
+        },
+        {
+            "date": 1761043276772,
+            "name": "D:\\Moshfiqur Rahman\\federico939-backend\\winston\\success\\21-10-2025-16-success.log",
+            "hash": "51fd06b4fc54070cdd6ce5d2d26ecd783d27ced0c01e2695e68a5adf9505eb0d"
+        },
+        {
+            "date": 1761047432434,
+            "name": "D:\\Moshfiqur Rahman\\federico939-backend\\winston\\success\\21-10-2025-17-success.log",
+            "hash": "971f4d46b56f8a3209bf96b503f7effad87e647e00502eeff028f7f3bac79a7a"
+        },
+        {
+            "date": 1761048019777,
+            "name": "D:\\Moshfiqur Rahman\\federico939-backend\\winston\\success\\21-10-2025-18-success.log",
+            "hash": "66e20ccdbcd88608662c976ee6239c6ccf53e6c18f928e52e9d87c44489294a9"
+        }
+    ],
+    "hashType": "sha256"
 }

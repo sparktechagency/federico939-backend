@@ -1,541 +1,348 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import bcrypt from 'bcrypt';
-import httpStatus from 'http-status';
-import jwt, { JwtPayload } from 'jsonwebtoken';
-import config from '../../config';
-import AppError from '../../errors/AppError';
-import { sendEmail } from '../../utils/sendEmail';
-import { User } from '../User/user.model';
-import { TLoginUser } from './auth.interface';
-import { createToken, verifyToken } from './auth.utils';
-import generateOTP from '../../utils/generateOTP';
-import { TRegisterUser } from '../User/user.interface';
-import { cleanObject } from '../User/user.utils';
-import { OTP } from '../User/otp.model';
-import { OTPmailBody, OTPmailSubject } from '../../utils/emailTemplate';
+import bcrypt from "bcrypt";
+import { StatusCodes } from "http-status-codes";
+import { JwtPayload, Secret } from "jsonwebtoken";
+import { IAuthResetPassword, IChangePassword, ILoginData, IVerifyEmail } from "../../types/auth";
+import AppError from "../../errors/AppError";
+import { User } from "../User/user.model";
+import { STATUS } from "../User/user.constant";
+import { jwtHelper } from "../../helpers/jwtHelper";
+import config from "../../config";
+import generateOTP from "../../utils/generateOTP";
+import { emailTemplate } from "../../shared/emailTemplate";
+import { emailHelper } from "../../helpers/emailHelper";
+import cryptoToken from "../../utils/cryptoToken";
+import { ResetToken } from "../ResetToken/resetToken.model";
 
-const loginUser = async (payload: TLoginUser) => {
-  // checking if the user is exist
-  const user = await User.findOne({ email: payload.email });
+//login
+const loginUserFromDB = async (payload: ILoginData) => {
+  const { email, password } = payload;
 
-  if (!user) {
-    throw new AppError(httpStatus.NOT_FOUND, 'This user is not found !');
-  }
-  // checking if the user is already deleted
-
-  const isDeleted = user?.isDeleted;
-
-  if (isDeleted) {
-    throw new AppError(httpStatus.FORBIDDEN, 'This user is deleted !');
+  const isExistUser = await User.findOne({ email }).select("+password");
+  if (!isExistUser) {
+    throw new AppError(StatusCodes.BAD_REQUEST, "User doesn't exist!");
   }
 
-  // checking if the user is blocked
-
-  const userStatus = user?.status;
-
-  if (userStatus === 'banned') {
-    throw new AppError(httpStatus.FORBIDDEN, 'This user is banned ! !');
-  }
-
-  //checking if the password is correct
-
-  if (!(await User.isPasswordMatched(payload?.password, user?.password)))
-    throw new AppError(httpStatus.FORBIDDEN, 'Password do not matched');
-
-  //create token and sent to the  user
-
-  const jwtPayload = {
-    userId: user._id.toString(),
-    email: user.email,
-    role: user.role,
-    phone: user.phone,
-  };
-
-  const accessToken = createToken(
-    jwtPayload,
-    config.jwt_access_secret as string,
-    config.jwt_access_expires_in as string,
-  );
-
-  const refreshToken = createToken(
-    jwtPayload,
-    config.jwt_refresh_secret as string,
-    config.jwt_refresh_expires_in as string,
-  );
-
-  return {
-    accessToken,
-    refreshToken,
-  };
-};
-
-const registerUser = async (payload: TRegisterUser, files: any) => {
-  if (!payload) {
-    throw new AppError(httpStatus.BAD_REQUEST, 'Missing required fields!');
-  }
-
-  if (!files || !files.file) {
-    throw new AppError(httpStatus.BAD_REQUEST, 'Missing NID document!');
-  }
-  // checking if the user is exist
-  const userEmail = await User.findOne({ email: payload.email });
-  const userPhone = await User.findOne({ phone: payload.phone });
-  const userName = await User.findOne({ name: payload.name });
-
-  let user = null;
-  let duplicateField: string | null = null;
-
-  // Step 1: Find duplicate
-  if (userEmail) {
-    user = userEmail;
-    duplicateField = 'email';
-  } else if (userPhone) {
-    user = userPhone;
-    duplicateField = 'phone';
-  } else if (userName) {
-    user = userName;
-    duplicateField = 'username';
-  }
-
-  // Step 2: Run validations if user exists
-  if (user) {
-    if (user?.isDeleted) {
-      throw new AppError(httpStatus.FORBIDDEN, 'This user is deleted!');
-    }
-
-    if (user?.status === 'banned') {
-      throw new AppError(httpStatus.FORBIDDEN, 'This user is banned!');
-    }
-
-    // Step 3: If validations pass, throw duplication error
-    if (duplicateField === 'email') {
-      throw new AppError(httpStatus.CONFLICT, 'This email is already in use!');
-    }
-    if (duplicateField === 'phone') {
-      throw new AppError(
-        httpStatus.CONFLICT,
-        'This phone number is already in use!',
-      );
-    }
-    if (duplicateField === 'username') {
-      throw new AppError(
-        httpStatus.CONFLICT,
-        'This username is already in use!',
-      );
-    }
-  }
-
-  // if (file && !payload.NIDOrPassportImg) {
-  //   const filename = `/uploads/${file.filename}`;
-  //   payload.NIDOrPassportImg = filename;
-  // }
-
-  if (files.profileImg) {
-    const filename = `/uploads/${files.profileImg.filename}`;
-    payload.profileImg = filename;
-  }
-
-  if (files.file) {
-    const filename = `/uploads/${files.file.filename}`;
-    payload.NIDOrPassportImg = filename;
-  }
-
-  const otp = generateOTP();
-
-  const body = {
-    email: payload.email,
-    otp,
-    expiresAt: new Date(Date.now() + 120000),
-  };
-
-  const storeOtpTOServer = await OTP.findOneAndUpdate(
-    { email: payload.email },
-    body,
-    {
-      upsert: true,
-      new: true,
-    },
-  );
-
-  if (!storeOtpTOServer) {
-    throw new AppError(httpStatus.NOT_FOUND, 'Failed to store OTP !');
-  }
-
-  const html = OTPmailBody(otp);
-  const subject = OTPmailSubject;
-
-  sendEmail(payload?.email, html, subject);
-
-  const crypto = config.create_user_otp_verify_token as string;
-  // const crypto = cryptoToken(10);
-
-  const token = jwt.sign(payload, crypto, { expiresIn: '2m' });
-
-  return {
-    token,
-  };
-};
-
-const compareOTPForRegister = async (otp: string, token: string) => {
-  if (!otp || !token) {
-    throw new AppError(httpStatus.NOT_FOUND, 'Missing OTP code or token!');
-  }
-
-  const decoded = verifyToken(
-    token,
-    config.create_user_otp_verify_token as string,
-  );
-
-  const userData = cleanObject(decoded, ['iat', 'exp']);
-
-  const { email } = decoded;
-
-  const isOtpExist = await OTP.findOne({ email });
-
-  if (!isOtpExist) {
+  // check verified and status
+  if (!isExistUser.verified) {
     throw new AppError(
-      httpStatus.NOT_FOUND,
-      'OTP code Expired! Please try again.!',
+      StatusCodes.BAD_REQUEST,
+      "Please verify your account, then try to login again",
     );
   }
-  if (isOtpExist.otp !== otp) {
+
+  // check user status
+  if (isExistUser.status === STATUS.INACTIVE) {
     throw new AppError(
-      httpStatus.NOT_FOUND,
-      'Incorrect OTP. Please try again.',
+      StatusCodes.BAD_REQUEST,
+      "You don’t have permission to access this content. It looks like your account has been deactivated.",
     );
   }
 
-  const crypto = config.create_user_token as string;
-  const createUserToken = jwt.sign(userData, crypto, { expiresIn: '2m' });
-
-  return {
-    token: createUserToken,
-  };
-};
-
-const compareOTPForPasswordReset = async (otp: string, email: string) => {
-  if (!otp || !email) {
-    throw new AppError(httpStatus.NOT_FOUND, 'Missing OTP code or email!');
+  // check match password
+  if (
+    password &&
+    !(await User.isMatchPassword(password, isExistUser.password))
+  ) {
+    throw new AppError(StatusCodes.BAD_REQUEST, "Password is incorrect!");
   }
 
-  const user = await User.findOne({ email });
-
-  if (!user) {
-    throw new AppError(httpStatus.NOT_FOUND, 'User not found!');
-  }
-  const isOtpExist = await OTP.findOne({ email });
-
-  if (!isOtpExist) {
-    throw new AppError(
-      httpStatus.NOT_FOUND,
-      'OTP code Expired! Please try again.!',
-    );
-  }
-  if (isOtpExist.otp !== otp) {
-    throw new AppError(
-      httpStatus.NOT_FOUND,
-      'Incorrect OTP. Please try again.',
-    );
-  }
-
-  const jwtPayload = {
-    userId: user._id.toString(),
-    role: user.role,
-  };
-  const secret = config.reset_pass_token;
-  const token = createToken(jwtPayload, secret as string, '2m');
-  return token;
-};
-
-const resendOTP = async (email: string) => {
-  if (!email) {
-    throw new AppError(httpStatus.NOT_FOUND, 'Missing user email!');
-  }
-
-  const newOtp = generateOTP();
-
-  const html = OTPmailBody(newOtp);
-  const subject = OTPmailSubject;
-
-  const body = {
-    email: email,
-    otp: newOtp,
-    expiresAt: new Date(Date.now() + 120000),
-  };
-
-  const isOtpExist = await OTP.findOne({ email });
-
-  let storeOtpTOServer = null;
-
-  if (isOtpExist) {
-    storeOtpTOServer = await OTP.updateOne(
-      { email },
-      { otp: newOtp, expiresAt: new Date(Date.now() + 120000) },
-    );
-  } else {
-    storeOtpTOServer = await OTP.create(body);
-  }
-
-  if (!storeOtpTOServer) {
-    throw new AppError(httpStatus.NOT_FOUND, 'Failed to store OTP !');
-  }
-  sendEmail(email, html, subject);
-
-  return null;
-};
-
-const changePassword = async (
-  userData: JwtPayload,
-  payload: { oldPassword: string; newPassword: string },
-) => {
-  // checking if the user is exist
-  const user = await User.findById(userData.userId);
-
-  if (!user) {
-    throw new AppError(httpStatus.NOT_FOUND, 'This user is not found !');
-  }
-  // checking if the user is already deleted
-
-  const isDeleted = user?.isDeleted;
-
-  if (isDeleted) {
-    throw new AppError(httpStatus.FORBIDDEN, 'This user is deleted !');
-  }
-
-  // checking if the user is blocked
-
-  const userStatus = user?.status;
-
-  if (userStatus === 'banned') {
-    throw new AppError(httpStatus.FORBIDDEN, 'This user is banned ! !');
-  }
-
-  //checking if the password is correct
-
-  if (!(await User.isPasswordMatched(payload.oldPassword, user?.password)))
-    throw new AppError(httpStatus.FORBIDDEN, 'Password do not matched');
-
-  //hash new password
-  const newHashedPassword = await bcrypt.hash(
-    payload.newPassword,
-    Number(config.bcrypt_salt_rounds),
+  // create token
+  const createToken = jwtHelper.createToken(
+    { id: isExistUser._id, role: isExistUser.role, email: isExistUser.email },
+    config.jwt.jwt_secret as Secret,
+    config.jwt.jwt_expire_in as string,
   );
 
-  const result = await User.updateOne(
-    {
-      _id: userData.userId,
-      role: userData.role,
-    },
-    {
-      password: newHashedPassword,
-      passwordChangedAt: new Date(),
-    },
-  );
-
-  if (!result) {
-    throw new AppError(httpStatus.BAD_REQUEST, 'Failed To Update!');
-  }
+  const result = {
+    token: createToken,
+    user: isExistUser,
+  };
 
   return result;
 };
 
-const refreshToken = async (token: string) => {
-  // checking if the given token is valid
-  const decoded = verifyToken(token, config.jwt_refresh_secret as string);
-
-  const { userId, iat } = decoded;
-
-  // checking if the user is exist
-  const user = await User.isUserExistsByObjectId(userId);
-
-  if (!user) {
-    throw new AppError(httpStatus.NOT_FOUND, 'This user is not found !');
-  }
-  // checking if the user is already deleted
-  const isDeleted = user?.isDeleted;
-
-  if (isDeleted) {
-    throw new AppError(httpStatus.FORBIDDEN, 'This user is deleted !');
+//forget password
+const forgetPasswordToDB = async (email: string) => {
+  const isExistUser = await User.isExistUserByEmail(email);
+  if (!isExistUser) {
+    throw new AppError(StatusCodes.BAD_REQUEST, "User doesn't exist!");
   }
 
-  // checking if the user is blocked
-  const userStatus = user?.status;
-
-  if (userStatus === 'banned') {
-    throw new AppError(httpStatus.FORBIDDEN, 'This user is banned ! !');
-  }
-
-  if (
-    user.passwordChangedAt &&
-    User.isJWTIssuedBeforePasswordChanged(user.passwordChangedAt, iat as number)
-  ) {
-    throw new AppError(httpStatus.UNAUTHORIZED, 'You are not authorized !');
-  }
-
-  const jwtPayload = {
-    userId: user._id.toString(),
-    email: user.email,
-    role: user.role,
-    phone: user.phone,
-  };
-
-  const accessToken = createToken(
-    jwtPayload,
-    config.jwt_access_secret as string,
-    config.jwt_access_expires_in as string,
-  );
-
-  return {
-    accessToken,
-  };
-};
-
-const forgetPassword = async (email: string) => {
-  // checking if the user is exist
-  const user = await User.findOne({ email });
-
-  if (!user) {
-    throw new AppError(httpStatus.NOT_FOUND, 'user not found !');
-  }
-  // checking if the user is already deleted
-  const isDeleted = user?.isDeleted;
-
-  if (isDeleted) {
-    throw new AppError(httpStatus.FORBIDDEN, 'This user is deleted !');
-  }
-
-  // checking if the user is blocked
-  const userStatus = user?.status;
-
-  if (userStatus === 'banned') {
-    throw new AppError(httpStatus.FORBIDDEN, 'This user is banned ! !');
-  }
-
+  //send mail
   const otp = generateOTP();
-  const html = OTPmailBody(otp);
-  const subject = OTPmailSubject;
-
-  const body = {
-    email: user.email,
+  const value = {
     otp,
-    expiresAt: new Date(Date.now() + 120000),
+    email: isExistUser.email,
   };
-  const storeOtpTOServer = await OTP.create(body);
-  if (!storeOtpTOServer) {
-    throw new AppError(httpStatus.NOT_FOUND, 'Failed to store OTP !');
-  }
-  sendEmail(user?.email, html, subject);
 
-  return null;
+  const forgetPassword = emailTemplate.resetPassword(value);
+  emailHelper.sendEmail(forgetPassword);
+
+  //save to DB
+  const authentication = {
+    oneTimeCode: otp,
+    expireAt: new Date(Date.now() + 3 * 60000),
+  };
+  await User.findOneAndUpdate({ email }, { $set: { authentication } });
 };
 
-const resetPassword = async (
-  payload: { newPassword: string },
+//verify email
+const verifyEmailToDB = async (payload: IVerifyEmail) => {
+  const { email, oneTimeCode } = payload;
+  const isExistUser = await User.findOne({ email }).select("+authentication");
+  if (!isExistUser) {
+    throw new AppError(StatusCodes.BAD_REQUEST, "User doesn't exist!");
+  }
+
+  if (!oneTimeCode) {
+    throw new AppError(
+      StatusCodes.BAD_REQUEST,
+      "Please give the otp, check your email we send a code",
+    );
+  }
+
+  if (isExistUser.authentication?.oneTimeCode !== oneTimeCode) {
+    throw new AppError(StatusCodes.BAD_REQUEST, "You provided wrong otp");
+  }
+
+  const date = new Date();
+  if (date > isExistUser.authentication?.expireAt) {
+    throw new AppError(
+      StatusCodes.BAD_REQUEST,
+      "Otp already expired, Please try again",
+    );
+  }
+
+  let message;
+  let data;
+
+  if (!isExistUser.verified) {
+    await User.findOneAndUpdate(
+      { _id: isExistUser._id },
+      { verified: true, authentication: { oneTimeCode: null, expireAt: null } },
+    );
+    message = "Email verify successfully";
+  } else {
+    await User.findOneAndUpdate(
+      { _id: isExistUser._id },
+      {
+        authentication: {
+          isResetPassword: true,
+          oneTimeCode: null,
+          expireAt: null,
+        },
+      },
+    );
+
+    // create token ;
+    const createToken = cryptoToken();
+    await ResetToken.create({
+      user: isExistUser._id,
+      token: createToken,
+      expireAt: new Date(Date.now() + 5 * 60000),
+    });
+    message =
+      "Verification Successful: Please securely store and utilize this code for reset password";
+    data = createToken;
+  }
+  return { data, message };
+};
+
+// reset password
+const resetPasswordToDB = async (
   token: string,
+  payload: IAuthResetPassword,
 ) => {
-  let decoded: JwtPayload = {};
-  try {
-    decoded = jwt.verify(
-      token,
-      config.reset_pass_token as string,
-    ) as JwtPayload;
-
-    console.log('Decoded payload:', decoded);
-
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } catch (err: any) {
-    if (err.name === 'TokenExpiredError') {
-      throw new AppError(
-        httpStatus.BAD_REQUEST,
-        `Token has expired at: ${err.expiredAt}`,
-      );
-    } else if (err.name === 'JsonWebTokenError') {
-      throw new AppError(
-        httpStatus.BAD_REQUEST,
-        `Invalid token: ${err.message}`,
-      );
-    } else if (err.name === 'NotBeforeError') {
-      throw new AppError(
-        httpStatus.BAD_REQUEST,
-        `Token not active yet: ${err.date}`,
-      );
-    } else {
-      throw new AppError(
-        httpStatus.BAD_REQUEST,
-        `Token verification failed: ${err}`,
-      );
-    }
+  const { newPassword, confirmPassword } = payload;
+  // isExist token
+  const isExistToken = await ResetToken.isExistToken(token);
+  if (!isExistToken) {
+    throw new AppError(StatusCodes.UNAUTHORIZED, "You are not authorized");
   }
 
-  // checking if the user is exist
-  const user = await User.findOne({ _id: decoded.userId });
-
-  if (!user) {
-    throw new AppError(httpStatus.NOT_FOUND, 'user not found !');
-  }
-  // checking if the user is already deleted
-  const isDeleted = user?.isDeleted;
-
-  if (isDeleted) {
-    throw new AppError(httpStatus.FORBIDDEN, 'This user is deleted !');
+  // user permission check
+  const isExistUser = await User.findById(isExistToken.user).select(
+    "+authentication",
+  );
+  if (!isExistUser?.authentication?.isResetPassword) {
+    throw new AppError(
+      StatusCodes.UNAUTHORIZED,
+      "You don't have permission to change the password. Please click again to 'Forgot Password'",
+    );
   }
 
-  // checking if the user is blocked
-  const userStatus = user?.status;
-
-  if (userStatus === 'banned') {
-    throw new AppError(httpStatus.FORBIDDEN, 'This user is banned ! !');
+  // validity check
+  const isValid = await ResetToken.isExpireToken(token);
+  if (!isValid) {
+    throw new AppError(
+      StatusCodes.BAD_REQUEST,
+      "Token expired, Please click again to the forget password",
+    );
   }
 
-  //hash new password
-  const newHashedPassword = await bcrypt.hash(
-    payload.newPassword,
+  // check password
+  if (newPassword !== confirmPassword) {
+    throw new AppError(
+      StatusCodes.BAD_REQUEST,
+      "New password and Confirm password doesn't match!",
+    );
+  }
+
+  const hashPassword = await bcrypt.hash(
+    newPassword,
     Number(config.bcrypt_salt_rounds),
   );
 
-  await User.findOneAndUpdate(
-    {
-      _id: decoded.userId,
-      role: decoded.role,
-    },
-    {
-      password: newHashedPassword,
-    },
-  );
-
-  //create token and sent to the  user
-
-  const jwtPayload = {
-    userId: user._id.toString(),
-    role: user.role,
+  const updateData = {
+    password: hashPassword,
+    authentication: { isResetPassword: false },
   };
 
-  const accessToken = createToken(
-    jwtPayload,
-    config.jwt_access_secret as string,
-    config.jwt_access_expires_in as string,
-  );
-
-  const refreshToken = createToken(
-    jwtPayload,
-    config.jwt_refresh_secret as string,
-    config.jwt_refresh_expires_in as string,
-  );
-
-  return {
-    accessToken,
-    refreshToken,
-  };
+  await User.findOneAndUpdate({ _id: isExistToken.user }, updateData, {
+    new: true,
+  });
 };
 
-export const AuthServices = {
-  loginUser,
-  changePassword,
-  refreshToken,
-  forgetPassword,
-  resetPassword,
-  registerUser,
-  compareOTPForRegister,
-  compareOTPForPasswordReset,
-  resendOTP,
+const changePasswordToDB = async (
+  user: JwtPayload,
+  payload: IChangePassword,
+) => {
+  const { currentPassword, newPassword, confirmPassword } = payload;
+  const isExistUser = await User.findById(user.id).select("+password");
+  if (!isExistUser) {
+    throw new AppError(StatusCodes.BAD_REQUEST, "User doesn't exist!");
+  }
+
+  // current password match
+  if (
+    currentPassword &&
+    !(await User.isMatchPassword(currentPassword, isExistUser.password))
+  ) {
+    throw new AppError(StatusCodes.BAD_REQUEST, "Password is incorrect");
+  }
+
+  // newPassword and current password
+  if (currentPassword === newPassword) {
+    throw new AppError(
+      StatusCodes.BAD_REQUEST,
+      "Please give different password from current password",
+    );
+  }
+
+  // new password and confirm password check
+  if (newPassword !== confirmPassword) {
+    throw new AppError(
+      StatusCodes.BAD_REQUEST,
+      "Password and Confirm password doesn't matched",
+    );
+  }
+
+  // hash password
+  const hashPassword = await bcrypt.hash(
+    newPassword,
+    Number(config.bcrypt_salt_rounds),
+  );
+
+  const updateData = {
+    password: hashPassword,
+  };
+
+  await User.findOneAndUpdate({ _id: user.id }, updateData, { new: true });
+};
+
+const newAccessTokenToUser = async (token: string) => {
+  // Check if the token is provided
+  if (!token) {
+    throw new AppError(StatusCodes.BAD_REQUEST, "Token is required!");
+  }
+
+  const verifyUser = jwtHelper.verifyToken(
+    token,
+    config.jwt.jwtRefreshSecret as Secret,
+  );
+
+  const isExistUser = await User.findById(verifyUser?.id);
+  if (!isExistUser) {
+    throw new AppError(StatusCodes.UNAUTHORIZED, "Unauthorized access");
+  }
+
+  // create token
+  const accessToken = jwtHelper.createToken(
+    { id: isExistUser._id, role: isExistUser.role, email: isExistUser.email },
+    config.jwt.jwt_secret as Secret,
+    config.jwt.jwt_expire_in as string,
+  );
+
+  return { accessToken };
+};
+
+const resendVerificationEmailToDB = async (email: string) => {
+  // Find the user by ID
+  const existingUser: any = await User.findOne({ email: email }).lean();
+
+  if (!existingUser) {
+    throw new AppError(
+      StatusCodes.NOT_FOUND,
+      "User with this email does not exist!",
+    );
+  }
+
+  if (existingUser?.isVerified) {
+    throw new AppError(StatusCodes.BAD_REQUEST, "User is already verified!");
+  }
+
+  // Generate OTP and prepare email
+  const otp = generateOTP();
+  const emailValues = {
+    name: existingUser.firstName,
+    otp,
+    email: existingUser.email,
+  };
+
+  const accountEmailTemplate = emailTemplate.createAccount(emailValues);
+  emailHelper.sendEmail(accountEmailTemplate);
+
+  // Update user with authentication details
+  const authentication = {
+    oneTimeCode: otp,
+    expireAt: new Date(Date.now() + 3 * 60000),
+  };
+
+  await User.findOneAndUpdate(
+    { email: email },
+    { $set: { authentication } },
+    { new: true },
+  );
+};
+
+const deleteUserFromDB = async (user: JwtPayload, password: string) => {
+  const isExistUser = await User.findById(user.id).select("+password");
+  if (!isExistUser) {
+    throw new AppError(StatusCodes.BAD_REQUEST, "User doesn't exist!");
+  }
+
+  // check match password
+  if (
+    password &&
+    !(await User.isMatchPassword(password, isExistUser.password))
+  ) {
+    throw new AppError(StatusCodes.BAD_REQUEST, "Password is incorrect");
+  }
+
+  const updateUser = await User.findByIdAndDelete(user.id);
+  if (!updateUser) {
+    throw new AppError(StatusCodes.BAD_REQUEST, "User doesn't exist!");
+  }
+  return;
+};
+
+export const AuthService = {
+  verifyEmailToDB,
+  loginUserFromDB,
+  forgetPasswordToDB,
+  resetPasswordToDB,
+  changePasswordToDB,
+  newAccessTokenToUser,
+  resendVerificationEmailToDB,
+  deleteUserFromDB,
 };

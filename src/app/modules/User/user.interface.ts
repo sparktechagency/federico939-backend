@@ -1,43 +1,36 @@
-/* eslint-disable no-unused-vars */
-import { Model, Types } from 'mongoose';
-import { USER_ROLE } from './user.constant';
+import { Model } from "mongoose";
+import { USER_ROLES } from "../../enums/user";
+import { GENDER, STATUS } from "./user.constant";
 
-export interface TRegisterUser {
+
+
+export type IUser = {
   name: string;
+  role: USER_ROLES;
   email: string;
-  phone: string;
   password: string;
-  address?: string;
+  dateOfBirth?: string;
+  countryCode?: string;
+  phone?: string;
+
+
   profileImage?: string;
-}
+  gender?: GENDER;
 
-export interface TUser {
-  _id: Types.ObjectId;
-  name: string;
-  id: string;
-  email: string;
-  phone: string;
-  password: string;
-  needsPasswordChange: boolean;
-  passwordChangedAt?: Date;
-  role: 'user' | 'admin';
-  status: 'in-progress' | 'banned';
-  isDeleted: boolean;
-  profileImage: string;
-}
+  status: STATUS;
 
-export interface UserModel extends Model<TUser> {
-  //instance methods for checking if the user exist
-  isUserExistsByObjectId(_id: string): Promise<TUser | null>;
-  //instance methods for checking if passwords are matched
-  isPasswordMatched(
-    plainTextPassword: string,
-    hashedPassword: string,
-  ): Promise<boolean>;
-  isJWTIssuedBeforePasswordChanged(
-    passwordChangedTimestamp: Date,
-    jwtIssuedTimestamp: number,
-  ): boolean;
-}
+  // authentication
+  verified: boolean;
+  authentication?: {
+    isResetPassword: boolean;
+    oneTimeCode: number;
+    expireAt: Date;
+  };
+};
 
-export type TUserRole = keyof typeof USER_ROLE;
+export type UserModel = {
+  isExistUserById(id: string): any;
+  isExistUserByEmail(email: string): any;
+  isExistUserByPhone(contact: string): any;
+  isMatchPassword(password: string, hashPassword: string): boolean;
+} & Model<IUser>;

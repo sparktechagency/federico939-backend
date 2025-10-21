@@ -15,7 +15,7 @@ const moduleRoutes = [
     route: AuthRoutes,
   },
   {
-    path: 'faq',
+    path: '/faq',
     route: FaqRoutes,
   },
 
