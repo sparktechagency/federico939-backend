@@ -34,8 +34,21 @@ const getBlogById = catchAsync(async (req, res) => {
     })
 })
 
+const updateBlogById = catchAsync(async (req, res) => {
+    const { id } = req.params;
+    const updatedData = req.body;
+    const result = await BlogServices.updateBlogByIdToDB(id, updatedData);
+    sendResponse(res, {
+        success: true,
+        statusCode: 200,
+        message: "Blog data is updated successfully",
+        data: result,
+    })
+})
+
 export const BlogControllers = {
     createBlog,
     getAllBLogs,
     getBlogById,
+    updateBlogById,
 }
