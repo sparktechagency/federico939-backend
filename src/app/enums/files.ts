@@ -7,6 +7,7 @@ export enum FOLDER_NAMES {
   PROFILE_IMAGE = 'profileImage',
   CHILD_IMAGE = 'childImage',
   IMAGES = 'images',
+  AUTHORIMAGE = 'authorImage',
   LICENSE = 'license',
   DRIVER_LICENSE = 'driverLicense',
   INSURANCE = 'insurance',

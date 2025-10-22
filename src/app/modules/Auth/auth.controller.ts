@@ -1,10 +1,10 @@
-import { Request, Response } from "express";
-import { StatusCodes } from "http-status-codes";
+import { Request, Response } from 'express';
+import { StatusCodes } from 'http-status-codes';
 
-import { AuthService } from "./auth.service";
-import { JwtPayload } from "jsonwebtoken";
-import catchAsync from "../../utils/catchAsync";
-import sendResponse from "../../utils/sendResponse";
+import { AuthService } from './auth.service';
+import { JwtPayload } from 'jsonwebtoken';
+import catchAsync from '../../utils/catchAsync';
+import sendResponse from '../../utils/sendResponse';
 
 const verifyEmail = catchAsync(async (req: Request, res: Response) => {
   const { ...verifyData } = req.body;
@@ -25,7 +25,7 @@ const loginUser = catchAsync(async (req: Request, res: Response) => {
   sendResponse(res, {
     success: true,
     statusCode: StatusCodes.OK,
-    message: "User login successfully",
+    message: 'User login successfully',
     data: result,
   });
 });
@@ -37,7 +37,7 @@ const forgetPassword = catchAsync(async (req: Request, res: Response) => {
   sendResponse(res, {
     success: true,
     statusCode: StatusCodes.OK,
-    message: "Please check your email, we send a OTP!",
+    message: 'Please check your email, we send a OTP!',
     data: result,
   });
 });
@@ -50,7 +50,7 @@ const resetPassword = catchAsync(async (req, res) => {
   sendResponse(res, {
     success: true,
     statusCode: StatusCodes.OK,
-    message: "Your password has been successfully reset.",
+    message: 'Your password has been successfully reset.',
     data: result,
   });
 });
@@ -63,8 +63,7 @@ const changePassword = catchAsync(async (req: Request, res: Response) => {
   sendResponse(res, {
     success: true,
     statusCode: StatusCodes.OK,
-    message: "Password changed successfully",
-    
+    message: 'Password changed successfully',
   });
 });
 
@@ -75,7 +74,7 @@ const newAccessToken = catchAsync(async (req: Request, res: Response) => {
   sendResponse(res, {
     success: true,
     statusCode: StatusCodes.OK,
-    message: "Generate Access Token successfully",
+    message: 'Generate Access Token successfully',
     data: result,
   });
 });
@@ -88,7 +87,7 @@ const resendVerificationEmail = catchAsync(
     sendResponse(res, {
       success: true,
       statusCode: StatusCodes.OK,
-      message: "Generate OTP and send successfully",
+      message: 'Generate OTP and send successfully',
       data: result,
     });
   },
@@ -104,7 +103,7 @@ const deleteUser = catchAsync(async (req: Request, res: Response) => {
   sendResponse(res, {
     success: true,
     statusCode: StatusCodes.OK,
-    message: "Account Deleted successfully",
+    message: 'Account Deleted successfully',
     data: result,
   });
 });
