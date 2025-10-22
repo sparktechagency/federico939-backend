@@ -36,9 +36,25 @@ const getBlogByIdFromDB = async (id: string) => {
     return blog;
 }
 
+const updateBlogByIdToDB = async (id: string, payload: Partial<TBlog>) => {
+  const updatedBlog = await Blog.findByIdAndUpdate(
+    id,
+    { $set: payload },
+    { new: true, runValidators: true }
+  );
+
+  if (!updatedBlog) {
+    throw new AppError(404, "No blog found or failed to update");
+  }
+
+  return updatedBlog;
+};
+
+
 export const BlogServices = {
     createBlogToDB,
     getAllBLogsFromDB,
     getBlogByIdFromDB,
+    updateBlogByIdToDB,
 };
 
