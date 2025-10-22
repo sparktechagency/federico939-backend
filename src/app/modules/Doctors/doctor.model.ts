@@ -3,12 +3,12 @@ import { DOCTOR_CATEGORY, IDoctor } from './doctor.interface';
 
 const DoctorSchema = new Schema<IDoctor>(
   {
-    doctor_id: {
-      type: String,
-      required: true,
-      unique: true,
-    },
-    doctor_category: {
+    // doctor_id: {
+    //   type: String,
+    //   required: true,
+    //   unique: true,
+    // },
+    category: {
       type: String,
       enum: Object.values(DOCTOR_CATEGORY),
       required: true,
@@ -18,63 +18,63 @@ const DoctorSchema = new Schema<IDoctor>(
       type: String,
       required: true,
     },
-    doctor_name: {
+    name: {
       type: String,
       required: true,
       trim: true,
     },
-    doctor_chember: {
+    chember: {
       type: String,
       required: true,
       trim: true,
     },
-    doctor_city: {
+    city: {
       type: String,
       required: true,
       trim: true,
     },
-    doctor_about: {
+    about: {
       type: String,
       required: true,
       trim: true,
     },
-    doctor_total_patient: {
+    total_patient: {
       type: Number,
       default: 0,
     },
-    doctor_years_of_experience: {
+    years_of_experience: {
       type: Number,
       default: 0,
     },
-    doctor_ratings: {
+    ratings: {
       type: Number,
       default: 4.8, // constant value (since backend has no source yet)
     },
-    doctor_available_start_day: {
+    available_start_day: {
       type: String,
       required: true,
     },
-    doctor_available_end_day: {
+    available_end_day: {
       type: String,
       required: true,
     },
-    doctor_available_start_time: {
+    available_start_time: {
       type: String,
       required: true,
     },
-    doctor_available_end_time: {
+    available_end_time: {
       type: String,
       required: true,
     },
-    doctor_phone: {
+    phone: {
       type: String,
       required: true,
     },
-    doctor_whatsapp: {
+    whatsapp: {
       type: String,
       required: true,
     },
-    doctor_email: {
+    email: {
       type: String,
       required: true,
       lowercase: true,

@@ -13,13 +13,13 @@ export enum AudioCategory {
 }
 
 export interface IAudio {
-  audio_id: string;
-  audio_name: string;
-  audio_author: string;
+  // audio_id: string;
+  name: string;
+  author: string;
   audio: string;
-  audio_duration: number;
-  audio_total_duration: number;
-  audio_category: AudioCategory;
+  duration: number;
+  total_duration: number;
+  category: AudioCategory;
   createdAt?: Date;
   updatedAt?: Date;
 }

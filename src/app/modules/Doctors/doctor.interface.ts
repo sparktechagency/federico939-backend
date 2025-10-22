@@ -8,21 +8,21 @@ export enum DOCTOR_CATEGORY {
 }
 
 export interface IDoctor extends Document {
-  doctor_id: string;
-  doctor_category: DOCTOR_CATEGORY;
+  // doctor_id: string;
+  category: DOCTOR_CATEGORY;
   image: string;
-  doctor_name: string;
-  doctor_chember: string;
-  doctor_city: string;
-  doctor_about: string;
-  doctor_total_patient: number;
-  doctor_years_of_experience: number;
-  doctor_ratings: number;
-  doctor_available_start_day: string;
-  doctor_available_end_day: string;
-  doctor_available_start_time: string; // 12h format e.g. "09:00 AM"
-  doctor_available_end_time: string; // 12h format e.g. "05:00 PM"
-  doctor_phone: string;
-  doctor_whatsapp: string;
-  doctor_email: string;
+  name: string;
+  chember: string;
+  city: string;
+  about: string;
+  total_patient: number;
+  years_of_experience: number;
+  ratings: number;
+  available_start_day: string;
+  available_end_day: string;
+  available_start_time: string; // 12h format e.g. "09:00 AM"
+  available_end_time: string; // 12h format e.g. "05:00 PM"
+  phone: string;
+  whatsapp: string;
+  email: string;
 }

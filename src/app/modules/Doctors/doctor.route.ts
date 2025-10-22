@@ -22,14 +22,14 @@ router.get(
   DoctorControllers.getAllDoctors,
 );
 router.get(
-  '/:id',
-  auth(USER_ROLES.USER, USER_ROLES.ADMIN),
-  DoctorControllers.getDoctorById,
-);
-router.get(
   '/special_doctor',
   auth(USER_ROLES.USER, USER_ROLES.ADMIN),
   DoctorControllers.getSpecialDoctor,
+);
+router.get(
+  '/:id',
+  auth(USER_ROLES.USER, USER_ROLES.ADMIN),
+  DoctorControllers.getDoctorById,
 );
 router.patch('/:id', auth(USER_ROLES.ADMIN), DoctorControllers.updateDoctor);
 router.delete('/:id', auth(USER_ROLES.ADMIN), DoctorControllers.deleteDoctor);
