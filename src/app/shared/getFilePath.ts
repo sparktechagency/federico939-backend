@@ -1,22 +1,23 @@
 export type IFolderName =
-  | "images"
-  | "seatingPlan"
-  | "businessProfileImage"
-  | "gallery"
-  | "profileImage"
-  | "image"
-  | "childImage"
-  | "license"
-  | "driverLicense"
-  | "insurance"
-  | "permits"
-  | "banner"
-  | "logo"
-  | "audio"
-  | "video"
-  | "document"
-  | "thumbnail"
-  | "others";
+  | 'images'
+  | 'authorImage'
+  | 'seatingPlan'
+  | 'businessProfileImage'
+  | 'gallery'
+  | 'profileImage'
+  | 'image'
+  | 'childImage'
+  | 'license'
+  | 'driverLicense'
+  | 'insurance'
+  | 'permits'
+  | 'banner'
+  | 'logo'
+  | 'audio'
+  | 'video'
+  | 'document'
+  | 'thumbnail'
+  | 'others';
 
 //single file
 export const getSingleFilePath = (files: any, folderName: IFolderName) => {

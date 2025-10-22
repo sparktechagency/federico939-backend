@@ -1,6 +1,5 @@
-import { Error } from "mongoose";
-import { IErrorMessage } from "../types/error.types";
-
+import { Error } from 'mongoose';
+import { IErrorMessage } from '../types/error.types';
 
 const handleValidationError = (error: Error.ValidationError) => {
   const errorMessages: IErrorMessage[] = Object.values(error.errors).map(
@@ -15,7 +14,7 @@ const handleValidationError = (error: Error.ValidationError) => {
   const statusCode = 400;
   return {
     statusCode,
-    message: "Validation Error",
+    message: 'Validation Error',
     errorMessages,
   };
 };

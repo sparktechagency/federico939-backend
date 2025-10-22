@@ -1,30 +1,29 @@
-import { IUser } from "./user.interface";
-import { JwtPayload, Secret } from "jsonwebtoken";
-import { User } from "./user.model";
-import { StatusCodes } from "http-status-codes";
-import { Types } from "mongoose";
-import { STATUS } from "./user.constant";
-import AppError from "../../errors/AppError";
-import generateOTP from "../../utils/generateOTP";
-import { emailTemplate } from "../../shared/emailTemplate";
-import { emailHelper } from "../../helpers/emailHelper";
-import { jwtHelper } from "../../helpers/jwtHelper";
-import config from "../../config";
-import unlinkFile from "../../shared/unlinkFile";
-import QueryBuilder from "../../builder/QueryBuilder";
-
+import { IUser } from './user.interface';
+import { JwtPayload, Secret } from 'jsonwebtoken';
+import { User } from './user.model';
+import { StatusCodes } from 'http-status-codes';
+import { Types } from 'mongoose';
+import { STATUS } from './user.constant';
+import AppError from '../../errors/AppError';
+import generateOTP from '../../utils/generateOTP';
+import { emailTemplate } from '../../shared/emailTemplate';
+import { emailHelper } from '../../helpers/emailHelper';
+import { jwtHelper } from '../../helpers/jwtHelper';
+import config from '../../config';
+import unlinkFile from '../../shared/unlinkFile';
+import QueryBuilder from '../../builder/QueryBuilder';
 
 const createAdminToDB = async (payload: any): Promise<IUser> => {
   // check admin is exist or not;
   const isExistAdmin = await User.findOne({ email: payload.email });
   if (isExistAdmin) {
-    throw new AppError(StatusCodes.CONFLICT, "This Email already taken");
+    throw new AppError(StatusCodes.CONFLICT, 'This Email already taken');
   }
 
   // create admin to db
   const createAdmin = await User.create(payload);
   if (!createAdmin) {
-    throw new AppError(StatusCodes.BAD_REQUEST, "Failed to create Admin");
+    throw new AppError(StatusCodes.BAD_REQUEST, 'Failed to create Admin');
   } else {
     await User.findByIdAndUpdate(
       { _id: createAdmin?._id },
@@ -39,7 +38,7 @@ const createAdminToDB = async (payload: any): Promise<IUser> => {
 const createUserToDB = async (payload: any) => {
   const createUser = await User.create(payload);
   if (!createUser) {
-    throw new AppError(StatusCodes.BAD_REQUEST, "Failed to create user");
+    throw new AppError(StatusCodes.BAD_REQUEST, 'Failed to create user');
   }
 
   //send email
@@ -114,15 +113,11 @@ const updateProfileToDB = async (
   return updateDoc;
 };
 
-
-
-
-
 const getAllUsersFromDB = async (query: any) => {
   const baseQuery = User.find();
 
   const queryBuilder = new QueryBuilder(baseQuery, query)
-    .search(["name", "email"])
+    .search(['name', 'email'])
     .sort()
     .fields()
     .filter()
@@ -133,7 +128,7 @@ const getAllUsersFromDB = async (query: any) => {
   const meta = await queryBuilder.countTotal();
 
   if (!users || users.length === 0) {
-    throw new AppError(404, "No users are found in the database");
+    throw new AppError(404, 'No users are found in the database');
   }
 
   return {
@@ -145,7 +140,7 @@ const getAllUsersFromDB = async (query: any) => {
 const getUserByIdFromDB = async (id: string) => {
   const result = await User.findById(id);
   if (!result) {
-    throw new AppError(404, "No user is found ");
+    throw new AppError(404, 'No user is found ');
   }
   return result;
 };
@@ -160,12 +155,12 @@ const updateUserStatusByIdToDB = async (
 
   const user = await User.findById(id);
   if (!user) {
-    throw new AppError(404, "No user is found by this user ID");
+    throw new AppError(404, 'No user is found by this user ID');
   }
 
   const result = await User.findByIdAndUpdate(id, { status }, { new: true });
   if (!result) {
-    throw new AppError(400, "Failed to change status by this user ID");
+    throw new AppError(400, 'Failed to change status by this user ID');
   }
 
   return result;
@@ -174,13 +169,13 @@ const updateUserStatusByIdToDB = async (
 const deleteUserByIdFromD = async (id: string) => {
   const user = await User.findById(id);
   if (!user) {
-    throw new AppError(404, "User doest not exist in the database");
+    throw new AppError(404, 'User doest not exist in the database');
   }
 
   const result = await User.findByIdAndDelete(id);
 
   if (!result) {
-    throw new AppError(400, "Failed to delete user by this ID");
+    throw new AppError(400, 'Failed to delete user by this ID');
   }
 
   return result;
@@ -195,7 +190,7 @@ const deleteProfileFromDB = async (id: string) => {
   const result = await User.findByIdAndDelete(id);
 
   if (!result) {
-    throw new AppError(400, "Failed to delete this user");
+    throw new AppError(400, 'Failed to delete this user');
   }
   return result;
 };

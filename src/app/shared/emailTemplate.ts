@@ -1,10 +1,9 @@
-import { ICreateAccount, IResetPassword } from "../types/emailTemplate";
-
+import { ICreateAccount, IResetPassword } from '../types/emailTemplate';
 
 const createAccount = (values: ICreateAccount) => {
   const data = {
     to: values.email,
-    subject: "Verify your account",
+    subject: 'Verify your account',
     html: `
             <body style="font-family: Arial, sans-serif; background-color: #f9f9f9; margin: 50px; padding: 20px; color: #555;">
                 <div style="width: 100%; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #fff; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
@@ -40,7 +39,7 @@ const createAccount = (values: ICreateAccount) => {
 const resetPassword = (values: IResetPassword) => {
   const data = {
     to: values.email,
-    subject: "Reset your password",
+    subject: 'Reset your password',
     html: `
             <body style="font-family: Arial, sans-serif; background-color: #f9f9f9; margin: 50px; padding: 20px; color: #555;">
                 <div style="width: 100%; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #fff; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">

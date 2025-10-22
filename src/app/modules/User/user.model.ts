@@ -1,12 +1,11 @@
-import { model, Schema } from "mongoose";
-import { IUser, UserModel } from "./user.interface";
-import bcrypt from "bcrypt";
-import { USER_ROLES } from "../../enums/user";
-import { GENDER, STATUS } from "./user.constant";
-import AppError from "../../errors/AppError";
-import config from "../../config";
-import { StatusCodes } from "http-status-codes";
-
+import { model, Schema } from 'mongoose';
+import { IUser, UserModel } from './user.interface';
+import bcrypt from 'bcrypt';
+import { USER_ROLES } from '../../enums/user';
+import { GENDER, STATUS } from './user.constant';
+import AppError from '../../errors/AppError';
+import config from '../../config';
+import { StatusCodes } from 'http-status-codes';
 
 const userSchema = new Schema<IUser, UserModel>(
   {
@@ -46,7 +45,7 @@ const userSchema = new Schema<IUser, UserModel>(
 
     profileImage: {
       type: String,
-      default: "",
+      default: '',
     },
     gender: {
       type: String,
@@ -115,11 +114,11 @@ userSchema.statics.isMatchPassword = async (
 };
 
 //check user
-userSchema.pre("save", async function (next) {
+userSchema.pre('save', async function (next) {
   //check user
   const isExist = await User.findOne({ email: this.email });
   if (isExist) {
-    throw new AppError(StatusCodes.BAD_REQUEST, "Email already exist!");
+    throw new AppError(StatusCodes.BAD_REQUEST, 'Email already exist!');
   }
 
   //password hash
@@ -129,4 +128,4 @@ userSchema.pre("save", async function (next) {
   );
   next();
 });
-export const User = model<IUser, UserModel>("User", userSchema);
+export const User = model<IUser, UserModel>('User', userSchema);

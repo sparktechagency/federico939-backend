@@ -2,8 +2,9 @@ import { Router } from 'express';
 import { AuthRoutes } from '../modules/Auth/auth.route';
 import { UserRoutes } from '../modules/User/user.route';
 import { FaqRoutes } from '../modules/Faq/faq.route';
-import { DoctorRoutes } from '../modules/Doctors/doctor.route';
+import { BlogRoutes } from '../modules/Blog/blog.route';
 import { AudioRoutes } from '../modules/AudioCollections/audio.route';
+import { DoctorRoutes } from '../modules/Doctors/doctor.route';
 
 const router = Router();
 
@@ -21,13 +22,17 @@ const moduleRoutes = [
     route: FaqRoutes,
   },
   {
-    path: '/doctor',
-    route: DoctorRoutes,
+    path: "/blogs",
+    route: BlogRoutes
   },
   {
-    path: '/audio',
-    route: AudioRoutes,
+    path:"/audio",
+    route:AudioRoutes
   },
+  {
+    path:"/doctor",
+    route:DoctorRoutes
+  }
 
   //AppSystem routes
 ];

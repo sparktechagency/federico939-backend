@@ -1,4 +1,5 @@
 import bcrypt from 'bcrypt';
+import { StatusCodes } from 'http-status-codes';
 import { JwtPayload, Secret } from 'jsonwebtoken';
 import {
   IAuthResetPassword,
@@ -16,12 +17,19 @@ import { emailTemplate } from '../../shared/emailTemplate';
 import { emailHelper } from '../../helpers/emailHelper';
 import cryptoToken from '../../utils/cryptoToken';
 import { ResetToken } from '../ResetToken/resetToken.model';
+
 import httpStatus from 'http-status';
+
+
 
 //login
 const loginUserFromDB = async (payload: ILoginData) => {
   const { email, password } = payload;
+
   console.log(payload);
+
+
+
   const isExistUser = await User.findOne({ email }).select('+password');
   if (!isExistUser) {
     throw new AppError(httpStatus.BAD_REQUEST, "User doesn't exist!");
@@ -30,7 +38,9 @@ const loginUserFromDB = async (payload: ILoginData) => {
   // check verified and status
   if (!isExistUser.verified) {
     throw new AppError(
-      httpStatus.BAD_REQUEST,
+
+      StatusCodes.BAD_REQUEST,
+
       'Please verify your account, then try to login again',
     );
   }
@@ -38,7 +48,9 @@ const loginUserFromDB = async (payload: ILoginData) => {
   // check user status
   if (isExistUser.status === STATUS.INACTIVE) {
     throw new AppError(
-      httpStatus.BAD_REQUEST,
+
+      StatusCodes.BAD_REQUEST,
+
       'You don’t have permission to access this content. It looks like your account has been deactivated.',
     );
   }
@@ -48,7 +60,9 @@ const loginUserFromDB = async (payload: ILoginData) => {
     password &&
     !(await User.isMatchPassword(password, isExistUser.password))
   ) {
-    throw new AppError(httpStatus.BAD_REQUEST, 'Password is incorrect!');
+
+    throw new AppError(StatusCodes.BAD_REQUEST, 'Password is incorrect!');
+
   }
 
   // create token
@@ -101,19 +115,25 @@ const verifyEmailToDB = async (payload: IVerifyEmail) => {
 
   if (!oneTimeCode) {
     throw new AppError(
-      httpStatus.BAD_REQUEST,
+
+      StatusCodes.BAD_REQUEST,
+
       'Please give the otp, check your email we send a code',
     );
   }
 
   if (isExistUser.authentication?.oneTimeCode !== oneTimeCode) {
-    throw new AppError(httpStatus.BAD_REQUEST, 'You provided wrong otp');
+
+    throw new AppError(StatusCodes.BAD_REQUEST, 'You provided wrong otp');
+
   }
 
   const date = new Date();
   if (date > isExistUser.authentication?.expireAt) {
     throw new AppError(
+
       httpStatus.BAD_REQUEST,
+
       'Otp already expired, Please try again',
     );
   }
@@ -162,7 +182,9 @@ const resetPasswordToDB = async (
   // isExist token
   const isExistToken = await ResetToken.isExistToken(token);
   if (!isExistToken) {
+
     throw new AppError(httpStatus.UNAUTHORIZED, 'You are not authorized');
+
   }
 
   // user permission check
@@ -180,7 +202,9 @@ const resetPasswordToDB = async (
   const isValid = await ResetToken.isExpireToken(token);
   if (!isValid) {
     throw new AppError(
+
       httpStatus.BAD_REQUEST,
+
       'Token expired, Please click again to the forget password',
     );
   }
@@ -223,13 +247,17 @@ const changePasswordToDB = async (
     currentPassword &&
     !(await User.isMatchPassword(currentPassword, isExistUser.password))
   ) {
+
     throw new AppError(httpStatus.BAD_REQUEST, 'Password is incorrect');
+
   }
 
   // newPassword and current password
   if (currentPassword === newPassword) {
     throw new AppError(
+
       httpStatus.BAD_REQUEST,
+
       'Please give different password from current password',
     );
   }
@@ -258,7 +286,9 @@ const changePasswordToDB = async (
 const newAccessTokenToUser = async (token: string) => {
   // Check if the token is provided
   if (!token) {
+
     throw new AppError(httpStatus.BAD_REQUEST, 'Token is required!');
+
   }
 
   const verifyUser = jwtHelper.verifyToken(
@@ -268,7 +298,9 @@ const newAccessTokenToUser = async (token: string) => {
 
   const isExistUser = await User.findById(verifyUser?.id);
   if (!isExistUser) {
+
     throw new AppError(httpStatus.UNAUTHORIZED, 'Unauthorized access');
+
   }
 
   // create token
@@ -287,13 +319,17 @@ const resendVerificationEmailToDB = async (email: string) => {
 
   if (!existingUser) {
     throw new AppError(
+
       httpStatus.NOT_FOUND,
+
       'User with this email does not exist!',
     );
   }
 
   if (existingUser?.isVerified) {
+
     throw new AppError(httpStatus.BAD_REQUEST, 'User is already verified!');
+
   }
 
   // Generate OTP and prepare email
@@ -331,7 +367,9 @@ const deleteUserFromDB = async (user: JwtPayload, password: string) => {
     password &&
     !(await User.isMatchPassword(password, isExistUser.password))
   ) {
+
     throw new AppError(httpStatus.BAD_REQUEST, 'Password is incorrect');
+
   }
 
   const updateUser = await User.findByIdAndDelete(user.id);
