@@ -1,0 +1,15 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 1
+    },
+    "auditLog": "C:\\Users\\nnsna\\OneDrive\\Desktop\\sakib\\Spetra-mentas-backend\\winston\\success\\.72867884acca3fcacaa7122c4be9b01419dd7fe9-audit.json",
+    "files": [
+        {
+            "date": 1761116446610,
+            "name": "C:\\Users\\nnsna\\OneDrive\\Desktop\\sakib\\Spetra-mentas-backend\\winston\\success\\22-10-2025-13-success.log",
+            "hash": "5edfb6a69cfcbbb82a8d2fcb98765b41195ca2f2d99fc8f9d28c148de2e3d152"
+        }
+    ],
+    "hashType": "sha256"
+}
