@@ -16,7 +16,7 @@ export interface IAudio {
   audio_id: string;
   audio_name: string;
   audio_author: string;
-  audio_url: string;
+  audio: string;
   audio_duration: number;
   audio_total_duration: number;
   audio_category: AudioCategory;
