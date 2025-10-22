@@ -10,7 +10,7 @@ export enum DOCTOR_CATEGORY {
 export interface IDoctor extends Document {
   doctor_id: string;
   doctor_category: DOCTOR_CATEGORY;
-  doctor_image: string;
+  image: string;
   doctor_name: string;
   doctor_chember: string;
   doctor_city: string;

@@ -2,11 +2,20 @@ import express from 'express';
 import { DoctorControllers } from './doctor.controller';
 import auth from '../../middlewares/auth';
 import { USER_ROLES } from '../../enums/user';
+import fileUploadHandler from '../../middlewares/fileUploadHandler';
+import parseAllFilesData from '../../middlewares/parseAllFileData';
+import { FOLDER_NAMES } from '../../enums/files';
 
 const router = express.Router();
 
 // Example routes with optional auth
-router.post('/', auth(USER_ROLES.ADMIN), DoctorControllers.createDoctor);
+router.post(
+  '/',
+  fileUploadHandler(),
+  parseAllFilesData({ fieldName: FOLDER_NAMES.IMAGE, forceSingle: true }),
+  auth(USER_ROLES.ADMIN),
+  DoctorControllers.createDoctor,
+);
 router.get(
   '/',
   auth(USER_ROLES.USER, USER_ROLES.ADMIN),

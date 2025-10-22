@@ -14,7 +14,7 @@ const DoctorSchema = new Schema<IDoctor>(
       required: true,
       trim: true,
     },
-    doctor_image: {
+    image: {
       type: String,
       required: true,
     },
