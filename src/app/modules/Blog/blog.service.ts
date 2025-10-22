@@ -27,8 +27,18 @@ const getAllBLogsFromDB = async () => {
     return result;
 }
 
+const getBlogByIdFromDB = async (id: string) => {
+    const blog = await Blog.findById(id);
+    if (!blog) {
+        throw new AppError(404, "No blog found in the database by this ID")
+    };
+
+    return blog;
+}
+
 export const BlogServices = {
     createBlogToDB,
     getAllBLogsFromDB,
+    getBlogByIdFromDB,
 };
 
