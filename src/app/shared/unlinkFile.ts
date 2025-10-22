@@ -9,14 +9,14 @@
 // };
 
 // export default unlinkFile;
-import fs from "fs";
-import path from "path";
+import fs from 'fs';
+import path from 'path';
 
 const unlinkFile = (file: string | string[]) => {
   // Check if the file parameter is a string or an array
-  if (typeof file === "string") {
+  if (typeof file === 'string') {
     // If it's a single string (file path), unlink the file
-    const filePath = path.join("uploads", file);
+    const filePath = path.join('uploads', file);
     if (fs.existsSync(filePath)) {
       fs.unlinkSync(filePath);
       console.log(`File ${file} deleted successfully.`);
@@ -26,7 +26,7 @@ const unlinkFile = (file: string | string[]) => {
   } else if (Array.isArray(file)) {
     // If it's an array of file paths, loop through the array and unlink each file
     file.forEach((singleFile) => {
-      const filePath = path.join("uploads", singleFile);
+      const filePath = path.join('uploads', singleFile);
       if (fs.existsSync(filePath)) {
         fs.unlinkSync(filePath);
         console.log(`File ${singleFile} deleted successfully.`);
@@ -35,7 +35,7 @@ const unlinkFile = (file: string | string[]) => {
       }
     });
   } else {
-    console.log("Invalid input. Expected a string or an array of strings.");
+    console.log('Invalid input. Expected a string or an array of strings.');
   }
 };
 

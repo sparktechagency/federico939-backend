@@ -1,11 +1,11 @@
-import { model, Schema } from "mongoose";
-import { IResetToken, ResetTokenModel } from "./resetToken.interface";
+import { model, Schema } from 'mongoose';
+import { IResetToken, ResetTokenModel } from './resetToken.interface';
 
 const resetTokenSchema = new Schema<IResetToken, ResetTokenModel>(
   {
     user: {
       type: Schema.Types.ObjectId,
-      ref: "User",
+      ref: 'User',
     },
     token: {
       type: String,
@@ -37,6 +37,6 @@ resetTokenSchema.statics.isExpireToken = async (token: string) => {
 };
 
 export const ResetToken = model<IResetToken, ResetTokenModel>(
-  "Token",
+  'Token',
   resetTokenSchema,
 );

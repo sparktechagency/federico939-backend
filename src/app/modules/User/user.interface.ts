@@ -1,8 +1,6 @@
-import { Model } from "mongoose";
-import { USER_ROLES } from "../../enums/user";
-import { GENDER, STATUS } from "./user.constant";
-
-
+import { Model } from 'mongoose';
+import { USER_ROLES } from '../../enums/user';
+import { GENDER, STATUS } from './user.constant';
 
 export type IUser = {
   name: string;
@@ -12,7 +10,6 @@ export type IUser = {
   dateOfBirth?: string;
   countryCode?: string;
   phone?: string;
-
 
   profileImage?: string;
   gender?: GENDER;
