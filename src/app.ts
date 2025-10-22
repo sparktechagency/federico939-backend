@@ -9,6 +9,7 @@ import config from './app/config';
 import globalErrorHandler from './app/middlewares/globalErrorhandler';
 import notFound from './app/middlewares/notFound';
 import router from './app/routes';
+import { getImages } from './app/utils/ImageController';
 
 const app: Application = express();
 
@@ -18,6 +19,7 @@ app.use(cookieParser());
 
 app.use(cors({ origin: '*', credentials: true }));
 
+getImages(app);
 // application routes
 app.use('/api/v1', router);
 
