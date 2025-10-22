@@ -37,18 +37,26 @@ const getBlogByIdFromDB = async (id: string) => {
 }
 
 const updateBlogByIdToDB = async (id: string, payload: Partial<TBlog>) => {
-  const updatedBlog = await Blog.findByIdAndUpdate(
-    id,
-    { $set: payload },
-    { new: true, runValidators: true }
-  );
+    const updatedBlog = await Blog.findByIdAndUpdate(
+        id,
+        { $set: payload },
+        { new: true, runValidators: true }
+    );
 
-  if (!updatedBlog) {
-    throw new AppError(404, "No blog found or failed to update");
-  }
+    if (!updatedBlog) {
+        throw new AppError(404, "No blog found or failed to update");
+    }
 
-  return updatedBlog;
+    return updatedBlog;
 };
+
+const deleteBlogByIdFromDB = async (id: string) => {
+    const result = await Blog.findByIdAndDelete(id);
+    if (!result) {
+        throw new AppError(400, "Failed to delete this blog by ID")
+    };
+    return result;
+}
 
 
 export const BlogServices = {
@@ -56,5 +64,6 @@ export const BlogServices = {
     getAllBLogsFromDB,
     getBlogByIdFromDB,
     updateBlogByIdToDB,
+    deleteBlogByIdFromDB,
 };
 
