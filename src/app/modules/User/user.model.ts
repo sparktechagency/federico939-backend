@@ -1,97 +1,132 @@
-/* eslint-disable @typescript-eslint/no-this-alias */
-import bcrypt from 'bcrypt';
-import { Schema, model } from 'mongoose';
-import config from '../../config';
-import { UserStatus } from './user.constant';
-import { TUser, UserModel } from './user.interface';
+import { model, Schema } from "mongoose";
+import { IUser, UserModel } from "./user.interface";
+import bcrypt from "bcrypt";
+import { USER_ROLES } from "../../enums/user";
+import { GENDER, STATUS } from "./user.constant";
+import AppError from "../../errors/AppError";
+import config from "../../config";
+import { StatusCodes } from "http-status-codes";
 
-const userSchema = new Schema<TUser, UserModel>(
+
+const userSchema = new Schema<IUser, UserModel>(
   {
     name: {
       type: String,
       required: true,
-      unique: true,
+    },
+    role: {
+      type: String,
+      enum: Object.values(USER_ROLES),
+      default: USER_ROLES.USER,
     },
     email: {
       type: String,
       required: true,
       unique: true,
-    },
-    phone: {
-      type: String,
-      required: true,
-      unique: true,
+      lowercase: true,
     },
     password: {
       type: String,
-      required: true,
-      // select: 0,
+      required: false,
+      select: 0,
+      minlength: 8,
     },
-    needsPasswordChange: {
-      type: Boolean,
-      default: true,
-    },
-    passwordChangedAt: {
-      type: Date,
-    },
-    profileImg: {
+    dateOfBirth: {
       type: String,
+      required: false,
     },
-    role: {
+    countryCode: {
       type: String,
-      enum: ['student', 'teacher'],
-      required: true,
+      required: false,
     },
+    phone: {
+      type: String,
+      required: false,
+    },
+
+    profileImage: {
+      type: String,
+      default: "",
+    },
+    gender: {
+      type: String,
+      enum: Object.values(GENDER),
+      required: false,
+    },
+
     status: {
       type: String,
-      enum: UserStatus,
-      default: 'in-progress',
+      enum: Object.values(STATUS),
+      default: STATUS.ACTIVE,
     },
-    isDeleted: {
+
+    // authentication
+    verified: {
       type: Boolean,
       default: false,
+    },
+    authentication: {
+      type: {
+        isResetPassword: {
+          type: Boolean,
+          default: false,
+        },
+        oneTimeCode: {
+          type: Number,
+          default: null,
+        },
+        expireAt: {
+          type: Date,
+          default: null,
+        },
+      },
+      select: 0,
     },
   },
   {
     timestamps: true,
+    versionKey: false,
   },
 );
 
-userSchema.pre('save', async function (next) {
-  // eslint-disable-next-line @typescript-eslint/no-this-alias
-  const user = this; // doc
-  // hashing password and save into DB
-  user.password = await bcrypt.hash(
-    user.password,
+//exist user check
+userSchema.statics.isExistUserById = async (id: string) => {
+  const isExist = await User.findById(id);
+  return isExist;
+};
+
+userSchema.statics.isExistUserByEmail = async (email: string) => {
+  const isExist = await User.findOne({ email });
+  return isExist;
+};
+
+//account check
+userSchema.statics.isAccountCreated = async (id: string) => {
+  const isUserExist: any = await User.findById(id);
+  return isUserExist.accountInformation.status;
+};
+
+//is match password
+userSchema.statics.isMatchPassword = async (
+  password: string,
+  hashPassword: string,
+): Promise<boolean> => {
+  return await bcrypt.compare(password, hashPassword);
+};
+
+//check user
+userSchema.pre("save", async function (next) {
+  //check user
+  const isExist = await User.findOne({ email: this.email });
+  if (isExist) {
+    throw new AppError(StatusCodes.BAD_REQUEST, "Email already exist!");
+  }
+
+  //password hash
+  this.password = await bcrypt.hash(
+    this.password,
     Number(config.bcrypt_salt_rounds),
   );
   next();
 });
-
-// set '' after saving password
-userSchema.post('save', function (doc, next) {
-  doc.password = '';
-  next();
-});
-
-userSchema.statics.isUserExistsByObjectId = async function (_id: string) {
-  return await User.findOne({ _id }).select('+password');
-};
-
-userSchema.statics.isPasswordMatched = async function (
-  plainTextPassword,
-  hashedPassword,
-) {
-  return await bcrypt.compare(plainTextPassword, hashedPassword);
-};
-
-userSchema.statics.isJWTIssuedBeforePasswordChanged = function (
-  passwordChangedTimestamp: Date,
-  jwtIssuedTimestamp: number,
-) {
-  const passwordChangedTime =
-    new Date(passwordChangedTimestamp).getTime() / 1000;
-  return passwordChangedTime > jwtIssuedTimestamp;
-};
-
-export const User = model<TUser, UserModel>('User', userSchema);
+export const User = model<IUser, UserModel>("User", userSchema);

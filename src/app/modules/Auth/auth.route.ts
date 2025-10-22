@@ -1,65 +1,64 @@
-import express, { NextFunction, Request, Response } from 'express';
-import auth from '../../middlewares/auth';
-import validateRequest from '../../middlewares/validateRequest';
-import { USER_ROLE } from '../User/user.constant';
-import { AuthControllers } from './auth.controller';
-import { AuthValidation } from './auth.validation';
-import { upload } from '../../utils/sendImageToCloudinary';
-
+import express, { NextFunction, Request, Response } from "express";
+import auth from "../../middlewares/auth";
+import validateRequest from "../../middlewares/validateRequest";
+import { AuthController } from "./auth.controller";
+import { AuthValidation } from "./auth.validation";
+import { USER_ROLES } from "../../enums/user";
 const router = express.Router();
 
 router.post(
-  '/login',
-  validateRequest(AuthValidation.loginValidationSchema),
-  AuthControllers.loginUser,
+  "/login",
+  validateRequest(AuthValidation.createLoginZodSchema),
+  AuthController.loginUser,
 );
+
 router.post(
-  '/register',
-  upload.fields([
-    { name: 'file', maxCount: 1 },
-    { name: 'profileImg', maxCount: 1 }
-  ]),
-  (req: Request, res: Response, next: NextFunction) => {
-    req.body = JSON.parse(req.body.data);
-    next();
+  "/forget-password",
+  validateRequest(AuthValidation.createForgetPasswordZodSchema),
+  AuthController.forgetPassword,
+);
+
+router.post("/refresh-token", AuthController.newAccessToken);
+
+router.post("/resend-otp", AuthController.resendVerificationEmail);
+
+router.post(
+  "/verify-email",
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { email, oneTimeCode } = req.body;
+
+      req.body = { email, oneTimeCode: Number(oneTimeCode) };
+      next();
+    } catch (error) {
+      return res
+        .status(500)
+        .json({ message: "Failed to convert string to number" });
+    }
   },
-  validateRequest(AuthValidation.registerValidationSchema),
-  AuthControllers.registerUser,
+  validateRequest(AuthValidation.createVerifyEmailZodSchema),
+  AuthController.verifyEmail,
 );
 
 router.post(
-  '/otp-compare-for-register',
-  // validateRequest(AuthValidation.compareOTPValidationSchema),
-  AuthControllers.compareOTPForRegister,
-);
-
-router.patch(
-  '/change-password',
-  auth(USER_ROLE.admin, USER_ROLE.user),
-  validateRequest(AuthValidation.changePasswordValidationSchema),
-  AuthControllers.changePassword,
+  "/reset-password",
+  validateRequest(AuthValidation.createResetPasswordZodSchema),
+  AuthController.resetPassword,
 );
 
 router.post(
-  '/refresh-token',
-  validateRequest(AuthValidation.refreshTokenValidationSchema),
-  AuthControllers.refreshToken,
+  "/change-password",
+  auth(USER_ROLES.ADMIN, USER_ROLES.USER),
+  validateRequest(AuthValidation.createChangePasswordZodSchema),
+  AuthController.changePassword,
 );
 
-router.post(
-  '/forget-password',
-  validateRequest(AuthValidation.forgetPasswordValidationSchema),
-  AuthControllers.forgetPassword,
+router.post("/resend-otp", AuthController.resendVerificationEmail);
+
+router.delete(
+  "/delete-account",
+  auth(USER_ROLES.ADMIN),
+  AuthController.deleteUser,
 );
-
-router.post('/reset-password', AuthControllers.resetPassword);
-
-router.post(
-  '/otp-compare-for-reset-password',
-  validateRequest(AuthValidation.compareOTPValidationSchema),
-  AuthControllers.compareOTPForPasswordReset,
-);
-
-router.post('/otp-resend/:email', AuthControllers.resendOTP);
 
 export const AuthRoutes = router;

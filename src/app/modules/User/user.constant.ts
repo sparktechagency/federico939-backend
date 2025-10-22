@@ -1,6 +1,9 @@
-export const USER_ROLE = {
-  user: 'user',
-  admin: 'admin',
-} as const;
+export enum GENDER {
+  MALE = "MALE",
+  FEMALE = "FEMALE",
+}
 
-export const UserStatus = ['in-progress', 'banned'];
+export enum STATUS {
+  ACTIVE = "ACTIVE",
+  INACTIVE = "INACTIVE",
+}

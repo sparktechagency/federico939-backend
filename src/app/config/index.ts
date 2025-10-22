@@ -1,26 +1,25 @@
-import dotenv from 'dotenv';
-import path from 'path';
-
-dotenv.config({ path: path.join((process.cwd(), '.env')) });
+import dotenv from "dotenv";
+import path from "path";
+dotenv.config({ path: path.join(process.cwd(), ".env") });
 
 export default {
-  NODE_ENV: process.env.NODE_ENV,
+  ip_address: process.env.IP,
   port: process.env.PORT,
   database_url: process.env.DATABASE_URL,
+  node_env: process.env.NODE_ENV,
   bcrypt_salt_rounds: process.env.BCRYPT_SALT_ROUNDS,
-  default_password: process.env.DEFAULT_PASS,
-  jwt_access_secret: process.env.JWT_ACCESS_SECRET,
-  jwt_refresh_secret: process.env.JWT_REFRESH_SECRET,
-  jwt_access_expires_in: process.env.JWT_ACCESS_EXPIRES_IN,
-  jwt_refresh_expires_in: process.env.JWT_REFRESH_EXPIRES_IN,
-  reset_pass_ui_link: process.env.RESET_PASS_UI_LINK,
-  super_admin_password: process.env.SUPER_ADMIN_PASSWORD,
-  origin_link: process.env.CORS_ORIGIN,
-  base_url: process.env.BASE_URL,
-  create_user_token: process.env.CREAT_USER_TOKEN,
-  create_user_otp_verify_token: process.env.CREAT_USER_OTP_VERIFY_TOKEN,
-  reset_pass_token: process.env.RESET_PASS_TOKEN,
-  stripe_secret_key: process.env.STRIPE_SECRET_KEY,
+  jwt: {
+    jwt_secret: process.env.JWT_SECRET,
+    jwt_expire_in: process.env.JWT_EXPIRE_IN,
+    jwtRefreshSecret: process.env.JWT_REFRESH_SECRET,
+    jwtRefreshExpiresIn: process.env.JWT_REFRESH_EXPIRES_IN,
+  },
+  support_receiver_email: process.env.SUPPORT_RECEIVER_EMAIL,
+  stripe: {
+    stripeSecretKey: process.env.STRIPE_SECRET_KEY,
+    webhookSecret: process.env.STRIPE_WEBHOOK_SECRET,
+    paymentSuccess: process.env.STRIPE_PAYMENT_SUCCESS_URL,
+  },
   email: {
     from: process.env.EMAIL_FROM,
     user: process.env.EMAIL_USER,
@@ -28,5 +27,19 @@ export default {
     host: process.env.EMAIL_HOST,
     pass: process.env.EMAIL_PASS,
   },
-  session_secret: process.env.SESSION_SECRET,
+  social: {
+    google_client_id: process.env.GOOGLE_CLIENT_ID,
+    facebook_client_id: process.env.FACEBOOK_CLIENT_ID,
+    google_client_secret: process.env.GOOGLE_CLIENT_SECRET,
+    facebook_client_secret: process.env.FACEBOOK_CLIENT_SECRET,
+  },
+  admin: {
+    email: process.env.SUPER_ADMIN_EMAIL,
+    password: process.env.SUPER_ADMIN_PASSWORD,
+  },
+  twilio: {
+    accountSid: process.env.TWILIO_ACCOUNT_SID,
+    authToken: process.env.TWILIO_AUTH_TOKEN,
+    twilioNumber: process.env.TWILIO_NUMBER,
+  },
 };

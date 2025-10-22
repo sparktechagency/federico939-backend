@@ -1,36 +1,12 @@
-import { z } from 'zod';
-import { UserStatus } from './user.constant';
+import { z } from "zod";
 
-const userValidationSchema = z.object({
-  pasword: z
-    .string({
-      invalid_type_error: 'Password must be string',
-    })
-    .max(20, { message: 'Password can not be more than 20 characters' })
-    .optional(),
-});
-
-const changeStatusValidationSchema = z.object({
+const createAdminZodSchema = z.object({
   body: z.object({
-    status: z.enum([...UserStatus] as [string, ...string[]]),
+    name: z.string({ required_error: "Name is required" }),
+    email: z.string({ required_error: "Email is required" }),
+    password: z.string({ required_error: "Password is required" }),
+    role: z.string({ required_error: "Role is required" }),
   }),
 });
 
-const createUserValidationShema = z.object({
-  body: z.object({
-    password: z.string().min(1, { message: "Password is required" }),
-    userData: z.object({
-      name: z.string().min(1, { message: "Name is required" }),
-      email: z.string().email({ message: "Invalid email address" }),
-      profileImg: z.string().url().optional(), // Optional, must be valid URL if exists
-      role: z.enum(['student', 'teacher']),
-    })
-  })
-});
-
-export const UserValidation = {
-  userValidationSchema,
-  changeStatusValidationSchema,
-  createUserValidationShema
-};
-
+export const UserValidation = { createAdminZodSchema };

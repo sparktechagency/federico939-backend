@@ -25,13 +25,20 @@
 ### Installation
 
 1. install nodemodules:
-    ```bash
-    npm i
+
+   ```bash
+   npm i
+
+   ```
 
 2. run in dev mode:
-    ```bash
-    npm run start:dev
+
+   ```bash
+   npm run start:dev
+
+   ```
 
 3. run in prod mode:
-    ```bash
-    npm run start:prod
+   ```bash
+   npm run start:prod
+   ```

@@ -1,45 +1,36 @@
-/* eslint-disable no-unused-vars */
-import { Model, Types } from 'mongoose';
-import { USER_ROLE } from './user.constant';
+import { Model } from "mongoose";
+import { USER_ROLES } from "../../enums/user";
+import { GENDER, STATUS } from "./user.constant";
 
-export interface TRegisterUser {
+
+
+export type IUser = {
   name: string;
+  role: USER_ROLES;
   email: string;
-  phone: string;
   password: string;
-  address?: string;
-  profileImg?: string;
-  NIDnumber: string;
-  NIDOrPassportImg: string;
-}
+  dateOfBirth?: string;
+  countryCode?: string;
+  phone?: string;
 
-export interface TUser {
-  _id: Types.ObjectId;
-  name: string;
-  id: string;
-  email: string;
-  phone: string;
-  password: string;
-  needsPasswordChange: boolean;
-  passwordChangedAt?: Date;
-  role: 'student' | 'teacher';
-  status: 'in-progress' | 'banned';
-  isDeleted: boolean;
-  profileImg: string;
-}
 
-export interface UserModel extends Model<TUser> {
-  //instance methods for checking if the user exist
-  isUserExistsByObjectId(_id: string): Promise<TUser | null>;
-  //instance methods for checking if passwords are matched
-  isPasswordMatched(
-    plainTextPassword: string,
-    hashedPassword: string,
-  ): Promise<boolean>;
-  isJWTIssuedBeforePasswordChanged(
-    passwordChangedTimestamp: Date,
-    jwtIssuedTimestamp: number,
-  ): boolean;
-}
+  profileImage?: string;
+  gender?: GENDER;
 
-export type TUserRole = keyof typeof USER_ROLE;
+  status: STATUS;
+
+  // authentication
+  verified: boolean;
+  authentication?: {
+    isResetPassword: boolean;
+    oneTimeCode: number;
+    expireAt: Date;
+  };
+};
+
+export type UserModel = {
+  isExistUserById(id: string): any;
+  isExistUserByEmail(email: string): any;
+  isExistUserByPhone(contact: string): any;
+  isMatchPassword(password: string, hashPassword: string): boolean;
+} & Model<IUser>;
