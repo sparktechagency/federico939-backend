@@ -18,7 +18,17 @@ const createBlogToDB = async (payload: TBlog) => {
     return result;
 };
 
-export const BlogServices={
+const getAllBLogsFromDB = async () => {
+    const result = await Blog.find();
+    if (!result || result.length === 0) {
+        throw new AppError(404, "No blogs are found in the database")
+    };
+
+    return result;
+}
+
+export const BlogServices = {
     createBlogToDB,
+    getAllBLogsFromDB,
 };
 
