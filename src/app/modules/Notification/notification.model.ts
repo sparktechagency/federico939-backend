@@ -1,8 +1,8 @@
 import { model, Schema } from "mongoose";
-import { INotification, NotificationModel } from "./notification.interface";
+import { TNotification } from "./notification.interface";
 import { NOTIFICATION_TYPE } from "./notification.constant";
 
-const notificationSchema = new Schema<INotification, NotificationModel>(
+const notificationSchema = new Schema<TNotification>(
     {
         text: {
             type: String,
@@ -33,7 +33,7 @@ const notificationSchema = new Schema<INotification, NotificationModel>(
     },
 );
 
-export const Notification = model<INotification, NotificationModel>(
+export const Notification = model<TNotification>(
     "Notification",
     notificationSchema,
 );

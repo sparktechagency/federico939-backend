@@ -1,7 +1,7 @@
 import { Model, Types } from "mongoose";
 import { NOTIFICATION_TYPE } from "./notification.constant";
 
-export type INotification = {
+export type TNotification= {
     text: string;
     receiver?: Types.ObjectId;
     read: boolean;
@@ -9,4 +9,4 @@ export type INotification = {
     type?: NOTIFICATION_TYPE;
 };
 
-export type NotificationModel = Model<INotification>;
+
