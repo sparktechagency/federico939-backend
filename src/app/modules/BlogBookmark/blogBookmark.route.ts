@@ -5,7 +5,6 @@ import validateRequest from "../../middlewares/validateRequest";
 import { BookmarkValidation } from "./blogBookmark.validation";
 import { BlogBookmarkControllers } from "./blogBookmark.controller";
 
-
 const router = express.Router();
 
 router.post(

@@ -25,7 +25,8 @@ const getAllBLogs = catchAsync(async (req, res) => {
 
 const getBlogById = catchAsync(async (req, res) => {
     const { id } = req.params;
-    const result = await BlogServices.getBlogByIdFromDB(id);
+    const { id: userId } = req.user;
+    const result = await BlogServices.getBlogByIdFromDB(userId, id);
     sendResponse(res, {
         success: true,
         statusCode: 200,

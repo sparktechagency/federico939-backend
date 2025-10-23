@@ -1,5 +1,6 @@
 import QueryBuilder from '../../builder/QueryBuilder';
 import AppError from '../../errors/AppError';
+import { BlogBookmark } from '../BlogBookmark/blogBookmark.model';
 import { BLOG_CATEGORY } from './blog.constant';
 import { TBlog } from './blog.interface';
 import { Blog } from './blog.model';
@@ -52,13 +53,23 @@ const getAllBLogsFromDB = async (query: any) => {
     };
 };
 
-const getBlogByIdFromDB = async (id: string) => {
-    const blog = await Blog.findById(id);
+const getBlogByIdFromDB = async (userId: string, id: string) => {
+    const blog = await Blog.findById(id).lean();
+
+    const isBookmarked = await BlogBookmark.exists({
+        userId,
+        referenceId: id,
+    });
+
+
     if (!blog) {
         throw new AppError(404, 'No blog found in the database by this ID');
     }
 
-    return blog;
+    return {
+        ...blog,
+        isBookmarked: !!isBookmarked,
+    };
 };
 
 const updateBlogByIdToDB = async (id: string, payload: Partial<TBlog>) => {
@@ -81,7 +92,7 @@ const deleteBlogByIdFromDB = async (id: string) => {
     if (!result) {
         throw new AppError(400, 'Failed to delete this blog by ID');
     }
-    
+
     return result;
 };
 
