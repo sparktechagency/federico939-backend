@@ -27,3 +27,9 @@ const userReadNotificationToDB = async (userId: string): Promise<TNotification |
 };
 
 
+export const NotificationServices = {
+    adminNotificationFromDB,
+    adminReadNotificationToDB,
+    userNotificationFromDB,
+    userReadNotificationToDB,
+}

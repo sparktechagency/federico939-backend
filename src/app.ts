@@ -15,6 +15,10 @@ const app: Application = express();
 //parsers
 app.use(express.json());
 app.use(cookieParser());
+app.use(express.urlencoded({ extended: true }));
+
+//file retrieve
+app.use(express.static("uploads"));
 
 app.use(cors({ origin: '*', credentials: true }));
 
