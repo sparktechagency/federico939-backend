@@ -6,6 +6,7 @@ import { BlogRoutes } from '../modules/Blog/blog.route';
 import { AudioRoutes } from '../modules/AudioCollections/audio.route';
 import { DoctorRoutes } from '../modules/Doctors/doctor.route';
 import { BlogBookmarkRoutes } from '../modules/BlogBookmark/blogBookmark.route';
+import { NotificationRoutes } from '../modules/Notification/notification.route';
 
 const router = Router();
 
@@ -37,6 +38,10 @@ const moduleRoutes = [
   {
     path: "/bookmarks",
     route: BlogBookmarkRoutes
+  },
+  {
+    path: "/notifications",
+    route: NotificationRoutes
   }
 ];
 
