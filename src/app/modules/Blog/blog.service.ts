@@ -1,6 +1,10 @@
 import QueryBuilder from '../../builder/QueryBuilder';
 import AppError from '../../errors/AppError';
+import { sendNotifications } from '../../helpers/notificationHelper';
 import { BlogBookmark } from '../BlogBookmark/blogBookmark.model';
+import { NOTIFICATION_TYPE } from '../Notification/notification.constant';
+import { STATUS } from '../User/user.constant';
+import { User } from '../User/user.model';
 import { BLOG_CATEGORY } from './blog.constant';
 import { TBlog } from './blog.interface';
 import { Blog } from './blog.model';
@@ -19,6 +23,26 @@ const createBlogToDB = async (payload: TBlog) => {
     }
 
     const result = await Blog.create(payload);
+
+    // Fetch only verified & active users
+    const users = await User.find(
+        { verified: true, status: STATUS.ACTIVE },
+        '_id',
+    );
+
+    // Send notification to those users
+    await Promise.all(
+        users.map(user =>
+            sendNotifications({
+                receiver: user._id,
+                text: 'New blog published!',
+                message: `${result.title} is now available to read.`,
+                type: NOTIFICATION_TYPE.USER,
+                data: result,
+            }),
+        ),
+    );
+
 
     if (!result) {
         throw new AppError(400, 'Failed to create blog');

@@ -26,6 +26,9 @@ const notificationSchema = new Schema<TNotification>(
             enum: Object.values(NOTIFICATION_TYPE),
             required: false,
         },
+        data: {
+            type: Schema.Types.Mixed,
+        },
     },
     {
         timestamps: true,
