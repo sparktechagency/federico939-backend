@@ -5,6 +5,7 @@ import { FaqRoutes } from '../modules/Faq/faq.route';
 import { BlogRoutes } from '../modules/Blog/blog.route';
 import { AudioRoutes } from '../modules/AudioCollections/audio.route';
 import { DoctorRoutes } from '../modules/Doctors/doctor.route';
+import { BlogBookmarkRoutes } from '../modules/BlogBookmark/blogBookmark.route';
 
 const router = Router();
 
@@ -26,15 +27,17 @@ const moduleRoutes = [
     route: BlogRoutes
   },
   {
-    path:"/audio",
-    route:AudioRoutes
+    path: "/audio",
+    route: AudioRoutes
   },
   {
-    path:"/doctor",
-    route:DoctorRoutes
+    path: "/doctor",
+    route: DoctorRoutes
+  },
+  {
+    path: "/bookmarks",
+    route: BlogBookmarkRoutes
   }
-
-  //AppSystem routes
 ];
 
 moduleRoutes.forEach((route) => router.use(route.path, route.route));
