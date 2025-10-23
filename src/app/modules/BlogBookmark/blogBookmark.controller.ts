@@ -21,7 +21,7 @@ const toggleBlogBookmark = catchAsync(async (req, res) => {
   });
 });
 
-const getBookmark = catchAsync(async (req, res) => {
+const getBlogBookmark = catchAsync(async (req, res) => {
   const { id } = req.user as { id: string };
   const result = await BlogBookmarkServices.getBlogBookmarkFromDB(id);
 
@@ -33,7 +33,7 @@ const getBookmark = catchAsync(async (req, res) => {
   });
 });
 
-const deleteBookmark = catchAsync(async (req, res) => {
+const deleteBlogBookmarkByID = catchAsync(async (req, res) => {
   const { id } = req.user as { id: string };
   const { referenceId } = req.params as {
     referenceId: string;
@@ -51,6 +51,6 @@ const deleteBookmark = catchAsync(async (req, res) => {
 
 export const BlogBookmarkControllers = {
   toggleBlogBookmark,
-  getBookmark,
-  deleteBookmark,
+  getBlogBookmark,
+  deleteBlogBookmarkByID,
 };
