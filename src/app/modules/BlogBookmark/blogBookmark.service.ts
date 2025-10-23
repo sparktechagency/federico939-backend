@@ -81,7 +81,7 @@ const deleteBlogBookmarkByIdFromDB = async (userId: string, referenceId: string)
   return result;
 };
 
-export const BookmarkService = {
+export const BlogBookmarkServices = {
   toggleBlogBookmark,
   getBlogBookmarkFromDB,
   deleteBlogBookmarkByIdFromDB,
