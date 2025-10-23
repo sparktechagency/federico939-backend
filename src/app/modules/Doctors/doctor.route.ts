@@ -13,7 +13,7 @@ router.post(
   '/',
   fileUploadHandler(),
   parseAllFilesData({ fieldName: FOLDER_NAMES.IMAGE, forceSingle: true }),
-  auth(USER_ROLES.ADMIN),
+  auth(USER_ROLES.ADMIN,USER_ROLES.SUPER_ADMIN),
   DoctorControllers.createDoctor,
 );
 router.get(
