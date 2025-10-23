@@ -21,4 +21,4 @@ const blogBookmarkSchema = new Schema<TBlogBookmark>(
     },
 );
 
-export const BookmarkEvent = model<TBlogBookmark>("BlogBookmark", blogBookmarkSchema);
+export const BlogBookmark = model<TBlogBookmark>("BlogBookmark", blogBookmarkSchema);
