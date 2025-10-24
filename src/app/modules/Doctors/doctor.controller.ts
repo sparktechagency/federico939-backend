@@ -18,13 +18,14 @@ const createDoctor = catchAsync(async (req, res) => {
 
 // 📋 Get All Doctors
 const getAllDoctors = catchAsync(async (req, res) => {
-  const result = await DoctorServices.getAllDoctors();
+  const result = await DoctorServices.getAllDoctors(req.query);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
     message: 'Doctors retrieved successfully',
-    data: result,
+    data: result.data,
+    meta: result.meta
   });
 });
 
@@ -43,28 +44,13 @@ const getDoctorById = catchAsync(async (req, res) => {
 
 // 🌟 Get Special Doctor (by category)
 const getSpecialDoctor = catchAsync(async (req, res) => {
-  const { category } = req.query;
-
-  if (
-    !category ||
-    !Object.values(DOCTOR_CATEGORY).includes(category as DOCTOR_CATEGORY)
-  ) {
-    return sendResponse(res, {
-      statusCode: httpStatus.BAD_REQUEST,
-      success: false,
-      message: 'Invalid or missing doctor category',
-      data: null,
-    });
-  }
-
   const result = await DoctorServices.getSpecialDoctor(
-    category as DOCTOR_CATEGORY,
+    req.query,
   );
-
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: `Doctors filtered by category: ${category}`,
+    message: `Special Doctors Retrieved Successfully!`,
     data: result,
   });
 });

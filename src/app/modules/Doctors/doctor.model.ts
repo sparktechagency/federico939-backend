@@ -23,7 +23,7 @@ const DoctorSchema = new Schema<IDoctor>(
       required: true,
       trim: true,
     },
-    chember: {
+    chamber: {
       type: String,
       required: true,
       trim: true,
