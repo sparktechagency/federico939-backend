@@ -53,7 +53,7 @@ const createBlogToDB = async (payload: TBlog) => {
 
 
 
-const getAllBLogsFromDB = async (query: any) => {
+const getAllBLogsFromDB = async (userId: string, query: any) => {
     const baseQuery = Blog.find();
 
     const queryBuilder = new QueryBuilder(baseQuery, query).search(["title", "authorName", "category"])
@@ -62,7 +62,7 @@ const getAllBLogsFromDB = async (query: any) => {
         .filter()
         .paginate()
 
-    const blogs = await queryBuilder.modelQuery;
+    const blogs = await queryBuilder.modelQuery.lean();
 
     const meta = await queryBuilder.countTotal();
 
@@ -71,8 +71,23 @@ const getAllBLogsFromDB = async (query: any) => {
         return []
     }
 
+    const withBookmark = await Promise.all(
+        blogs.map(async (blog) => {
+            const isBookmarked = await BlogBookmark.exists({
+                userId,
+                referenceId: blog._id,
+            });
+
+            return {
+                ...blog,
+                isBookmarked: !!isBookmarked,
+            }
+        })
+
+    )
+
     return {
-        data: blogs,
+        data: withBookmark,
         meta,
     };
 };
