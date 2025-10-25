@@ -68,7 +68,7 @@ const getAllBLogsFromDB = async (query: any) => {
 
 
     if (!blogs || blogs.length === 0) {
-        throw new AppError(404, 'No blogs are found in the database');
+        return []
     }
 
     return {
@@ -87,7 +87,7 @@ const getBlogByIdFromDB = async (userId: string, id: string) => {
 
 
     if (!blog) {
-        throw new AppError(404, 'No blog found in the database by this ID');
+        return {}
     }
 
     return {

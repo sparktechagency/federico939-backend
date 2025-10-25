@@ -6,11 +6,6 @@
     "auditLog": "D:\\Moshfiqur Rahman\\federico939-backend\\winston\\error\\.98d644082f07393c5df54537d2a649ad03d8c173-audit.json",
     "files": [
         {
-            "date": 1761268954263,
-            "name": "D:\\Moshfiqur Rahman\\federico939-backend\\winston\\error\\24-10-2025-07-error.log",
-            "hash": "4c955cdbddd28241eeba3945716f1b77b4f31e0f682aa05e29a4fa4c2cb6aacf"
-        },
-        {
             "date": 1761311992965,
             "name": "D:\\Moshfiqur Rahman\\federico939-backend\\winston\\error\\24-10-2025-19-error.log",
             "hash": "84b00940b3158b29af5bdb1b2ed4ff0e63a80277a2f5c135457a3082a12f75de"
@@ -19,6 +14,16 @@
             "date": 1761318140772,
             "name": "D:\\Moshfiqur Rahman\\federico939-backend\\winston\\error\\24-10-2025-21-error.log",
             "hash": "660557cc62244d21278fcd3cbbaaa50ff2ec4a962d6607dafe105faebbe7edb3"
+        },
+        {
+            "date": 1761363446246,
+            "name": "D:\\Moshfiqur Rahman\\federico939-backend\\winston\\error\\25-10-2025-09-error.log",
+            "hash": "8843f867651c3b2cfcd36add860af2949004e1a5c3baf702d82ab34dc7ec88db"
+        },
+        {
+            "date": 1761368683444,
+            "name": "D:\\Moshfiqur Rahman\\federico939-backend\\winston\\error\\25-10-2025-11-error.log",
+            "hash": "13e9b700f16d5c04a10ad25f5d5e3d10e735aeb7e1d9d8f572247133b19aa8cb"
         }
     ],
     "hashType": "sha256"
