@@ -6,14 +6,24 @@
     "auditLog": "D:\\sparktech\\federico939-backend\\winston\\success\\.3c677e4afc8ab70957f0ad2b8294730e9bcfc581-audit.json",
     "files": [
         {
-            "date": 1761286691818,
-            "name": "D:\\sparktech\\federico939-backend\\winston\\success\\24-10-2025-12-success.log",
-            "hash": "8261c83a3537f058b071119ab77e04de05303302fba4117d8dba251046f9373f"
-        },
-        {
             "date": 1761364925037,
             "name": "D:\\sparktech\\federico939-backend\\winston\\success\\25-10-2025-10-success.log",
             "hash": "46dc1be3ce227b6f171e79bce6de77468eea941356fea14c7bdfa99d32e219ff"
+        },
+        {
+            "date": 1761373668608,
+            "name": "D:\\sparktech\\federico939-backend\\winston\\success\\25-10-2025-12-success.log",
+            "hash": "1676ffbf1d2f9b2b5c8f6df9f93168f96b9c94350c76bb1304735bab82517520"
+        },
+        {
+            "date": 1761388281969,
+            "name": "D:\\sparktech\\federico939-backend\\winston\\success\\25-10-2025-16-success.log",
+            "hash": "39b72ca3ce1c81821dde6bbe92fb751bb1a5fe52a45eec00e9961ae23487b32b"
+        },
+        {
+            "date": 1761391108054,
+            "name": "D:\\sparktech\\federico939-backend\\winston\\success\\25-10-2025-17-success.log",
+            "hash": "686ed9bed0d3b019816c4aaa7a8ee005fa0bebe4e6f587293376f6f25ffb826a"
         }
     ],
     "hashType": "sha256"

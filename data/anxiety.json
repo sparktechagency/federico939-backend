@@ -1,0 +1,143 @@
+{
+  "category": "Anxiety",
+  "version": "1.0.0",
+  "questionType": "frequency",
+  "options": [
+    {
+      "text": "Never",
+      "score": 0
+    },
+    {
+      "text": "Rarely",
+      "score": 1
+    },
+    {
+      "text": "Sometimes",
+      "score": 2
+    },
+    {
+      "text": "Often",
+      "score": 3
+    },
+    {
+      "text": "Always",
+      "score": 4
+    }
+  ],
+  "questions": [
+    {
+      "id": 1,
+      "question": "I feel nervous, anxious or on edge"
+    },
+    {
+      "id": 2,
+      "question": "I worry about different things"
+    },
+    {
+      "id": 3,
+      "question": "I find it difficult to control my worrying"
+    },
+    {
+      "id": 4,
+      "question": "I have trouble relaxing"
+    },
+    {
+      "id": 5,
+      "question": "I feel restless and cannot sit still"
+    },
+    {
+      "id": 6,
+      "question": "I become easily annoyed or irritable"
+    },
+    {
+      "id": 7,
+      "question": "I feel afraid as if something awful might happen"
+    },
+    {
+      "id": 8,
+      "question": "I experience physical signs of anxiety, such as rapid heartbeat or sweating"
+    },
+    {
+      "id": 9,
+      "question": "I avoid situations that make me anxious"
+    },
+    {
+      "id": 10,
+      "question": "I have difficulty concentrating because of my worries"
+    },
+    {
+      "id": 11,
+      "question": "I feel tense in social situations"
+    },
+    {
+      "id": 12,
+      "question": "I fear losing control or going crazy"
+    },
+    {
+      "id": 13,
+      "question": "I have sudden feelings of panic"
+    },
+    {
+      "id": 14,
+      "question": "I experience shortness of breath or dizziness when anxious"
+    },
+    {
+      "id": 15,
+      "question": "I wake up worrying about things"
+    },
+    {
+      "id": 16,
+      "question": "I feel uneasy in unfamiliar environments"
+    },
+    {
+      "id": 17,
+      "question": "I find myself imagining the worst‑case scenario"
+    },
+    {
+      "id": 18,
+      "question": "I feel overwhelmed by responsibilities"
+    },
+    {
+      "id": 19,
+      "question": "I feel anxious about the future"
+    },
+    {
+      "id": 20,
+      "question": "I feel anxious even when there is no obvious reason"
+    }
+  ],
+  "scoring": {
+    "type": "sum",
+    "reverseScored": [],
+    "totalMin": 0,
+    "totalMax": 80,
+    "ranges": [
+      {
+        "min": 0,
+        "max": 20,
+        "label": "No or minimal anxiety"
+      },
+      {
+        "min": 21,
+        "max": 40,
+        "label": "Mild anxiety"
+      },
+      {
+        "min": 41,
+        "max": 60,
+        "label": "Moderate anxiety"
+      },
+      {
+        "min": 61,
+        "max": 80,
+        "label": "Severe anxiety"
+      }
+    ],
+    "interpretations": {
+      "No or minimal anxiety": "Your score suggests little to no symptoms of anxiety. You may sometimes experience worry or moments of tension, but these feelings do not interfere with your daily life. Occasional concerns are a natural part of being human and it seems you are generally able to manage them well. Continuing to care for yourself through healthy routines, good rest, and meaningful connections can help you maintain this balance and strengthen your resilience for the future.",
+      "Mild anxiety": "You may notice anxious feelings from time to time, but overall they tend to be manageable and do not take over your daily life. These moments of worry or tension are a normal part of being human, especially when life feels busy or uncertain. Paying attention to your well-being can make a difference. Practicing mindfulness, relaxation exercises, or simply taking a few minutes to breathe deeply can help calm your mind. Healthy lifestyle choices, such as regular movement, balanced sleep, and meaningful social connections, can also reduce the impact of anxiety and give you greater resilience. Even small daily habits of self-care can support you in keeping these feelings under control and preventing them from growing stronger.",
+      "Moderate anxiety": "Anxiety symptoms are showing up more often and may start to interfere with your daily life and overall sense of well-being. This is a sign that your mind and body are asking for attention and care. Exploring stress-management techniques such as relaxation exercises, mindfulness, or physical activity can be helpful in reducing the intensity of these feelings. It may also be valuable to share your experiences with a health professional, who can support you in finding strategies tailored to your needs. Taking small, consistent steps can already make a meaningful difference in how you feel.",
+      "Severe anxiety": "Living with persistent or intense anxiety can feel overwhelming and exhausting. If your score falls in this range it means that anxiety is having a strong impact on your life and on the way you face everyday situations. Remember that what you are experiencing is not a weakness but rather a signal that you may need some extra support. Speaking with a professional can help you understand better what is happening and guide you towards strategies that make things feel lighter. You do not have to go through this alone. Asking for help is already a powerful step towards feeling more balanced and in control again."
+    }
+  }
+}

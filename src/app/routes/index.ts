@@ -7,6 +7,7 @@ import { AudioRoutes } from '../modules/AudioCollections/audio.route';
 import { DoctorRoutes } from '../modules/Doctors/doctor.route';
 import { BlogBookmarkRoutes } from '../modules/BlogBookmark/blogBookmark.route';
 import { NotificationRoutes } from '../modules/Notification/notification.route';
+import { SelfAssRoutes } from '../modules/SelfAss/sa.route';
 
 const router = Router();
 
@@ -42,6 +43,10 @@ const moduleRoutes = [
   {
     path: "/notifications",
     route: NotificationRoutes
+  },
+  {
+    path: "/self-assessment",
+    route: SelfAssRoutes
   }
 ];
 

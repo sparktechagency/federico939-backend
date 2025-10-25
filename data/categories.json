@@ -1,0 +1,24 @@
+{
+  "categories": [
+    {
+      "key": "anxiety",
+      "title": "Anxiety",
+      "questionCount": 20
+    },
+    {
+      "key": "depression",
+      "title": "Depression",
+      "questionCount": 20
+    },
+    {
+      "key": "stress",
+      "title": "Stress",
+      "questionCount": 20
+    },
+    {
+      "key": "personality",
+      "title": "Personality",
+      "questionCount": 20
+    }
+  ]
+}

@@ -1,0 +1,157 @@
+{
+  "category": "Stress",
+  "version": "1.0.0",
+  "questionType": "frequency",
+  "options": [
+    {
+      "text": "Never",
+      "score": 0
+    },
+    {
+      "text": "Rarely",
+      "score": 1
+    },
+    {
+      "text": "Sometimes",
+      "score": 2
+    },
+    {
+      "text": "Often",
+      "score": 3
+    },
+    {
+      "text": "Always",
+      "score": 4
+    }
+  ],
+  "questions": [
+    {
+      "id": 1,
+      "question": "In the last month, how often have you been upset because of something that happened unexpectedly?",
+      "reverseScored": false
+    },
+    {
+      "id": 2,
+      "question": "In the last month, how often have you felt that you were unable to control the important things in your life?",
+      "reverseScored": false
+    },
+    {
+      "id": 3,
+      "question": "In the last month, how often have you felt nervous and stressed?",
+      "reverseScored": false
+    },
+    {
+      "id": 4,
+      "question": "In the last month, how often have you felt confident about your ability to handle your personal problems?",
+      "reverseScored": true
+    },
+    {
+      "id": 5,
+      "question": "In the last month, how often have you felt that things were going your way?",
+      "reverseScored": true
+    },
+    {
+      "id": 6,
+      "question": "In the last month, how often have you found that you could not cope with all the things that you had to do?",
+      "reverseScored": false
+    },
+    {
+      "id": 7,
+      "question": "In the last month, how often have you been able to control irritations in your life?",
+      "reverseScored": true
+    },
+    {
+      "id": 8,
+      "question": "In the last month, how often have you felt that you were on top of things?",
+      "reverseScored": true
+    },
+    {
+      "id": 9,
+      "question": "In the last month, how often have you been angered because of things that were outside of your control?",
+      "reverseScored": false
+    },
+    {
+      "id": 10,
+      "question": "In the last month, how often have you felt that difficulties were piling up so high that you could not overcome them?",
+      "reverseScored": false
+    },
+    {
+      "id": 11,
+      "question": "In the last month, how often have you felt overwhelmed by responsibilities?",
+      "reverseScored": false
+    },
+    {
+      "id": 12,
+      "question": "In the last month, how often have you found it hard to relax after work?",
+      "reverseScored": false
+    },
+    {
+      "id": 13,
+      "question": "In the last month, how often have you felt that you did not have time for yourself?",
+      "reverseScored": false
+    },
+    {
+      "id": 14,
+      "question": "In the last month, how often have you had trouble sleeping because of stress?",
+      "reverseScored": false
+    },
+    {
+      "id": 15,
+      "question": "In the last month, how often have you felt under pressure from deadlines?",
+      "reverseScored": false
+    },
+    {
+      "id": 16,
+      "question": "In the last month, how often have you felt that you were doing things expected of you rather than what you wanted?",
+      "reverseScored": false
+    },
+    {
+      "id": 17,
+      "question": "In the last month, how often have you been moody or irritable due to stress?",
+      "reverseScored": false
+    },
+    {
+      "id": 18,
+      "question": "In the last month, how often have you experienced headaches or body tension?",
+      "reverseScored": false
+    },
+    {
+      "id": 19,
+      "question": "In the last month, how often have you felt that you lacked control over the direction of your life?",
+      "reverseScored": false
+    },
+    {
+      "id": 20,
+      "question": "In the last month, how often have you been able to enjoy your hobbies or leisure time?",
+      "reverseScored": true
+    }
+  ],
+  "scoring": {
+    "type": "sum",
+    "reverseRule": "reverse items where reverseScored=true (score = 4 - score)",
+    "totalMin": 0,
+    "totalMax": 80,
+    "ranges": [
+      {
+        "min": 0,
+        "max": 26,
+        "label": "Low stress"
+      },
+      {
+        "min": 27,
+        "max": 52,
+        "label": "Moderate stress"
+      },
+      {
+        "min": 53,
+        "max": 80,
+        "label": "High stress"
+      }
+    ],
+    "interpretations": {
+      "Low stress": "You perceive only a few situations in your life as stressful, which suggests you are managing daily challenges in a balanced way. This does not mean that moments of tension will never arise, but it shows that you already have effective coping strategies that help you maintain your well-being. Continue nurturing these habits and give yourself space to recharge whenever you need it. Listening to the relaxation and mindfulness audios from SpectraMentis can be a simple way to reinforce your inner calm and strengthen your ability to handle future challenges with resilience.",
+      "Moderate stress": "You experience stressors more frequently and they may sometimes affect how you feel or how you go through your day. This is a natural sign that your mind and body are asking for more care. Learning time-management techniques, practicing relaxation, or sharing your feelings with a trusted friend or a professional can help you lighten the load. Building small moments of pause into your routine, such as guided meditations or breathing exercises, can make a real difference. You may find that listening to SpectraMentis audios regularly gives you an accessible tool to release tension and feel more grounded.",
+      "High stress": "You perceive many situations as highly stressful and this constant pressure may start to affect your health, mood, and relationships. Living with such a level of stress can feel overwhelming, but it is also an important reminder that you deserve extra care and support. Professional advice on stress management can help you find strategies that work for you and bring relief in your everyday life. Alongside this, practicing mindfulness, relaxation, and listening to the calming audios from Spectramentis can provide a safe space to slow down, reconnect with yourself, and regain a sense of control and balanceon stress management."
+    }
+  }
+}

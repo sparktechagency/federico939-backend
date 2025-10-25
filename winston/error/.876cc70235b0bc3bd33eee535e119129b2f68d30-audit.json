@@ -6,14 +6,24 @@
     "auditLog": "D:\\sparktech\\federico939-backend\\winston\\error\\.876cc70235b0bc3bd33eee535e119129b2f68d30-audit.json",
     "files": [
         {
-            "date": 1761286691823,
-            "name": "D:\\sparktech\\federico939-backend\\winston\\error\\24-10-2025-12-error.log",
-            "hash": "2a2fca8e73d2b580d817a3bb5fffb90553977e88332ae60b548a22e611325f47"
-        },
-        {
             "date": 1761364925039,
             "name": "D:\\sparktech\\federico939-backend\\winston\\error\\25-10-2025-10-error.log",
             "hash": "56167b9de3352f01d64807650073e59bfab0fe807efa24aa3ffd7d9164316c37"
+        },
+        {
+            "date": 1761373668614,
+            "name": "D:\\sparktech\\federico939-backend\\winston\\error\\25-10-2025-12-error.log",
+            "hash": "29121ac7dd8992f4656946e15945e1c2fdfff9fbe17051c555a57758e942d6b0"
+        },
+        {
+            "date": 1761388281973,
+            "name": "D:\\sparktech\\federico939-backend\\winston\\error\\25-10-2025-16-error.log",
+            "hash": "810fc6c6d4948ff05767e3b8fb99d74cc38e4cead676a6335a2d3fd461cdc182"
+        },
+        {
+            "date": 1761391108057,
+            "name": "D:\\sparktech\\federico939-backend\\winston\\error\\25-10-2025-17-error.log",
+            "hash": "b8dae861fdf01c49316f537878ce96caf3e45b77eaeab0837e7214d34ab76c6a"
         }
     ],
     "hashType": "sha256"
