@@ -1,4 +1,5 @@
 import QueryBuilder from '../../builder/QueryBuilder';
+import AppError from '../../errors/AppError';
 import { DOCTOR_CATEGORY, IDoctor } from './doctor.interface';
 import { Doctor } from './doctor.model';
 import { cleanQuery } from './doctor.utils';
@@ -64,14 +65,35 @@ const getSpecialDoctor = async (rawQuery: any) => {
   return { data: result, meta };
 };
 
-// ✏️ Update Doctor
+
 const updateDoctor = async (id: string, payload: Partial<IDoctor>) => {
-  const result = await Doctor.findByIdAndUpdate(id, payload, {
-    new: true,
-    runValidators: true,
-  });
+ 
+  if (payload.category) {
+    const categoryMap: Record<DOCTOR_CATEGORY, string> = {
+      [DOCTOR_CATEGORY.BUSINESS_DOCTOR]: "Business",
+      [DOCTOR_CATEGORY.CAREER_DOCTOR]: "Career",
+      [DOCTOR_CATEGORY.LIFE_DOCTOR]: "Life",
+      [DOCTOR_CATEGORY.MENTAL_DOCTOR]: "Mental",
+      [DOCTOR_CATEGORY.PHYCOLOGIST_DOCTOR]: "Psychologist",
+      [DOCTOR_CATEGORY.SPECIAL_DOCTOR]: "Special"
+    };
+
+    payload.categoryName = categoryMap[payload.category];
+  }
+
+  const result = await Doctor.findByIdAndUpdate(
+    id,
+    { $set: payload },
+    { new: true, runValidators: true }
+  );
+
+  if (!result) {
+    throw new AppError(404, "Doctor not found or failed to update");
+  }
+
   return result;
 };
+
 
 // 🗑️ Delete Doctor
 const deleteDoctor = async (id: string) => {

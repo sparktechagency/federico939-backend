@@ -124,6 +124,31 @@ const getBlogByIdFromDB = async (userId: string, id: string) => {
 };
 
 const updateBlogByIdToDB = async (id: string, payload: Partial<TBlog>) => {
+   
+    if (payload.category) {
+        const validCategories = [
+            BLOG_CATEGORY.ANXITY_BLOG,
+            BLOG_CATEGORY.FEAR_BLOG,
+            BLOG_CATEGORY.PRODUCTIVITY_BLOG,
+            BLOG_CATEGORY.SLEEP_BLOG,
+            BLOG_CATEGORY.STRESS_BLOG,
+        ];
+
+        if (!validCategories.includes(payload.category)) {
+            throw new AppError(400, "Category must be one of the valid enum values");
+        }
+
+        const categoryMap: Record<BLOG_CATEGORY, string> = {
+            [BLOG_CATEGORY.ANXITY_BLOG]: "Anxity",
+            [BLOG_CATEGORY.FEAR_BLOG]: "Fear",
+            [BLOG_CATEGORY.PRODUCTIVITY_BLOG]: "Productivity",
+            [BLOG_CATEGORY.SLEEP_BLOG]: "Sleep",
+            [BLOG_CATEGORY.STRESS_BLOG]: "Stress"
+        };
+
+        payload.categoryName = categoryMap[payload.category];
+    }
+
     const updatedBlog = await Blog.findByIdAndUpdate(
         id,
         { $set: payload },
@@ -136,6 +161,7 @@ const updateBlogByIdToDB = async (id: string, payload: Partial<TBlog>) => {
 
     return updatedBlog;
 };
+
 
 const deleteBlogByIdFromDB = async (id: string) => {
     const result = await Blog.findByIdAndDelete(id);
