@@ -75,7 +75,17 @@ const getMyMoodTrackerHistoriesFromDB = async (userId: string) => {
     return result;
 }
 
+const getAllMoodTrackerHistoriesFromDB = async () => {
+    const result = await MoodTracker.find();
+    if (!result || result.length === 0) {
+        return []
+    };
+
+    return result;
+}
+
 export const MoodTrackerServices = {
     CreateOrUpdateMoodTrackerToDB,
-    getMyMoodTrackerHistoriesFromDB
+    getMyMoodTrackerHistoriesFromDB,
+    getAllMoodTrackerHistoriesFromDB,
 }
