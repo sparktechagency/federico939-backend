@@ -1,0 +1,15 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 1
+    },
+    "auditLog": "D:\\sparktech\\federico939-backend\\winston\\error\\.876cc70235b0bc3bd33eee535e119129b2f68d30-audit.json",
+    "files": [
+        {
+            "date": 1761393495380,
+            "name": "D:\\sparktech\\federico939-backend\\winston\\error\\25-10-2025-17-error.log",
+            "hash": "652e640ccd8fe7ab6c88bc05920beed105c7cf03ac8b15db65552c002b203250"
+        }
+    ],
+    "hashType": "sha256"
+}
