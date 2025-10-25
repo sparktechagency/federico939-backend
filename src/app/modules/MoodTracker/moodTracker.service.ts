@@ -24,14 +24,14 @@ const CreateOrUpdateMoodTrackerToDB = async (
 
 
     const titleMap: Record<MOOD_TYPE, string> = {
-        [MOOD_TYPE.ANXITY]: "SEVERE ANXITY",
-        [MOOD_TYPE.DEPRESSION]: "DEPRESSION",
-        [MOOD_TYPE.HAPPY]: "HAPPY",
-        [MOOD_TYPE.NO_MOTIVATION]: "NO MOTIVATION",
-        [MOOD_TYPE.PERSONALITY]: "PERSONALITY",
-        [MOOD_TYPE.SAD]: "SAD",
-        [MOOD_TYPE.SLEEPY]: "SLEEPY",
-        [MOOD_TYPE.STRESSED]: "STRESSED",
+        [MOOD_TYPE.ANXITY]: "Severe Anxity",
+        [MOOD_TYPE.DEPRESSION]: "Depression",
+        [MOOD_TYPE.HAPPY]: "Happy",
+        [MOOD_TYPE.NO_MOTIVATION]: "No Moitivation",
+        [MOOD_TYPE.PERSONALITY]: "Personality",
+        [MOOD_TYPE.SAD]: "Sad",
+        [MOOD_TYPE.SLEEPY]: "Sleepy",
+        [MOOD_TYPE.STRESSED]: "Stressed",
     };
 
     const title = titleMap[payload.moodType];
