@@ -17,6 +17,10 @@ const blogSchema = new Schema<TBlog>(
       enum: Object.values(BLOG_CATEGORY),
       required: true,
     },
+    categoryName: {
+      type: String,
+      required: false,
+    },
     thumbnail: {
       type: String,
       required: true,

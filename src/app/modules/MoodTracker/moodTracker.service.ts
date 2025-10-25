@@ -84,8 +84,19 @@ const getAllMoodTrackerHistoriesFromDB = async () => {
     return result;
 }
 
+const deleteMoodTrackerHistoryByIdFromDB = async (id: string) => {
+    const result = await MoodTracker.findByIdAndDelete(id);
+    if (!result) {
+        throw new AppError(400, "Failed to delete mood tracker history by this ID")
+    };
+
+    return result;
+}
+
+
 export const MoodTrackerServices = {
     CreateOrUpdateMoodTrackerToDB,
     getMyMoodTrackerHistoriesFromDB,
     getAllMoodTrackerHistoriesFromDB,
+    deleteMoodTrackerHistoryByIdFromDB,
 }

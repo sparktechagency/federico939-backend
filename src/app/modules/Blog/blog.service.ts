@@ -22,6 +22,18 @@ const createBlogToDB = async (payload: TBlog) => {
         throw new AppError(400, "Category must'be valid enum values");
     }
 
+    const categoryMap: Record<BLOG_CATEGORY, string> = {
+        [BLOG_CATEGORY.ANXITY_BLOG]: "Anxity",
+        [BLOG_CATEGORY.FEAR_BLOG]: "Fear",
+        [BLOG_CATEGORY.PRODUCTIVITY_BLOG]: "Productivity",
+        [BLOG_CATEGORY.SLEEP_BLOG]: "Sleep",
+        [BLOG_CATEGORY.STRESS_BLOG]: "Stress"
+    }
+
+    const categoryName = categoryMap[payload.category]
+
+    payload.categoryName = categoryName
+
     const result = await Blog.create(payload);
 
     // Fetch only verified & active users
