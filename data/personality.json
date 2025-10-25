@@ -1,0 +1,170 @@
+{
+  "category": "Personality",
+  "version": "1.0.0",
+  "questionType": "agreement",
+  "options": [
+    {
+      "text": "Strongly disagree",
+      "score": 0
+    },
+    {
+      "text": "Disagree",
+      "score": 1
+    },
+    {
+      "text": "Neutral",
+      "score": 2
+    },
+    {
+      "text": "Agree",
+      "score": 3
+    },
+    {
+      "text": "Strongly agree",
+      "score": 4
+    }
+  ],
+  "questions": [
+    {
+      "id": 1,
+      "trait": "Openness",
+      "question": "I enjoy trying new and unfamiliar activities",
+      "reverseScored": false
+    },
+    {
+      "id": 2,
+      "trait": "Openness",
+      "question": "I am interested in learning about art, music or literature",
+      "reverseScored": false
+    },
+    {
+      "id": 3,
+      "trait": "Openness",
+      "question": "I like to think about abstract concepts and ideas",
+      "reverseScored": false
+    },
+    {
+      "id": 4,
+      "trait": "Openness",
+      "question": "I avoid new experiences and prefer routine",
+      "reverseScored": true
+    },
+    {
+      "id": 5,
+      "trait": "Conscientiousness",
+      "question": "I am always prepared and keep my tasks organized",
+      "reverseScored": false
+    },
+    {
+      "id": 6,
+      "trait": "Conscientiousness",
+      "question": "I pay attention to details and like to finish tasks properly",
+      "reverseScored": false
+    },
+    {
+      "id": 7,
+      "trait": "Conscientiousness",
+      "question": "I often leave my belongings around and do things at the last minute",
+      "reverseScored": true
+    },
+    {
+      "id": 8,
+      "trait": "Conscientiousness",
+      "question": "I follow a schedule and meet deadlines",
+      "reverseScored": false
+    },
+    {
+      "id": 9,
+      "trait": "Extraversion",
+      "question": "I feel comfortable around people and enjoy social gatherings",
+      "reverseScored": false
+    },
+    {
+      "id": 10,
+      "trait": "Extraversion",
+      "question": "I start conversations with new people easily",
+      "reverseScored": false
+    },
+    {
+      "id": 11,
+      "trait": "Extraversion",
+      "question": "I prefer to be alone or with a small group rather than attend parties",
+      "reverseScored": true
+    },
+    {
+      "id": 12,
+      "trait": "Extraversion",
+      "question": "I feel energized when I am around other people",
+      "reverseScored": false
+    },
+    {
+      "id": 13,
+      "trait": "Agreeableness",
+      "question": "I take time to understand other people’s feelings",
+      "reverseScored": false
+    },
+    {
+      "id": 14,
+      "trait": "Agreeableness",
+      "question": "I enjoy helping others and contributing to their happiness",
+      "reverseScored": false
+    },
+    {
+      "id": 15,
+      "trait": "Agreeableness",
+      "question": "I am sometimes critical or indifferent toward others",
+      "reverseScored": true
+    },
+    {
+      "id": 16,
+      "trait": "Agreeableness",
+      "question": "I trust people and believe most people are well‑intentioned",
+      "reverseScored": false
+    },
+    {
+      "id": 17,
+      "trait": "Neuroticism",
+      "question": "I often feel anxious or worried about many things",
+      "reverseScored": false
+    },
+    {
+      "id": 18,
+      "trait": "Neuroticism",
+      "question": "I become upset easily and have mood swings",
+      "reverseScored": false
+    },
+    {
+      "id": 19,
+      "trait": "Neuroticism",
+      "question": "I remain calm and emotionally stable when faced with stress",
+      "reverseScored": true
+    },
+    {
+      "id": 20,
+      "trait": "Neuroticism",
+      "question": "I tend to dwell on negative experiences or memories",
+      "reverseScored": false
+    }
+  ],
+  "scoring": {
+    "type": "big5",
+    "reverseRule": "reverse items where reverseScored=true (score = 4 - score)",
+    "totalMin": 0,
+    "totalMax": 80,
+    "traitAggregation": "sum per trait across 4 items; highest = predominant trait",
+    "traits": [
+      "Openness",
+      "Conscientiousness",
+      "Extraversion",
+      "Agreeableness",
+      "Neuroticism"
+    ],
+    "interpretations": {
+      "Openness": "You are curious, imaginative and open to new experiences. You enjoy learning, exploring ideas, and finding inspiration in art, creativity and discovery. People with high openness often seek novelty and are comfortable with change, while those with lower scores may prefer routine and familiar approaches. Nourishing your curiosity with moments of reflection can help you stay inspired and balanced. Listening to the Spectramentis audios can be a gentle way to fuel your creativity and open your mind to new perspectives.",
+      "Conscientiousness": "You are disciplined, organised and dependable. You like to plan carefully, set goals, and work steadily toward achieving them. High conscientiousness reflects structure and attention to detail, while lower scores may suggest a more spontaneous or flexible approach to tasks. While your organisation is a strength, it is also important to give yourself space to rest and recharge. Spectramentis audios can support you in finding balance, helping you release pressure and regain energy to stay focused and motivated.",
+      "Extraversion": "You are outgoing, sociable and energized by being around others. You thrive in group settings and often feel recharged through interaction, conversation and shared experiences. High extraversion suggests a love of connection, while lower scores reflect comfort in solitude and introspection. To nurture your well-being, it is important to balance your active social life with moments of calm. Listening to Spectramentis audios can help you pause, centre yourself, and maintain harmony between your outer energy and inner peace.",
+      "Agreeableness": "You are compassionate, empathetic and cooperative, often prioritising the feelings of others and seeking harmony in relationships. High agreeableness reflects kindness and a desire for connection, while lower scores may suggest a more independent or competitive approach. Remember that while caring for others is important, taking time to care for yourself is just as vital. Spectramentis audios can offer you a space of calm where you can recharge emotionally and reconnect with your own needs.",
+      "Neuroticism": "You may experience worry, mood changes or sensitivity to stress more frequently than others. A high score here indicates greater emotional reactivity, while lower scores suggest greater stability and resilience. Acknowledging your feelings without judgment is the first step towards taking care of yourself. Learning coping strategies and practicing self-compassion can support your well-being. Listening to calming Spectramentis audios may help you find relief, offering a safe space to release tension and recover balance in difficult moments."
+    }
+  }
+}

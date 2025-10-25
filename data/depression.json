@@ -1,0 +1,149 @@
+{
+  "category": "Depression",
+  "version": "1.0.0",
+  "questionType": "frequency",
+  "options": [
+    {
+      "text": "Never",
+      "score": 0
+    },
+    {
+      "text": "Rarely",
+      "score": 1
+    },
+    {
+      "text": "Sometimes",
+      "score": 2
+    },
+    {
+      "text": "Often",
+      "score": 3
+    },
+    {
+      "text": "Always",
+      "score": 4
+    }
+  ],
+  "questions": [
+    {
+      "id": 1,
+      "question": "Little interest or pleasure in doing things"
+    },
+    {
+      "id": 2,
+      "question": "Feeling down, depressed or hopeless"
+    },
+    {
+      "id": 3,
+      "question": "Trouble falling asleep, staying asleep or sleeping too much"
+    },
+    {
+      "id": 4,
+      "question": "Feeling tired or having little energy"
+    },
+    {
+      "id": 5,
+      "question": "Poor appetite or overeating"
+    },
+    {
+      "id": 6,
+      "question": "Feeling bad about yourself–that you are a failure or have let yourself or your family down"
+    },
+    {
+      "id": 7,
+      "question": "Trouble concentrating on things such as reading the newspaper or watching television"
+    },
+    {
+      "id": 8,
+      "question": "Moving or speaking slowly or being so fidgety or restless that other people have noticed"
+    },
+    {
+      "id": 9,
+      "question": "Feeling that life is not worth living or having thoughts of hurting yourself"
+    },
+    {
+      "id": 10,
+      "question": "Loss of motivation to do everyday tasks"
+    },
+    {
+      "id": 11,
+      "question": "Difficulty experiencing positive feelings such as happiness or joy"
+    },
+    {
+      "id": 12,
+      "question": "Feeling lonely even when around other people"
+    },
+    {
+      "id": 13,
+      "question": "Feelings of guilt or self‑blame"
+    },
+    {
+      "id": 14,
+      "question": "Feeling unworthy or lacking self‑esteem"
+    },
+    {
+      "id": 15,
+      "question": "Feeling irritable or easily agitated"
+    },
+    {
+      "id": 16,
+      "question": "Social withdrawal or isolation from friends and family"
+    },
+    {
+      "id": 17,
+      "question": "Feeling hopeless about the future"
+    },
+    {
+      "id": 18,
+      "question": "Feeling tearful or crying for no reason"
+    },
+    {
+      "id": 19,
+      "question": "Difficulty making decisions"
+    },
+    {
+      "id": 20,
+      "question": "Feeling numb or emotionally detached"
+    }
+  ],
+  "scoring": {
+    "type": "sum",
+    "reverseScored": [],
+    "totalMin": 0,
+    "totalMax": 80,
+    "ranges": [
+      {
+        "min": 0,
+        "max": 8,
+        "label": "None or minimal depression"
+      },
+      {
+        "min": 9,
+        "max": 24,
+        "label": "Mild depression"
+      },
+      {
+        "min": 25,
+        "max": 40,
+        "label": "Moderate depression"
+      },
+      {
+        "min": 41,
+        "max": 60,
+        "label": "Moderately severe depression"
+      },
+      {
+        "min": 61,
+        "max": 80,
+        "label": "Severe depression"
+      }
+    ],
+    "interpretations": {
+      "None or minimal depression": "Your responses suggest very few depressive symptoms. This means that, while moments of sadness or tiredness may occasionally appear, they do not interfere with your daily life. Maintaining healthy routines, meaningful social connections, and giving yourself time to recharge are all important to continue protecting your well-being. You can also strengthen your balance by listening to Spectramentis audios, which are designed to help you cultivate calmness and stay connected with your inner resources.",
+      "Mild depression": "You may notice occasional sadness, low energy, or a lack of interest in activities you usually enjoy. These moments are common, but it is important to pay attention to how they evolve. Practicing self-care, taking time to rest, and finding space for activities that bring you comfort can make a difference. Including mindfulness and guided relaxation in your routine can help lighten the weight of these feelings. Listening to Spectramentis audios may provide you with gentle support and a simple way to reconnect with yourself.",
+      "Moderate depression": "Depressive symptoms are becoming more frequent and may begin to affect how you feel and how you manage daily activities. This is a signal that you may benefit from extra care and support. Reaching out to a health professional is an important step to better understand what is happening and to find strategies that fit your needs. Alongside professional help, dedicating time to mindfulness, meditation, and relaxation with Spectramentis audios can give you moments of relief and a sense of renewed energy.",
+      "Moderately severe depression": "Persistent depressive symptoms are likely affecting several areas of your life, including your mood, motivation, and relationships. Living with this level of emotional weight can be very challenging, and it is important to take this seriously. Professional assessment and support are strongly recommended, as they can provide you with the guidance and resources you need. At the same time, practicing small daily rituals of self-care, such as listening to calming Spectramentis audios, may help you find brief but meaningful moments of peace in your day.",
+      "Severe depression": "Severe depressive symptoms can feel overwhelming and may deeply affect your life, increasing the risk of self-harm. If you are experiencing this, it is crucial to seek immediate professional help. You do not need to go through this alone. Talking to a doctor or a mental health professional can give you the support and safety you need. While waiting for help or in moments of calm, you may also find comfort in listening to Spectramentis audios, which are created to offer a gentle space for grounding and soothing. Remember that reaching out is a sign of strength and the first step toward recovery."
+    }
+  }
+}
