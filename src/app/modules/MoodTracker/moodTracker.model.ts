@@ -1,8 +1,12 @@
-import { model, Schema } from "mongoose";
+import { model, Schema, Types } from "mongoose";
 import { TMoodTracker } from "./moodTracker.interface";
 import { MOOD_TYPE, SOURCE } from "./moodTracker.constant";
 
 const moodTrackerSchema = new Schema<TMoodTracker>({
+    userId: {
+        type: Schema.Types.ObjectId,
+        ref: "User"
+    },
     title: {
         type: String,
         required: false,
