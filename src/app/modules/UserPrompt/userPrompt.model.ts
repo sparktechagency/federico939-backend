@@ -2,6 +2,11 @@ import { model, Schema } from "mongoose";
 import { TUserPrompt } from "./userPrompt.interface";
 
 const userPromptSchema = new Schema<TUserPrompt>({
+    userId: {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+        required: false,
+    },
     showMoodModal: {
         type: Boolean,
         required: false,
@@ -9,7 +14,15 @@ const userPromptSchema = new Schema<TUserPrompt>({
     showPaymentModal: {
         type: Boolean,
         required: false,
-    }
+    },
+    paymentModalCreatedAt: {
+        type: String,
+        required: false,
+    },
+    paymentModalIntervalDays: {
+        type: Number,
+        default: 7
+    },
 },
     {
         timestamps: true,

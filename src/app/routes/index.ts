@@ -10,6 +10,7 @@ import { NotificationRoutes } from '../modules/Notification/notification.route';
 import { SelfAssRoutes } from '../modules/SelfAss/sa.route';
 import { MoodTrackerRoutes } from '../modules/MoodTracker/moodTracker.route';
 import { AnalyticsRoutes } from '../modules/Analytics/analytics.route';
+import { UserPromptRoutes } from '../modules/UserPrompt/userPrompt.route';
 
 
 const router = Router();
@@ -58,6 +59,10 @@ const moduleRoutes = [
   {
     path: "/analytics",
     route: AnalyticsRoutes
+  },
+  {
+    path: "/user-prompts",
+    route: UserPromptRoutes
   }
 ];
 

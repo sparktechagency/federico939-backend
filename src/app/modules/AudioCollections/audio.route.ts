@@ -19,10 +19,10 @@ router.post(
 router.get('/', AudioController.getAllAudio);
 router.get('/special_audio', AudioController.getSpecialAudio);
 router.get('/:audio_id', AudioController.getSingleAudio);
-router.patch('/:audio_id', auth(USER_ROLES.ADMIN), AudioController.updateAudio);
+router.patch('/:audio_id', auth(USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN), AudioController.updateAudio);
 router.delete(
   '/:audio_id',
-  auth(USER_ROLES.ADMIN),
+  auth(USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN),
   AudioController.deleteAudio,
 );
 
