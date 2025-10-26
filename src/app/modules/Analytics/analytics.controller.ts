@@ -12,6 +12,23 @@ const getStats = catchAsync(async (req, res) => {
     })
 });
 
-export const AnalyticsControllers={
+
+const getMonthlyUserStats = catchAsync(async (req, res) => {
+    const { year } = req.query;
+
+    const selectedYear = year ? Number(year) : undefined;
+
+    const result = await AnalyticsServices.getMonthlyUserStatsFromDB(selectedYear);
+    sendResponse(res, {
+        success: true,
+        statusCode: 200,
+        message: "Successfully retrieved monthly stats",
+        data:result,
+    })
+
+})
+
+export const AnalyticsControllers = {
     getStats,
+    getMonthlyUserStats,
 }
