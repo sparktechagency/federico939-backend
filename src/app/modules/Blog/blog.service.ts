@@ -36,13 +36,13 @@ const createBlogToDB = async (payload: TBlog) => {
 
     const result = await Blog.create(payload);
 
-   
+
     const users = await User.find(
         { verified: true, status: STATUS.ACTIVE },
         '_id',
     );
 
- 
+
     await Promise.all(
         users.map(user =>
             sendNotifications({
@@ -63,10 +63,28 @@ const createBlogToDB = async (payload: TBlog) => {
     return result;
 };
 
+const getLatestBlogFromDB = async (userId: string) => {
+    const blog = await Blog.findOne({ isLatest: true }).sort("-createdAt");
+
+    if (!blog) {
+        return null
+    }
+
+    const isBookmarked = await BlogBookmark.exists({
+        userId,
+        referenceId: blog._id,
+    });
+
+    return {
+        ...blog.toObject(), 
+        isBookmarked: !!isBookmarked,
+    };
+};
+
 
 
 const getAllBLogsFromDB = async (userId: string, query: any) => {
-    const baseQuery = Blog.find();
+    const baseQuery = Blog.find({ isLatest: false });
 
     const queryBuilder = new QueryBuilder(baseQuery, query).search(["title", "authorName", "category"])
         .sort()
@@ -104,6 +122,9 @@ const getAllBLogsFromDB = async (userId: string, query: any) => {
     };
 };
 
+
+
+
 const getBlogByIdFromDB = async (userId: string, id: string) => {
     const blog = await Blog.findById(id).lean();
 
@@ -124,7 +145,7 @@ const getBlogByIdFromDB = async (userId: string, id: string) => {
 };
 
 const updateBlogByIdToDB = async (id: string, payload: Partial<TBlog>) => {
-   
+
     if (payload.category) {
         const validCategories = [
             BLOG_CATEGORY.ANXITY_BLOG,
@@ -179,4 +200,5 @@ export const BlogServices = {
     getBlogByIdFromDB,
     updateBlogByIdToDB,
     deleteBlogByIdFromDB,
+    getLatestBlogFromDB,
 };

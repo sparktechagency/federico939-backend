@@ -9,4 +9,5 @@ export interface TBlog {
   thumbnail: string;
   authorName: string;
   authorImage: string;
+  isLatest?:boolean
 }

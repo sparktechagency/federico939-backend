@@ -14,8 +14,8 @@ const createBlog = catchAsync(async (req, res) => {
 });
 
 const getAllBLogs = catchAsync(async (req, res) => {
-    const {id:userId}=req.user;
-    const result = await BlogServices.getAllBLogsFromDB(userId,req.query);
+    const { id: userId } = req.user;
+    const result = await BlogServices.getAllBLogsFromDB(userId, req.query);
     sendResponse(res, {
         success: true,
         statusCode: 200,
@@ -23,6 +23,17 @@ const getAllBLogs = catchAsync(async (req, res) => {
         data: result,
     });
 });
+
+const getLatestBlog = catchAsync(async (req, res) => {
+    const { id: userId } = req.user;
+    const result = await BlogServices.getLatestBlogFromDB(userId);
+    sendResponse(res, {
+        success: true,
+        statusCode: 200,
+        message: "Successfully retrieved latest blog data",
+        data: result,
+    })
+})
 
 const getBlogById = catchAsync(async (req, res) => {
     const { id } = req.params;
@@ -65,4 +76,5 @@ export const BlogControllers = {
     getBlogById,
     updateBlogById,
     deleteBlogById,
+    getLatestBlog,
 };

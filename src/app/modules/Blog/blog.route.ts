@@ -8,6 +8,8 @@ import { FOLDER_NAMES } from '../../enums/files';
 
 const router = express.Router();
 
+router.get("/latest", auth(USER_ROLES.USER, USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN), BlogControllers.getLatestBlog)
+
 router
     .route('/')
     .post(
@@ -20,6 +22,9 @@ router
         BlogControllers.createBlog,
     )
     .get(auth(USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN, USER_ROLES.USER), BlogControllers.getAllBLogs);
+
+
+
 
 router
     .route('/:id')

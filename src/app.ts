@@ -21,7 +21,7 @@ app.use(express.urlencoded({ extended: true }));
 //file retrieve
 app.use(express.static("uploads"));
 
-app.use(cors({ origin: '*', credentials: true }));
+app.use(cors({ origin: ["http://10.10.7.102:3003", "*"], credentials: true }));
 
 getImages(app);
 // application routes
