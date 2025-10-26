@@ -13,25 +13,25 @@ router.post(
   '/',
   fileUploadHandler(),
   parseAllFilesData({ fieldName: FOLDER_NAMES.IMAGE, forceSingle: true }),
-  auth(USER_ROLES.ADMIN,USER_ROLES.SUPER_ADMIN),
+  auth(USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN),
   DoctorControllers.createDoctor,
 );
 router.get(
   '/',
-  auth(USER_ROLES.USER, USER_ROLES.ADMIN),
+  auth(USER_ROLES.USER, USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN),
   DoctorControllers.getAllDoctors,
 );
 router.get(
   '/special_doctor',
-  auth(USER_ROLES.USER, USER_ROLES.ADMIN),
+  auth(USER_ROLES.USER, USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN),
   DoctorControllers.getSpecialDoctor,
 );
 router.get(
   '/:id',
-  auth(USER_ROLES.USER, USER_ROLES.ADMIN),
+  auth(USER_ROLES.USER, USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN),
   DoctorControllers.getDoctorById,
 );
-router.patch('/:id', auth(USER_ROLES.ADMIN), DoctorControllers.updateDoctor);
-router.delete('/:id', auth(USER_ROLES.ADMIN), DoctorControllers.deleteDoctor);
+router.patch('/:id', auth(USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN), DoctorControllers.updateDoctor);
+router.delete('/:id', auth(USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN), DoctorControllers.deleteDoctor);
 
 export const DoctorRoutes = router;

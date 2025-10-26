@@ -16,17 +16,18 @@ const CreateOrUpdateMoodTracker = catchAsync(async (req, res) => {
 
 const getMyMoodTrackerHistories = catchAsync(async (req, res) => {
     const { id: userId } = req.user;
-    const result = await MoodTrackerServices.getMyMoodTrackerHistoriesFromDB(userId);
+    const result = await MoodTrackerServices.getMyMoodTrackerHistoriesFromDB(userId, req.query);
     sendResponse(res, {
         success: true,
         statusCode: 200,
         message: "Successfully get my mood tracker histories",
-        data: result,
+        data: result.data,
+        meta:result.meta,
     })
 })
 
 const getAllMoodTrackerHistories = catchAsync(async (req, res) => {
-    const result = await MoodTrackerServices.getAllMoodTrackerHistoriesFromDB();
+    const result = await MoodTrackerServices.getAllMoodTrackerHistoriesFromDB(req.query);
     sendResponse(res, {
         success: true,
         statusCode: 200,

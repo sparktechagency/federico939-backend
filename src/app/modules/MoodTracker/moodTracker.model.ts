@@ -18,6 +18,14 @@ const moodTrackerSchema = new Schema<TMoodTracker>({
     source: {
         type: String,
         enum: Object.values(SOURCE)
+    },
+    category: {
+        type: String,
+        required: false,
+    },
+    resultLabel: {
+        type: String,
+        required: false,
     }
 },
     {

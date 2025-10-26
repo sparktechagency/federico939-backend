@@ -13,9 +13,9 @@ export enum AudioCategory {
 }
 
 export interface IAudio {
-  // audio_id: string;
   name: string;
   author: string;
+  thumbnail: string;
   audio: string;
   duration: number;
   total_duration: number;

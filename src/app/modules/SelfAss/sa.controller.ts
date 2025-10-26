@@ -6,6 +6,8 @@ import sendResponse from '../../utils/sendResponse';
 import { computeScore, loadQuestionnaire } from '../../utils/scoring';
 import { ISelfAssessment } from './sa.interface';
 import SelfAssessmentModel from './sa.model';
+import { MoodTracker } from '../MoodTracker/moodTracker.model';
+import { SOURCE } from '../MoodTracker/moodTracker.constant';
 
 const getCategories = catchAsync(async (req: Request, res: Response) => {
   try {
@@ -43,8 +45,8 @@ const getQuestions = async (req: Request, res: Response): Promise<void> => {
 // body: { answers: [{ questionId, selectedOption, score? }] }
 const submitAssessment = async (req: Request, res: Response): Promise<void> => {
   try {
-     const {id:userId}=req.user;
-  // depends on auth middleware
+    const { id: userId } = req.user;
+    // depends on auth middleware
     console.log('User ID:', userId);
     if (!userId) {
       res.status(401).json({ message: 'Unauthorized' });
@@ -68,6 +70,13 @@ const submitAssessment = async (req: Request, res: Response): Promise<void> => {
       interpretation: result.interpretation,
       answers: result.answers,
       traits: result.traits || undefined,
+    });
+
+    await MoodTracker.create({
+      userId,
+      category: doc.category,
+      resultLabel: doc.resultLabel,
+      source: SOURCE.SELF_ASSESSMENT,
     });
 
     res.status(201).json({

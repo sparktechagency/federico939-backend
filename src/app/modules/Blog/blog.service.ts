@@ -36,13 +36,13 @@ const createBlogToDB = async (payload: TBlog) => {
 
     const result = await Blog.create(payload);
 
-    // Fetch only verified & active users
+   
     const users = await User.find(
         { verified: true, status: STATUS.ACTIVE },
         '_id',
     );
 
-    // Send notification to those users
+ 
     await Promise.all(
         users.map(user =>
             sendNotifications({

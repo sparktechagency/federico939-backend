@@ -6,4 +6,6 @@ export interface TMoodTracker {
     title?: string;
     moodType: MOOD_TYPE;
     source: SOURCE;
+    category?:string
+    resultLabel?:string;
 }
