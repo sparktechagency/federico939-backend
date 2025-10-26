@@ -9,6 +9,7 @@ import { BlogBookmarkRoutes } from '../modules/BlogBookmark/blogBookmark.route';
 import { NotificationRoutes } from '../modules/Notification/notification.route';
 import { SelfAssRoutes } from '../modules/SelfAss/sa.route';
 import { MoodTrackerRoutes } from '../modules/MoodTracker/moodTracker.route';
+import { AnalyticsRoutes } from '../modules/Analytics/analytics.route';
 
 
 const router = Router();
@@ -53,6 +54,10 @@ const moduleRoutes = [
   {
     path: "/mood-trackers",
     route: MoodTrackerRoutes
+  },
+  {
+    path: "/analytics",
+    route: AnalyticsRoutes
   }
 ];
 
