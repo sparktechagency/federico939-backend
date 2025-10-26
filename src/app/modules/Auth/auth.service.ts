@@ -26,8 +26,6 @@ import httpStatus from 'http-status';
 const loginUserFromDB = async (payload: ILoginData) => {
   const { email, password } = payload;
 
-  console.log(payload);
-
 
 
   const isExistUser = await User.findOne({ email }).select('+password');

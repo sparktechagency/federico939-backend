@@ -8,6 +8,8 @@ import { DoctorRoutes } from '../modules/Doctors/doctor.route';
 import { BlogBookmarkRoutes } from '../modules/BlogBookmark/blogBookmark.route';
 import { NotificationRoutes } from '../modules/Notification/notification.route';
 import { SelfAssRoutes } from '../modules/SelfAss/sa.route';
+import { MoodTrackerRoutes } from '../modules/MoodTracker/moodTracker.route';
+
 
 const router = Router();
 
@@ -47,6 +49,10 @@ const moduleRoutes = [
   {
     path: "/self-assessment",
     route: SelfAssRoutes
+  },
+  {
+    path: "/mood-trackers",
+    route: MoodTrackerRoutes
   }
 ];
 

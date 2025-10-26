@@ -22,6 +22,18 @@ const createBlogToDB = async (payload: TBlog) => {
         throw new AppError(400, "Category must'be valid enum values");
     }
 
+    const categoryMap: Record<BLOG_CATEGORY, string> = {
+        [BLOG_CATEGORY.ANXITY_BLOG]: "Anxity",
+        [BLOG_CATEGORY.FEAR_BLOG]: "Fear",
+        [BLOG_CATEGORY.PRODUCTIVITY_BLOG]: "Productivity",
+        [BLOG_CATEGORY.SLEEP_BLOG]: "Sleep",
+        [BLOG_CATEGORY.STRESS_BLOG]: "Stress"
+    }
+
+    const categoryName = categoryMap[payload.category]
+
+    payload.categoryName = categoryName
+
     const result = await Blog.create(payload);
 
     // Fetch only verified & active users
@@ -53,7 +65,7 @@ const createBlogToDB = async (payload: TBlog) => {
 
 
 
-const getAllBLogsFromDB = async (query: any) => {
+const getAllBLogsFromDB = async (userId: string, query: any) => {
     const baseQuery = Blog.find();
 
     const queryBuilder = new QueryBuilder(baseQuery, query).search(["title", "authorName", "category"])
@@ -62,17 +74,32 @@ const getAllBLogsFromDB = async (query: any) => {
         .filter()
         .paginate()
 
-    const blogs = await queryBuilder.modelQuery;
+    const blogs = await queryBuilder.modelQuery.lean();
 
     const meta = await queryBuilder.countTotal();
 
 
     if (!blogs || blogs.length === 0) {
-        throw new AppError(404, 'No blogs are found in the database');
+        return []
     }
 
+    const withBookmark = await Promise.all(
+        blogs.map(async (blog) => {
+            const isBookmarked = await BlogBookmark.exists({
+                userId,
+                referenceId: blog._id,
+            });
+
+            return {
+                ...blog,
+                isBookmarked: !!isBookmarked,
+            }
+        })
+
+    )
+
     return {
-        data: blogs,
+        data: withBookmark,
         meta,
     };
 };
@@ -87,7 +114,7 @@ const getBlogByIdFromDB = async (userId: string, id: string) => {
 
 
     if (!blog) {
-        throw new AppError(404, 'No blog found in the database by this ID');
+        return {}
     }
 
     return {
@@ -97,6 +124,31 @@ const getBlogByIdFromDB = async (userId: string, id: string) => {
 };
 
 const updateBlogByIdToDB = async (id: string, payload: Partial<TBlog>) => {
+   
+    if (payload.category) {
+        const validCategories = [
+            BLOG_CATEGORY.ANXITY_BLOG,
+            BLOG_CATEGORY.FEAR_BLOG,
+            BLOG_CATEGORY.PRODUCTIVITY_BLOG,
+            BLOG_CATEGORY.SLEEP_BLOG,
+            BLOG_CATEGORY.STRESS_BLOG,
+        ];
+
+        if (!validCategories.includes(payload.category)) {
+            throw new AppError(400, "Category must be one of the valid enum values");
+        }
+
+        const categoryMap: Record<BLOG_CATEGORY, string> = {
+            [BLOG_CATEGORY.ANXITY_BLOG]: "Anxity",
+            [BLOG_CATEGORY.FEAR_BLOG]: "Fear",
+            [BLOG_CATEGORY.PRODUCTIVITY_BLOG]: "Productivity",
+            [BLOG_CATEGORY.SLEEP_BLOG]: "Sleep",
+            [BLOG_CATEGORY.STRESS_BLOG]: "Stress"
+        };
+
+        payload.categoryName = categoryMap[payload.category];
+    }
+
     const updatedBlog = await Blog.findByIdAndUpdate(
         id,
         { $set: payload },
@@ -109,6 +161,7 @@ const updateBlogByIdToDB = async (id: string, payload: Partial<TBlog>) => {
 
     return updatedBlog;
 };
+
 
 const deleteBlogByIdFromDB = async (id: string) => {
     const result = await Blog.findByIdAndDelete(id);

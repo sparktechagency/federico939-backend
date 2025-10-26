@@ -1,10 +1,25 @@
 import QueryBuilder from '../../builder/QueryBuilder';
+import AppError from '../../errors/AppError';
 import { DOCTOR_CATEGORY, IDoctor } from './doctor.interface';
 import { Doctor } from './doctor.model';
 import { cleanQuery } from './doctor.utils';
 
 // 🩺 Create Doctor
 const createDoctor = async (payload: IDoctor) => {
+
+  const categoryMap = {
+    [DOCTOR_CATEGORY.BUSINESS_DOCTOR]: "Business",
+    [DOCTOR_CATEGORY.CAREER_DOCTOR]: "Career",
+    [DOCTOR_CATEGORY.LIFE_DOCTOR]: "Life",
+    [DOCTOR_CATEGORY.MENTAL_DOCTOR]: "Mental",
+    [DOCTOR_CATEGORY.PHYCOLOGIST_DOCTOR]: "Psychologist",
+    [DOCTOR_CATEGORY.SPECIAL_DOCTOR]: "Special"
+  }
+
+  const categoryName = categoryMap[payload.category];
+
+  payload.categoryName = categoryName
+
   const result = await Doctor.create(payload);
   return result;
 };
@@ -13,7 +28,7 @@ const createDoctor = async (payload: IDoctor) => {
 const getAllDoctors = async (rawQuery: any) => {
   const query = cleanQuery(rawQuery);
   const resultQuery = new QueryBuilder(Doctor.find().sort({ createdAt: -1 }), query)
-    .search(["name", "category", "chamber","city", "about","available_start_day", "available_end_day","available_start_time","available_end_time","whatsapp","phone","email"])
+    .search(["name", "category", "chamber", "city", "about", "available_start_day", "available_end_day", "available_start_time", "available_end_time", "whatsapp", "phone", "email"])
     .filter()
     .sort()
     .fields()
@@ -32,10 +47,10 @@ const getDoctorById = async (id: string) => {
 
 // 🌟 Get Special Doctors (filter by category)
 const getSpecialDoctor = async (rawQuery: any) => {
-   const query = cleanQuery(rawQuery);
+  const query = cleanQuery(rawQuery);
   const resultQuery = new QueryBuilder(Doctor.find({ doctor_category: DOCTOR_CATEGORY.SPECIAL_DOCTOR })
     .sort({ createdAt: -1 }), query)
-    .search(["name", "category", "chamber","city", "about","available_start_day", "available_end_day","available_start_time","available_end_time","whatsapp","phone","email"])
+    .search(["name", "category", "chamber", "city", "about", "available_start_day", "available_end_day", "available_start_time", "available_end_time", "whatsapp", "phone", "email"])
     .filter()
     .sort()
     .fields()
@@ -50,14 +65,35 @@ const getSpecialDoctor = async (rawQuery: any) => {
   return { data: result, meta };
 };
 
-// ✏️ Update Doctor
+
 const updateDoctor = async (id: string, payload: Partial<IDoctor>) => {
-  const result = await Doctor.findByIdAndUpdate(id, payload, {
-    new: true,
-    runValidators: true,
-  });
+ 
+  if (payload.category) {
+    const categoryMap: Record<DOCTOR_CATEGORY, string> = {
+      [DOCTOR_CATEGORY.BUSINESS_DOCTOR]: "Business",
+      [DOCTOR_CATEGORY.CAREER_DOCTOR]: "Career",
+      [DOCTOR_CATEGORY.LIFE_DOCTOR]: "Life",
+      [DOCTOR_CATEGORY.MENTAL_DOCTOR]: "Mental",
+      [DOCTOR_CATEGORY.PHYCOLOGIST_DOCTOR]: "Psychologist",
+      [DOCTOR_CATEGORY.SPECIAL_DOCTOR]: "Special"
+    };
+
+    payload.categoryName = categoryMap[payload.category];
+  }
+
+  const result = await Doctor.findByIdAndUpdate(
+    id,
+    { $set: payload },
+    { new: true, runValidators: true }
+  );
+
+  if (!result) {
+    throw new AppError(404, "Doctor not found or failed to update");
+  }
+
   return result;
 };
+
 
 // 🗑️ Delete Doctor
 const deleteDoctor = async (id: string) => {

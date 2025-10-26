@@ -3,11 +3,10 @@ import { DOCTOR_CATEGORY, IDoctor } from './doctor.interface';
 
 const DoctorSchema = new Schema<IDoctor>(
   {
-    // doctor_id: {
-    //   type: String,
-    //   required: true,
-    //   unique: true,
-    // },
+    categoryName: {
+      type: String,
+      required: false,
+    },
     category: {
       type: String,
       enum: Object.values(DOCTOR_CATEGORY),

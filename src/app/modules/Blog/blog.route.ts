@@ -19,11 +19,11 @@ router
         ),
         BlogControllers.createBlog,
     )
-    .get(BlogControllers.getAllBLogs);
+    .get(auth(USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN, USER_ROLES.USER), BlogControllers.getAllBLogs);
 
 router
     .route('/:id')
-    .get(auth(USER_ROLES.USER), BlogControllers.getBlogById)
+    .get(auth(USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN, USER_ROLES.USER), BlogControllers.getBlogById)
     .patch(
         auth(USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN),
         fileUploadHandler(),
