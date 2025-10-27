@@ -31,7 +31,8 @@ router.get(
   auth(USER_ROLES.USER, USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN),
   DoctorControllers.getDoctorById,
 );
-router.patch('/:id', auth(USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN), DoctorControllers.updateDoctor);
+router.patch('/:id', fileUploadHandler(),
+  parseAllFilesData({ fieldName: FOLDER_NAMES.IMAGE, forceSingle: true }), auth(USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN), DoctorControllers.updateDoctor);
 router.delete('/:id', auth(USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN), DoctorControllers.deleteDoctor);
 
 export const DoctorRoutes = router;

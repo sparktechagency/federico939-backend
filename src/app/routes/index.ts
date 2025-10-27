@@ -11,6 +11,7 @@ import { SelfAssRoutes } from '../modules/SelfAss/sa.route';
 import { MoodTrackerRoutes } from '../modules/MoodTracker/moodTracker.route';
 import { AnalyticsRoutes } from '../modules/Analytics/analytics.route';
 import { UserPromptRoutes } from '../modules/UserPrompt/userPrompt.route';
+import { RuleRoutes } from '../modules/Rule/rule.route';
 
 
 const router = Router();
@@ -63,6 +64,10 @@ const moduleRoutes = [
   {
     path: "/user-prompts",
     route: UserPromptRoutes
+  },
+  {
+    path: "/rules",
+    route: RuleRoutes
   }
 ];
 

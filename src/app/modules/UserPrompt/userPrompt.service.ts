@@ -1,6 +1,7 @@
 import dayjs from "dayjs";
 import { MoodTracker } from "../MoodTracker/moodTracker.model";
 import { UserPrompt } from "./userPrompt.model";
+import { SOURCE } from "../MoodTracker/moodTracker.constant";
 
 // const checkPrompts = async (userId: string) => {
 //     const today = dayjs().startOf("day");
@@ -34,6 +35,7 @@ const checkPrompts = async (userId: string) => {
 
     const moodToday = await MoodTracker.findOne({
         userId,
+        source: SOURCE.HOME,
         createdAt: { $gte: today.toDate(), $lte: today.endOf("day").toDate() }
     });
 
