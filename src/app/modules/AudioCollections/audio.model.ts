@@ -7,7 +7,7 @@ const audioSchema = new Schema<IAudio>(
     author: { type: String, required: true },
     thumbnail: {
       type: String,
-      default: ""
+      default: '',
     },
     audio: { type: String, required: true },
     duration: { type: Number, required: false },

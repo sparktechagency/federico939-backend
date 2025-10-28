@@ -1,9 +1,9 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 const toggleBookmark = z.object({
   body: z.object({
     referenceId: z.string({
-      required_error: "Reference ID is required",
+      required_error: 'Reference ID is required',
     }),
   }),
 });

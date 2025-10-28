@@ -1,7 +1,5 @@
-
 import mongoose, { Schema } from 'mongoose';
 import { IAnswer, ISelfAssessment } from './sa.interface';
- 
 
 const AnswerSchema = new Schema<IAnswer>(
   {
@@ -11,7 +9,7 @@ const AnswerSchema = new Schema<IAnswer>(
     score: { type: Number, required: true },
     extra: { type: Object },
   },
-  { _id: false }
+  { _id: false },
 );
 
 const SelfAssessmentSchema = new Schema<ISelfAssessment>(
@@ -28,13 +26,12 @@ const SelfAssessmentSchema = new Schema<ISelfAssessment>(
     answers: { type: [AnswerSchema], default: [] },
     traits: { type: Object },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 const SelfAssessmentModel = mongoose.model<ISelfAssessment>(
   'SelfAssessment',
-  SelfAssessmentSchema
+  SelfAssessmentSchema,
 );
 
 export default SelfAssessmentModel;
-

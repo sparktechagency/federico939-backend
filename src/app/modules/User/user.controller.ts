@@ -122,7 +122,6 @@ const deleteUserById = catchAsync(async (req, res) => {
 
 const deleteProfile = catchAsync(async (req, res) => {
   const { id }: any = req.user;
- 
 
   const result = await UserService.deleteProfileFromDB(id);
 

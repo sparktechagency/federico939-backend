@@ -1,7 +1,7 @@
-import mongoose from "mongoose";
-import { BlogBookmark } from "./blogBookmark.model";
-import AppError from "../../errors/AppError";
-import { StatusCodes } from "http-status-codes";
+import mongoose from 'mongoose';
+import { BlogBookmark } from './blogBookmark.model';
+import AppError from '../../errors/AppError';
+import { StatusCodes } from 'http-status-codes';
 
 const checkBlogBookmarkStatus = async (userId: string, referenceId: string) => {
   const bookmark = await BlogBookmark.findOne({
@@ -26,7 +26,7 @@ const toggleBlogBookmark = async (payload: {
   if (existingBookmark) {
     await BlogBookmark.deleteOne({ _id: existingBookmark._id });
     return {
-      message: "Bookmark removed successfully",
+      message: 'Bookmark removed successfully',
       isBookmarked: false,
     };
   } else {
@@ -35,7 +35,7 @@ const toggleBlogBookmark = async (payload: {
       referenceId: new mongoose.Types.ObjectId(referenceId),
     });
     return {
-      message: "Bookmark added successfully",
+      message: 'Bookmark added successfully',
       isBookmarked: true,
       data: newBookmark,
     };
@@ -47,10 +47,10 @@ const getBlogBookmarkFromDB = async (userId: string) => {
 
   const bookmarks = await BlogBookmark.find(query)
     .populate({
-      path: "userId",
-      select: "name email profileImage role _id",
+      path: 'userId',
+      select: 'name email profileImage role _id',
     })
-    .populate("referenceId")
+    .populate('referenceId')
     .sort({ createdAt: -1 })
     .lean();
 
@@ -70,13 +70,16 @@ const getBlogBookmarkFromDB = async (userId: string) => {
   return populatedBookmarks;
 };
 
-const deleteBlogBookmarkByIdFromDB = async (userId: string, referenceId: string) => {
+const deleteBlogBookmarkByIdFromDB = async (
+  userId: string,
+  referenceId: string,
+) => {
   const result = await BlogBookmark.deleteOne({
     userId,
     referenceId,
   });
   if (!result.deletedCount) {
-    throw new AppError(StatusCodes.NOT_FOUND, "Bookmark not found");
+    throw new AppError(StatusCodes.NOT_FOUND, 'Bookmark not found');
   }
   return result;
 };
@@ -86,4 +89,3 @@ export const BlogBookmarkServices = {
   getBlogBookmarkFromDB,
   deleteBlogBookmarkByIdFromDB,
 };
-

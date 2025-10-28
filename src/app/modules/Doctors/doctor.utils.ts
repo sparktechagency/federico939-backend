@@ -7,7 +7,11 @@ export const cleanQuery = (query: Record<string, any>) => {
       value !== undefined &&
       value !== '' &&
       !(Array.isArray(value) && value.length === 0) &&
-      !(typeof value === 'object' && !Array.isArray(value) && Object.keys(value).length === 0)
+      !(
+        typeof value === 'object' &&
+        !Array.isArray(value) &&
+        Object.keys(value).length === 0
+      )
     ) {
       cleaned[key] = value;
     }

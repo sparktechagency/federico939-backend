@@ -1,6 +1,6 @@
-import catchAsync from "../../utils/catchAsync";
-import sendResponse from "../../utils/sendResponse";
-import { BlogBookmarkServices } from "./blogBookmark.service";
+import catchAsync from '../../utils/catchAsync';
+import sendResponse from '../../utils/sendResponse';
+import { BlogBookmarkServices } from './blogBookmark.service';
 
 const toggleBlogBookmark = catchAsync(async (req, res) => {
   const { id } = req.user as { id: string };
@@ -16,7 +16,7 @@ const toggleBlogBookmark = catchAsync(async (req, res) => {
   sendResponse(res, {
     statusCode: 200,
     success: true,
-    message: result.message || "Bookmark toggled successfully",
+    message: result.message || 'Bookmark toggled successfully',
     data: result,
   });
 });
@@ -28,7 +28,7 @@ const getBlogBookmark = catchAsync(async (req, res) => {
   sendResponse(res, {
     statusCode: 200,
     success: true,
-    message: "Bookmarks Retrieved Successfully",
+    message: 'Bookmarks Retrieved Successfully',
     data: result,
   });
 });
@@ -39,12 +39,15 @@ const deleteBlogBookmarkByID = catchAsync(async (req, res) => {
     referenceId: string;
   };
 
-  const result = await BlogBookmarkServices.deleteBlogBookmarkByIdFromDB(id, referenceId);
+  const result = await BlogBookmarkServices.deleteBlogBookmarkByIdFromDB(
+    id,
+    referenceId,
+  );
 
   sendResponse(res, {
     statusCode: 200,
     success: true,
-    message: "Bookmark deleted successfully",
+    message: 'Bookmark deleted successfully',
     data: result,
   });
 });

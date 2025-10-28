@@ -13,7 +13,6 @@ import { AnalyticsRoutes } from '../modules/Analytics/analytics.route';
 import { UserPromptRoutes } from '../modules/UserPrompt/userPrompt.route';
 import { RuleRoutes } from '../modules/Rule/rule.route';
 
-
 const router = Router();
 
 const moduleRoutes = [
@@ -30,45 +29,45 @@ const moduleRoutes = [
     route: FaqRoutes,
   },
   {
-    path: "/blogs",
-    route: BlogRoutes
+    path: '/blogs',
+    route: BlogRoutes,
   },
   {
-    path: "/audio",
-    route: AudioRoutes
+    path: '/audio',
+    route: AudioRoutes,
   },
   {
-    path: "/doctor",
-    route: DoctorRoutes
+    path: '/doctor',
+    route: DoctorRoutes,
   },
   {
-    path: "/bookmarks",
-    route: BlogBookmarkRoutes
+    path: '/bookmarks',
+    route: BlogBookmarkRoutes,
   },
   {
-    path: "/notifications",
-    route: NotificationRoutes
+    path: '/notifications',
+    route: NotificationRoutes,
   },
   {
-    path: "/self-assessment",
-    route: SelfAssRoutes
+    path: '/self-assessment',
+    route: SelfAssRoutes,
   },
   {
-    path: "/mood-trackers",
-    route: MoodTrackerRoutes
+    path: '/mood-trackers',
+    route: MoodTrackerRoutes,
   },
   {
-    path: "/analytics",
-    route: AnalyticsRoutes
+    path: '/analytics',
+    route: AnalyticsRoutes,
   },
   {
-    path: "/user-prompts",
-    route: UserPromptRoutes
+    path: '/user-prompts',
+    route: UserPromptRoutes,
   },
   {
-    path: "/rules",
-    route: RuleRoutes
-  }
+    path: '/rules',
+    route: RuleRoutes,
+  },
 ];
 
 moduleRoutes.forEach((route) => router.use(route.path, route.route));

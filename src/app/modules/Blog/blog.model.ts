@@ -37,7 +37,7 @@ const blogSchema = new Schema<TBlog>(
     isLatest: {
       type: Boolean,
       default: false,
-    }
+    },
   },
   {
     timestamps: true,

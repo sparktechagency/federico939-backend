@@ -1,12 +1,11 @@
 import colors from 'colors';
-import { Server } from "socket.io";
+import { Server } from 'socket.io';
 import mongoose from 'mongoose';
 import app from './app';
 import config from './app/config';
 import seedSuperUser from './app/DB';
 import { errorLogger, logger } from './app/shared/logger';
 import { socketHelper } from './app/helpers/socketHelper';
-
 
 let server: any;
 
@@ -16,10 +15,10 @@ async function main() {
     seedSuperUser();
 
     mongoose.connect(config.database_url as string);
-    logger.info(colors.green("🚀 Database connected successfully"));
+    logger.info(colors.green('🚀 Database connected successfully'));
 
     const port =
-      typeof config.port === "number" ? config.port : Number(config.port);
+      typeof config.port === 'number' ? config.port : Number(config.port);
 
     server = app.listen(port, config.ip_address as string, () => {
       logger.info(
@@ -31,7 +30,7 @@ async function main() {
     const io = new Server(server, {
       pingTimeout: 60000,
       cors: {
-        origin: "*",
+        origin: '*',
       },
     });
 
@@ -39,14 +38,14 @@ async function main() {
     //@ts-ignore
     global.io = io;
   } catch (error) {
-    errorLogger.error(colors.red("🤢 Failed to connect Database"));
+    errorLogger.error(colors.red('🤢 Failed to connect Database'));
   }
 
   //handle unhandledRejection
-  process.on("unhandledRejection", (error) => {
+  process.on('unhandledRejection', (error) => {
     if (server) {
       server.close(() => {
-        errorLogger.error("UnhandledRejection Detected", error);
+        errorLogger.error('UnhandledRejection Detected', error);
         process.exit(1);
       });
     } else {

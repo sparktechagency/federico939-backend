@@ -1,7 +1,7 @@
-import dayjs from "dayjs";
-import { MoodTracker } from "../MoodTracker/moodTracker.model";
-import { UserPrompt } from "./userPrompt.model";
-import { SOURCE } from "../MoodTracker/moodTracker.constant";
+import dayjs from 'dayjs';
+import { MoodTracker } from '../MoodTracker/moodTracker.model';
+import { UserPrompt } from './userPrompt.model';
+import { SOURCE } from '../MoodTracker/moodTracker.constant';
 
 // const checkPrompts = async (userId: string) => {
 //     const today = dayjs().startOf("day");
@@ -16,7 +16,6 @@ import { SOURCE } from "../MoodTracker/moodTracker.constant";
 
 //     let showMoodModal = !moodToday;
 
-
 //     let prompt = await UserPrompt.findOne({ userId });
 //     if (!prompt) {
 
@@ -30,51 +29,53 @@ import { SOURCE } from "../MoodTracker/moodTracker.constant";
 // };
 
 const checkPrompts = async (userId: string) => {
-    const today = dayjs().startOf("day");
+  const today = dayjs().startOf('day');
 
+  const moodToday = await MoodTracker.findOne({
+    userId,
+    source: SOURCE.HOME,
+    createdAt: { $gte: today.toDate(), $lte: today.endOf('day').toDate() },
+  });
 
-    const moodToday = await MoodTracker.findOne({
-        userId,
-        source: SOURCE.HOME,
-        createdAt: { $gte: today.toDate(), $lte: today.endOf("day").toDate() }
+  const showMoodModal = !moodToday;
+  const moodData = moodToday || null;
+
+  let prompt = await UserPrompt.findOne({ userId });
+  if (!prompt) {
+    prompt = await UserPrompt.create({
+      userId,
+      paymentModalCreatedAt: today.toDate(),
+      paymentModalIntervalDays: 7,
     });
+  }
 
-    const showMoodModal = !moodToday;
-    const moodData = moodToday || null;
+  let showPaymentModal = false;
+  if (prompt.paymentModalCreatedAt) {
+    const daysSince = today.diff(
+      dayjs(prompt.paymentModalCreatedAt).startOf('day'),
+      'day',
+    );
+    showPaymentModal = daysSince % (prompt.paymentModalIntervalDays || 7) === 0;
+  }
 
-
-    let prompt = await UserPrompt.findOne({ userId });
-    if (!prompt) {
-        prompt = await UserPrompt.create({ userId, paymentModalCreatedAt: today.toDate(), paymentModalIntervalDays: 7 });
-    }
-
-    let showPaymentModal = false;
-    if (prompt.paymentModalCreatedAt) {
-        const daysSince = today.diff(dayjs(prompt.paymentModalCreatedAt).startOf("day"), "day");
-        showPaymentModal = (daysSince % (prompt.paymentModalIntervalDays || 7) === 0);
-    }
-
-    return {
-        showMoodModal,
-        moodData,
-        showPaymentModal
-    };
+  return {
+    showMoodModal,
+    moodData,
+    showPaymentModal,
+  };
 };
 
 const updatePaymentIntervalToDB = async (userId: string, days: number) => {
-    const result = await UserPrompt.findOneAndUpdate(
-        { userId },
-        { paymentModalIntervalDays: days },
-        { new: true, upsert: true }
-    );
+  const result = await UserPrompt.findOneAndUpdate(
+    { userId },
+    { paymentModalIntervalDays: days },
+    { new: true, upsert: true },
+  );
 
-    return result;
+  return result;
 };
 
-
-
-
 export const UserPromptServices = {
-    checkPrompts,
-    updatePaymentIntervalToDB
-}
+  checkPrompts,
+  updatePaymentIntervalToDB,
+};

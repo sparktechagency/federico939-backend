@@ -25,7 +25,7 @@ const getAllDoctors = catchAsync(async (req, res) => {
     success: true,
     message: 'Doctors retrieved successfully',
     data: result.data,
-    meta: result.meta
+    meta: result.meta,
   });
 });
 
@@ -44,9 +44,7 @@ const getDoctorById = catchAsync(async (req, res) => {
 
 // 🌟 Get Special Doctor (by category)
 const getSpecialDoctor = catchAsync(async (req, res) => {
-  const result = await DoctorServices.getSpecialDoctor(
-    req.query,
-  );
+  const result = await DoctorServices.getSpecialDoctor(req.query);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,

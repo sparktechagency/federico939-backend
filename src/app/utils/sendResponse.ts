@@ -53,4 +53,3 @@ const sendResponse = <T>(res: Response, data: IData<T>) => {
 };
 
 export default sendResponse;
-

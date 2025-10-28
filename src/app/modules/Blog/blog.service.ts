@@ -10,195 +10,183 @@ import { TBlog } from './blog.interface';
 import { Blog } from './blog.model';
 
 const createBlogToDB = async (payload: TBlog) => {
-    const validCategories = [
-        BLOG_CATEGORY.ANXITY_BLOG,
-        BLOG_CATEGORY.FEAR_BLOG,
-        BLOG_CATEGORY.PRODUCTIVITY_BLOG,
-        BLOG_CATEGORY.SLEEP_BLOG,
-        BLOG_CATEGORY.STRESS_BLOG,
-    ];
+  const validCategories = [
+    BLOG_CATEGORY.ANXITY_BLOG,
+    BLOG_CATEGORY.FEAR_BLOG,
+    BLOG_CATEGORY.PRODUCTIVITY_BLOG,
+    BLOG_CATEGORY.SLEEP_BLOG,
+    BLOG_CATEGORY.STRESS_BLOG,
+  ];
 
-    if (!validCategories.includes(payload.category)) {
-        throw new AppError(400, "Category must'be valid enum values");
-    }
+  if (!validCategories.includes(payload.category)) {
+    throw new AppError(400, "Category must'be valid enum values");
+  }
 
-    const categoryMap: Record<BLOG_CATEGORY, string> = {
-        [BLOG_CATEGORY.ANXITY_BLOG]: "Anxity",
-        [BLOG_CATEGORY.FEAR_BLOG]: "Fear",
-        [BLOG_CATEGORY.PRODUCTIVITY_BLOG]: "Productivity",
-        [BLOG_CATEGORY.SLEEP_BLOG]: "Sleep",
-        [BLOG_CATEGORY.STRESS_BLOG]: "Stress"
-    }
+  const categoryMap: Record<BLOG_CATEGORY, string> = {
+    [BLOG_CATEGORY.ANXITY_BLOG]: 'Anxity',
+    [BLOG_CATEGORY.FEAR_BLOG]: 'Fear',
+    [BLOG_CATEGORY.PRODUCTIVITY_BLOG]: 'Productivity',
+    [BLOG_CATEGORY.SLEEP_BLOG]: 'Sleep',
+    [BLOG_CATEGORY.STRESS_BLOG]: 'Stress',
+  };
 
-    const categoryName = categoryMap[payload.category]
+  const categoryName = categoryMap[payload.category];
 
-    payload.categoryName = categoryName
+  payload.categoryName = categoryName;
 
-    const result = await Blog.create(payload);
+  const result = await Blog.create(payload);
 
+  const users = await User.find(
+    { verified: true, status: STATUS.ACTIVE },
+    '_id',
+  );
 
-    const users = await User.find(
-        { verified: true, status: STATUS.ACTIVE },
-        '_id',
-    );
+  await Promise.all(
+    users.map((user) =>
+      sendNotifications({
+        receiver: user._id,
+        text: 'New blog published!',
+        message: `${result.title} is now available to read.`,
+        type: NOTIFICATION_TYPE.USER,
+        data: result,
+      }),
+    ),
+  );
 
+  if (!result) {
+    throw new AppError(400, 'Failed to create blog');
+  }
 
-    await Promise.all(
-        users.map(user =>
-            sendNotifications({
-                receiver: user._id,
-                text: 'New blog published!',
-                message: `${result.title} is now available to read.`,
-                type: NOTIFICATION_TYPE.USER,
-                data: result,
-            }),
-        ),
-    );
-
-
-    if (!result) {
-        throw new AppError(400, 'Failed to create blog');
-    }
-
-    return result;
+  return result;
 };
 
 const getLatestBlogFromDB = async (userId: string) => {
-    const blog = await Blog.findOne({ isLatest: true }).sort("-createdAt");
+  const blog = await Blog.findOne({ isLatest: true }).sort('-createdAt');
 
-    if (!blog) {
-        return null
-    }
+  if (!blog) {
+    return null;
+  }
 
-    const isBookmarked = await BlogBookmark.exists({
-        userId,
-        referenceId: blog._id,
-    });
+  const isBookmarked = await BlogBookmark.exists({
+    userId,
+    referenceId: blog._id,
+  });
 
-    return {
-        ...blog.toObject(), 
-        isBookmarked: !!isBookmarked,
-    };
+  return {
+    ...blog.toObject(),
+    isBookmarked: !!isBookmarked,
+  };
 };
-
-
 
 const getAllBLogsFromDB = async (userId: string, query: any) => {
-    const baseQuery = Blog.find({ isLatest: false });
+  const baseQuery = Blog.find({ isLatest: false });
 
-    const queryBuilder = new QueryBuilder(baseQuery, query).search(["title", "authorName", "category"])
-        .sort()
-        .fields()
-        .filter()
-        .paginate()
+  const queryBuilder = new QueryBuilder(baseQuery, query)
+    .search(['title', 'authorName', 'category'])
+    .sort()
+    .fields()
+    .filter()
+    .paginate();
 
-    const blogs = await queryBuilder.modelQuery.lean();
+  const blogs = await queryBuilder.modelQuery.lean();
 
-    const meta = await queryBuilder.countTotal();
+  const meta = await queryBuilder.countTotal();
 
+  if (!blogs || blogs.length === 0) {
+    return [];
+  }
 
-    if (!blogs || blogs.length === 0) {
-        return []
-    }
-
-    const withBookmark = await Promise.all(
-        blogs.map(async (blog) => {
-            const isBookmarked = await BlogBookmark.exists({
-                userId,
-                referenceId: blog._id,
-            });
-
-            return {
-                ...blog,
-                isBookmarked: !!isBookmarked,
-            }
-        })
-
-    )
-
-    return {
-        data: withBookmark,
-        meta,
-    };
-};
-
-
-
-
-const getBlogByIdFromDB = async (userId: string, id: string) => {
-    const blog = await Blog.findById(id).lean();
-
-    const isBookmarked = await BlogBookmark.exists({
+  const withBookmark = await Promise.all(
+    blogs.map(async (blog) => {
+      const isBookmarked = await BlogBookmark.exists({
         userId,
-        referenceId: id,
-    });
+        referenceId: blog._id,
+      });
 
-
-    if (!blog) {
-        return {}
-    }
-
-    return {
+      return {
         ...blog,
         isBookmarked: !!isBookmarked,
-    };
+      };
+    }),
+  );
+
+  return {
+    data: withBookmark,
+    meta,
+  };
+};
+
+const getBlogByIdFromDB = async (userId: string, id: string) => {
+  const blog = await Blog.findById(id).lean();
+
+  const isBookmarked = await BlogBookmark.exists({
+    userId,
+    referenceId: id,
+  });
+
+  if (!blog) {
+    return {};
+  }
+
+  return {
+    ...blog,
+    isBookmarked: !!isBookmarked,
+  };
 };
 
 const updateBlogByIdToDB = async (id: string, payload: Partial<TBlog>) => {
+  if (payload.category) {
+    const validCategories = [
+      BLOG_CATEGORY.ANXITY_BLOG,
+      BLOG_CATEGORY.FEAR_BLOG,
+      BLOG_CATEGORY.PRODUCTIVITY_BLOG,
+      BLOG_CATEGORY.SLEEP_BLOG,
+      BLOG_CATEGORY.STRESS_BLOG,
+    ];
 
-    if (payload.category) {
-        const validCategories = [
-            BLOG_CATEGORY.ANXITY_BLOG,
-            BLOG_CATEGORY.FEAR_BLOG,
-            BLOG_CATEGORY.PRODUCTIVITY_BLOG,
-            BLOG_CATEGORY.SLEEP_BLOG,
-            BLOG_CATEGORY.STRESS_BLOG,
-        ];
-
-        if (!validCategories.includes(payload.category)) {
-            throw new AppError(400, "Category must be one of the valid enum values");
-        }
-
-        const categoryMap: Record<BLOG_CATEGORY, string> = {
-            [BLOG_CATEGORY.ANXITY_BLOG]: "Anxity",
-            [BLOG_CATEGORY.FEAR_BLOG]: "Fear",
-            [BLOG_CATEGORY.PRODUCTIVITY_BLOG]: "Productivity",
-            [BLOG_CATEGORY.SLEEP_BLOG]: "Sleep",
-            [BLOG_CATEGORY.STRESS_BLOG]: "Stress"
-        };
-
-        payload.categoryName = categoryMap[payload.category];
+    if (!validCategories.includes(payload.category)) {
+      throw new AppError(400, 'Category must be one of the valid enum values');
     }
 
-    const updatedBlog = await Blog.findByIdAndUpdate(
-        id,
-        { $set: payload },
-        { new: true, runValidators: true },
-    );
+    const categoryMap: Record<BLOG_CATEGORY, string> = {
+      [BLOG_CATEGORY.ANXITY_BLOG]: 'Anxity',
+      [BLOG_CATEGORY.FEAR_BLOG]: 'Fear',
+      [BLOG_CATEGORY.PRODUCTIVITY_BLOG]: 'Productivity',
+      [BLOG_CATEGORY.SLEEP_BLOG]: 'Sleep',
+      [BLOG_CATEGORY.STRESS_BLOG]: 'Stress',
+    };
 
-    if (!updatedBlog) {
-        throw new AppError(404, 'No blog found or failed to update');
-    }
+    payload.categoryName = categoryMap[payload.category];
+  }
 
-    return updatedBlog;
+  const updatedBlog = await Blog.findByIdAndUpdate(
+    id,
+    { $set: payload },
+    { new: true, runValidators: true },
+  );
+
+  if (!updatedBlog) {
+    throw new AppError(404, 'No blog found or failed to update');
+  }
+
+  return updatedBlog;
 };
 
-
 const deleteBlogByIdFromDB = async (id: string) => {
-    const result = await Blog.findByIdAndDelete(id);
+  const result = await Blog.findByIdAndDelete(id);
 
-    if (!result) {
-        throw new AppError(400, 'Failed to delete this blog by ID');
-    }
+  if (!result) {
+    throw new AppError(400, 'Failed to delete this blog by ID');
+  }
 
-    return result;
+  return result;
 };
 
 export const BlogServices = {
-    createBlogToDB,
-    getAllBLogsFromDB,
-    getBlogByIdFromDB,
-    updateBlogByIdToDB,
-    deleteBlogByIdFromDB,
-    getLatestBlogFromDB,
+  createBlogToDB,
+  getAllBLogsFromDB,
+  getBlogByIdFromDB,
+  updateBlogByIdToDB,
+  deleteBlogByIdFromDB,
+  getLatestBlogFromDB,
 };
