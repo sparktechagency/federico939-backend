@@ -1,0 +1,15 @@
+{
+  "keep": {
+    "days": true,
+    "amount": 1
+  },
+  "auditLog": "D:\\Moshfiqur Rahman\\federico939-backend\\winston\\error\\.98d644082f07393c5df54537d2a649ad03d8c173-audit.json",
+  "files": [
+    {
+      "date": 1761646726177,
+      "name": "D:\\Moshfiqur Rahman\\federico939-backend\\winston\\error\\28-10-2025-16-error.log",
+      "hash": "e3c2041f490c072cc329712188b0adfb8a47e432a50f986211233472bf7c565f"
+    }
+  ],
+  "hashType": "sha256"
+}
