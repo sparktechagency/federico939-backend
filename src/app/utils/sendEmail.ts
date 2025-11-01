@@ -5,7 +5,7 @@ export const sendEmail = async (to: string, html: string, subject: string) => {
   const transporter = nodemailer.createTransport({
     host: config.email.host,
     port: Number(config.email.port),
-    secure: config.NODE_ENV === 'production',
+    secure: config.node_env === 'production',
     auth: {
       // TODO: replace `user` and `pass` values from <https://forwardemail.net>
       user: config.email.user,
@@ -31,7 +31,7 @@ export const sendEmailToAdmin = async (
   const transporter = nodemailer.createTransport({
     host: config.email.host || 'smtp.gmail.com',
     port: Number(config.email.port) || 587,
-    secure: config.NODE_ENV === 'production',
+    secure: config.node_env === 'production',
     auth: {
       user: config.email.user,
       pass: config.email.pass,
