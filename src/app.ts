@@ -21,8 +21,15 @@ app.use(
       'https://appspectra.cloud',
     ],
     credentials: true,
+    allowedHeaders: [
+      'Content-Type',
+      'Authorization',
+      'ngrok-skip-browser-warning',
+    ],
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   }),
 );
+
 //parsers
 app.use(express.json());
 app.use(cookieParser());
