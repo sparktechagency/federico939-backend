@@ -16,17 +16,17 @@ const app: Application = express();
 app.use(
   cors({
     origin: [
-      'http://10.10.7.102:3003',
-      'https://federico-dashboard-tx1e.vercel.app',
       'https://appspectra.cloud',
+      'https://federico-dashboard-tx1e.vercel.app',
+      'http://10.10.7.102:3003',
     ],
     credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: [
       'Content-Type',
       'Authorization',
       'ngrok-skip-browser-warning',
     ],
-    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   }),
 );
 
