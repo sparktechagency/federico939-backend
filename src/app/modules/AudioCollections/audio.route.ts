@@ -13,7 +13,10 @@ router.post(
   '/',
   auth(USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN),
   fileUploadHandler(),
-  parseAllFilesData({ fieldName: FOLDER_NAMES.AUDIO, forceSingle: true }),
+  parseAllFilesData(
+    { fieldName: FOLDER_NAMES.AUDIO, forceSingle: true },
+    { fieldName: FOLDER_NAMES.THUMBNAIL, forceSingle: true },
+  ),
   AudioController.createAudio,
 );
 router.get('/', AudioController.getAllAudio);
@@ -22,6 +25,11 @@ router.get('/:audio_id', AudioController.getSingleAudio);
 router.patch(
   '/:audio_id',
   auth(USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN),
+  fileUploadHandler(),
+  parseAllFilesData(
+    { fieldName: FOLDER_NAMES.AUDIO, forceSingle: true },
+    { fieldName: FOLDER_NAMES.THUMBNAIL, forceSingle: true },
+  ),
   AudioController.updateAudio,
 );
 router.delete(

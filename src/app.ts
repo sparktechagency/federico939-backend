@@ -13,6 +13,23 @@ import { getImages } from './app/utils/ImageController';
 
 const app: Application = express();
 
+app.use(
+  cors({
+    origin: [
+      'https://appspectra.cloud',
+      'https://federico-dashboard-tx1e.vercel.app',
+      'http://10.10.7.102:3003',
+    ],
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: [
+      'Content-Type',
+      'Authorization',
+      'ngrok-skip-browser-warning',
+    ],
+  }),
+);
+
 //parsers
 app.use(express.json());
 app.use(cookieParser());
@@ -20,17 +37,6 @@ app.use(express.urlencoded({ extended: true }));
 
 //file retrieve
 app.use(express.static('uploads'));
-
-app.use(
-  cors({
-    origin: [
-      'http://10.10.7.102:3003',
-      'https://federico-dashboard-tx1e.vercel.app',
-      '*',
-    ],
-    credentials: true,
-  }),
-);
 
 getImages(app);
 // application routes
