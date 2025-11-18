@@ -12,6 +12,7 @@ import { MoodTrackerRoutes } from '../modules/MoodTracker/moodTracker.route';
 import { AnalyticsRoutes } from '../modules/Analytics/analytics.route';
 import { UserPromptRoutes } from '../modules/UserPrompt/userPrompt.route';
 import { RuleRoutes } from '../modules/Rule/rule.route';
+import { PushNotificationRoutes } from '../modules/pushNotification/pushNotification.route';
 
 const router = Router();
 
@@ -68,6 +69,10 @@ const moduleRoutes = [
     path: '/rules',
     route: RuleRoutes,
   },
+  {
+    path: "/push-notifications",
+    route: PushNotificationRoutes
+  }
 ];
 
 moduleRoutes.forEach((route) => router.use(route.path, route.route));
