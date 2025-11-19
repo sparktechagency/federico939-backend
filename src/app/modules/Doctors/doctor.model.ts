@@ -10,31 +10,31 @@ const DoctorSchema = new Schema<IDoctor>(
     category: {
       type: String,
       enum: Object.values(DOCTOR_CATEGORY),
-      required: true,
+      required: false,
       trim: true,
     },
     image: {
       type: String,
-      required: true,
+      required: false,
     },
     name: {
       type: String,
-      required: true,
+      required: false,
       trim: true,
     },
     chamber: {
       type: String,
-      required: true,
+      required: false,
       trim: true,
     },
     city: {
       type: String,
-      required: true,
+      required: false,
       trim: true,
     },
     about: {
       type: String,
-      required: true,
+      required: false,
       trim: true,
     },
     total_patient: {
@@ -51,31 +51,31 @@ const DoctorSchema = new Schema<IDoctor>(
     },
     available_start_day: {
       type: String,
-      required: true,
+      required: false,
     },
     available_end_day: {
       type: String,
-      required: true,
+      required: false,
     },
     available_start_time: {
       type: String,
-      required: true,
+      required: false,
     },
     available_end_time: {
       type: String,
-      required: true,
+      required: false,
     },
     phone: {
       type: String,
-      required: true,
+      required: false,
     },
     whatsapp: {
       type: String,
-      required: true,
+      required: false,
     },
     email: {
       type: String,
-      required: true,
+      required: false,
       lowercase: true,
       trim: true,
     },

@@ -4,6 +4,7 @@ import { sendToTopic } from '../services/fcm.service';
 import sendResponse from '../../utils/sendResponse';
 import { PushNotification } from './pushNotification.model';
 import QueryBuilder from '../../builder/QueryBuilder';
+import { cleanQuery } from '../Doctors/doctor.utils';
 
 
 const sendPushNotificationController = catchAsync(async (req, res) => {
@@ -26,17 +27,21 @@ const sendPushNotificationController = catchAsync(async (req, res) => {
 
 
 const getAllPushNotifications = catchAsync(async (req, res) => {
-  const query = new QueryBuilder(
-    PushNotification.find(),
-    req.query
+
+  console.log('req?.query push', req?.query)
+  const query = cleanQuery(req?.query);
+  const resultQuery = new QueryBuilder(
+    PushNotification.find().sort({ createdAt: -1 }),
+    req?.query,
   )
-    .filter()
-    .sort()
+    .filter()    
     .paginate()
+    .limit()
     .fields();
 
-  const result = await query.modelQuery;
-  const meta = await query.countTotal();
+  const result = await resultQuery.modelQuery;
+  console.log(' result', result?.length)
+  const meta = await resultQuery.countTotal();
 
   sendResponse(res, {
     success: true,
