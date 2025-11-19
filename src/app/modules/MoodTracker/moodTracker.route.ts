@@ -9,7 +9,7 @@ router
   .route('/')
   .post(auth(USER_ROLES.USER), MoodTrackerControllers.CreateOrUpdateMoodTracker)
   .get(
-    auth(USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN),
+    auth( USER_ROLES.SUPER_ADMIN),
     MoodTrackerControllers.getAllMoodTrackerHistories,
   );
 

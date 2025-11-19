@@ -7,13 +7,13 @@ const router = express.Router();
 
 router.get(
   '/stats',
-  auth(USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN),
+  auth(USER_ROLES.SUPER_ADMIN),
   AnalyticsControllers.getStats,
 );
 
 router.get(
   '/monthly-stats',
-  auth(USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN),
+  auth(USER_ROLES.SUPER_ADMIN),
   AnalyticsControllers.getMonthlyUserStats,
 );
 

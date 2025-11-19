@@ -9,7 +9,7 @@ const router = express.Router();
 router
   .route('/about')
   .post(
-    auth(USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN),
+    auth( USER_ROLES.SUPER_ADMIN),
     RuleControllers.createAbout,
   )
   .get(RuleControllers.getAbout);
@@ -18,7 +18,7 @@ router
 router
   .route('/privacy-policy')
   .post(
-    auth(USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN),
+    auth( USER_ROLES.SUPER_ADMIN),
     RuleControllers.createPrivacyPolicy,
   )
   .get(RuleControllers.getPrivacyPolicy);
@@ -27,7 +27,7 @@ router
 router
   .route('/terms-and-conditions')
   .post(
-    auth(USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN),
+    auth( USER_ROLES.SUPER_ADMIN),
     RuleControllers.createTermsAndCondition,
   )
   .get(RuleControllers.getTermsAndCondition);

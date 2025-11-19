@@ -10,14 +10,14 @@ const router = express.Router();
 
 router.get(
   '/latest',
-  auth(USER_ROLES.USER, USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN),
+  auth(USER_ROLES.USER, USER_ROLES.AUDIO_ADMIN, USER_ROLES.BLOG_ADMIN, USER_ROLES.DOCTOR_ADMIN, USER_ROLES.SUPER_ADMIN),
   BlogControllers.getLatestBlog,
 );
 
 router
   .route('/')
   .post(
-    auth(USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN),
+    auth(USER_ROLES.BLOG_ADMIN, USER_ROLES.SUPER_ADMIN),
     fileUploadHandler(),
     parseAllFilesData(
       { fieldName: FOLDER_NAMES.THUMBNAIL, forceSingle: true },
@@ -26,18 +26,18 @@ router
     BlogControllers.createBlog,
   )
   .get(
-    auth(USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN, USER_ROLES.USER),
+    auth(USER_ROLES.USER, USER_ROLES.AUDIO_ADMIN, USER_ROLES.BLOG_ADMIN, USER_ROLES.DOCTOR_ADMIN, USER_ROLES.SUPER_ADMIN),
     BlogControllers.getAllBLogs,
   );
 
 router
   .route('/:id')
   .get(
-    auth(USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN, USER_ROLES.USER),
+    auth(USER_ROLES.USER, USER_ROLES.AUDIO_ADMIN, USER_ROLES.BLOG_ADMIN, USER_ROLES.DOCTOR_ADMIN, USER_ROLES.SUPER_ADMIN),
     BlogControllers.getBlogById,
   )
   .patch(
-    auth(USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN),
+    auth(USER_ROLES.BLOG_ADMIN, USER_ROLES.SUPER_ADMIN),
     fileUploadHandler(),
     parseAllFilesData(
       { fieldName: FOLDER_NAMES.THUMBNAIL, forceSingle: true },
@@ -46,7 +46,7 @@ router
     BlogControllers.updateBlogById,
   )
   .delete(
-    auth(USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN),
+    auth(USER_ROLES.BLOG_ADMIN, USER_ROLES.SUPER_ADMIN),
     BlogControllers.deleteBlogById,
   );
 
