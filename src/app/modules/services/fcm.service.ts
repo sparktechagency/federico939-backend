@@ -1,12 +1,13 @@
 import { messaging } from "../../config/firebase";
 import { logger } from "../../shared/logger";
+import { PushNotification } from "../pushNotification/pushNotification.model";
 
 
 export const sendToTopic = async ({
     topic,
     notification,
     // data = {},
-}: any) => {
+}: any) => {    
     const message = {
         notification: {
             title: notification.title,
@@ -41,6 +42,7 @@ export const sendToTopic = async ({
         const messageId = await messaging.send(message);
         logger.info('FCM sent successfully', { topic, messageId, notification });
 
+        await PushNotification.create({title: 'Admin Notification', topic, ...notification})
         return {
             success: true,
             messageId,
