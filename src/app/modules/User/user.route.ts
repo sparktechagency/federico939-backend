@@ -13,11 +13,11 @@ const router = express.Router();
 router
   .route('/profile')
   .get(
-    auth(USER_ROLES.ADMIN, USER_ROLES.USER, USER_ROLES.SUPER_ADMIN),
+    auth(USER_ROLES.USER, USER_ROLES.AUDIO_ADMIN, USER_ROLES.BLOG_ADMIN, USER_ROLES.DOCTOR_ADMIN, USER_ROLES.SUPER_ADMIN),
     UserController.getUserProfile,
   )
   .delete(
-    auth(USER_ROLES.ADMIN, USER_ROLES.USER),
+    auth(USER_ROLES.USER, USER_ROLES.AUDIO_ADMIN, USER_ROLES.BLOG_ADMIN, USER_ROLES.DOCTOR_ADMIN, USER_ROLES.SUPER_ADMIN),
     UserController.deleteProfile,
   );
 
@@ -31,7 +31,7 @@ router
   .route('/')
   .post(UserController.createUser)
   .patch(
-    auth(USER_ROLES.ADMIN, USER_ROLES.USER, USER_ROLES.SUPER_ADMIN),
+    auth(USER_ROLES.USER, USER_ROLES.AUDIO_ADMIN, USER_ROLES.BLOG_ADMIN, USER_ROLES.DOCTOR_ADMIN, USER_ROLES.SUPER_ADMIN),
     fileUploadHandler(),
     parseAllFilesData({
       fieldName: FOLDER_NAMES.PROFILE_IMAGE,
@@ -40,24 +40,24 @@ router
     UserController.updateProfile,
   )
   .get(
-    auth(USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN),
+    auth(USER_ROLES.SUPER_ADMIN),
     UserController.getAllUsers,
   );
 
 router
   .route('/:id')
   .get(
-    auth(USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN),
+    auth(USER_ROLES.SUPER_ADMIN),
     UserController.getUserById,
   )
   .delete(
-    auth(USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN),
+    auth(USER_ROLES.SUPER_ADMIN),
     UserController.deleteUserById,
   );
 
 router.patch(
   '/:id/status',
-  auth(USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN),
+  auth(USER_ROLES.SUPER_ADMIN),
   UserController.updateUserStatusById,
 );
 

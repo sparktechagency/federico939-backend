@@ -11,7 +11,7 @@ const router = express.Router();
 router.get('/', auth(USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN), PushNotificationControllers.getAllPushNotifications)
 router.post(
     '/send',
-    auth(USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN),
+    auth( USER_ROLES.SUPER_ADMIN),
     // fileUploadHandler(),
     // parseAllFilesData({ fieldName: FOLDER_NAMES.IMAGE, forceSingle: true }),
     PushNotificationControllers.sendPushNotificationController,

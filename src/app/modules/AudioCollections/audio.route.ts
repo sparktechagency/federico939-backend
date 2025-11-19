@@ -11,7 +11,7 @@ const router = express.Router();
 
 router.post(
   '/',
-  auth(USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN),
+  auth(USER_ROLES.AUDIO_ADMIN, USER_ROLES.SUPER_ADMIN),
   fileUploadHandler(),
   parseAllFilesData(
     { fieldName: FOLDER_NAMES.AUDIO, forceSingle: true },
@@ -24,7 +24,7 @@ router.get('/special_audio', AudioController.getSpecialAudio);
 router.get('/:audio_id', AudioController.getSingleAudio);
 router.patch(
   '/:audio_id',
-  auth(USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN),
+  auth(USER_ROLES.AUDIO_ADMIN, USER_ROLES.SUPER_ADMIN),
   fileUploadHandler(),
   parseAllFilesData(
     { fieldName: FOLDER_NAMES.AUDIO, forceSingle: true },
@@ -34,7 +34,7 @@ router.patch(
 );
 router.delete(
   '/:audio_id',
-  auth(USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN),
+  auth(USER_ROLES.AUDIO_ADMIN, USER_ROLES.SUPER_ADMIN),
   AudioController.deleteAudio,
 );
 
