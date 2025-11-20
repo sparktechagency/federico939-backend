@@ -3,8 +3,8 @@ import { AudioCategory, IAudio } from './audio.interface';
 import { Audio } from './audio.model';
 
 // 🆕 Create
-const createAudio = async (payload: IAudio) => {
-  const result = await Audio.create(payload);
+const createAudio = async (payload: IAudio) => {   
+  const result = await Audio.create(payload);  
   return result;
 };
 

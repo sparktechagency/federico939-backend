@@ -19,6 +19,7 @@ app.use(
       'https://appspectra.cloud',
       'https://federico-dashboard-tx1e.vercel.app',
       'http://10.10.7.48:3003',
+      'https://federico-dashboard.vercel.app',
     ],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
