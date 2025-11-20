@@ -17,8 +17,8 @@ export interface IAudio {
   author: string;
   thumbnail: string;
   audio: string;
-  duration?: number;
-  total_duration?: number;
+  duration?: string;
+  // total_duration?: number;
   category: AudioCategory;
   createdAt?: Date;
   updatedAt?: Date;
