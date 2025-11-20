@@ -1,10 +1,28 @@
 // src/app/modules/audio/audio.service.ts
+import path from 'path';
 import { AudioCategory, IAudio } from './audio.interface';
 import { Audio } from './audio.model';
+import { parseFile } from 'music-metadata';
 
 // 🆕 Create
 const createAudio = async (payload: IAudio) => {
+  if (payload.audio) {
+    let fullPath: string;
+
+   
+      fullPath = path.join(process.cwd(), 'uploads', 'audio', path.basename(payload.audio));
+   
+
+    const metadata = await parseFile(fullPath);
+    const durationInSeconds = metadata.format.duration;
+
+    payload.duration = durationInSeconds ? Math.round(durationInSeconds) : undefined;
+    // payload.total_duration = durationInSeconds ? Math.round(durationInSeconds * 1000) : undefined;
+  }
+
   const result = await Audio.create(payload);
+
+
   return result;
 };
 

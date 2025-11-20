@@ -11,7 +11,7 @@ const audioSchema = new Schema<IAudio>(
     },
     audio: { type: String, required: true },
     duration: { type: Number, required: false },
-    total_duration: { type: Number, required: false },
+    // total_duration: { type: Number, required: false },
     category: {
       type: String,
       enum: Object.values(AudioCategory),
