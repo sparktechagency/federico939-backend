@@ -9,20 +9,25 @@ const createAudio = async (payload: IAudio) => {
   if (payload.audio) {
     let fullPath: string;
 
-   
-      fullPath = path.join(process.cwd(), 'uploads', 'audio', path.basename(payload.audio));
-   
+
+    fullPath = path.join(process.cwd(), 'uploads', 'audio', path.basename(payload.audio));
+
 
     const metadata = await parseFile(fullPath);
     const durationInSeconds = metadata.format.duration;
+    if (durationInSeconds) {
+      const minutes = Math.floor(durationInSeconds / 60);
+      const seconds = Math.floor(durationInSeconds % 60);
 
-    payload.duration = durationInSeconds ? Math.round(durationInSeconds) : undefined;
-    // payload.total_duration = durationInSeconds ? Math.round(durationInSeconds * 1000) : undefined;
+      // Format with leading zeros
+      const mm = String(minutes).padStart(2, "0");
+      const ss = String(seconds).padStart(2, "0");
+
+      payload.duration = `${mm}:${ss}`;
+    }
   }
 
   const result = await Audio.create(payload);
-
-
   return result;
 };
 
