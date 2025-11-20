@@ -7,12 +7,12 @@ export const sendToTopic = async ({
     topic,
     notification,
     // data = {},
-}: any) => {    
+}: any) => {
     const message = {
         notification: {
             title: notification.title,
             body: notification.body,
-           
+
         },
         // data: Object.keys(data).length > 0 ? data : undefined,
         topic,
@@ -42,7 +42,7 @@ export const sendToTopic = async ({
         const messageId = await messaging.send(message);
         logger.info('FCM sent successfully', { topic, messageId, notification });
 
-        await PushNotification.create({title: 'Admin Notification', topic, ...notification})
+        await PushNotification.create({ title: notification.title, body: notification.body, topic })
         return {
             success: true,
             messageId,
