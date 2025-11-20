@@ -70,9 +70,9 @@ const moduleRoutes = [
     route: RuleRoutes,
   },
   {
-    path: "/push-notifications",
-    route: PushNotificationRoutes
-  }
+    path: '/push-notifications',
+    route: PushNotificationRoutes,
+  },
 ];
 
 moduleRoutes.forEach((route) => router.use(route.path, route.route));

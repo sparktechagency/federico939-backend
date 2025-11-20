@@ -1,9 +1,9 @@
-import { model, Schema } from "mongoose";
+import { model, Schema } from 'mongoose';
 
 export interface IPushNotification {
-  title: string;  
+  title: string;
   body: string;
-  topic: "all_users";  
+  topic: 'all_users';
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -19,19 +19,19 @@ const pushNotificationSchema = new Schema<IPushNotification>(
       type: String,
       required: true,
       trim: true,
-    },    
+    },
     topic: {
-      type: String,      
-      default: "all_users",
+      type: String,
+      default: 'all_users',
     },
   },
   {
     timestamps: true,
     versionKey: false,
-  }
+  },
 );
 
 export const PushNotification = model<IPushNotification>(
-  "PushNotification",
-  pushNotificationSchema
+  'PushNotification',
+  pushNotificationSchema,
 );

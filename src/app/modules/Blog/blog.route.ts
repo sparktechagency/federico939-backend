@@ -10,7 +10,13 @@ const router = express.Router();
 
 router.get(
   '/latest',
-  auth(USER_ROLES.USER, USER_ROLES.AUDIO_ADMIN, USER_ROLES.BLOG_ADMIN, USER_ROLES.DOCTOR_ADMIN, USER_ROLES.SUPER_ADMIN),
+  auth(
+    USER_ROLES.USER,
+    USER_ROLES.AUDIO_ADMIN,
+    USER_ROLES.BLOG_ADMIN,
+    USER_ROLES.DOCTOR_ADMIN,
+    USER_ROLES.SUPER_ADMIN,
+  ),
   BlogControllers.getLatestBlog,
 );
 
@@ -26,14 +32,26 @@ router
     BlogControllers.createBlog,
   )
   .get(
-    auth(USER_ROLES.USER, USER_ROLES.AUDIO_ADMIN, USER_ROLES.BLOG_ADMIN, USER_ROLES.DOCTOR_ADMIN, USER_ROLES.SUPER_ADMIN),
+    auth(
+      USER_ROLES.USER,
+      USER_ROLES.AUDIO_ADMIN,
+      USER_ROLES.BLOG_ADMIN,
+      USER_ROLES.DOCTOR_ADMIN,
+      USER_ROLES.SUPER_ADMIN,
+    ),
     BlogControllers.getAllBLogs,
   );
 
 router
   .route('/:id')
   .get(
-    auth(USER_ROLES.USER, USER_ROLES.AUDIO_ADMIN, USER_ROLES.BLOG_ADMIN, USER_ROLES.DOCTOR_ADMIN, USER_ROLES.SUPER_ADMIN),
+    auth(
+      USER_ROLES.USER,
+      USER_ROLES.AUDIO_ADMIN,
+      USER_ROLES.BLOG_ADMIN,
+      USER_ROLES.DOCTOR_ADMIN,
+      USER_ROLES.SUPER_ADMIN,
+    ),
     BlogControllers.getBlogById,
   )
   .patch(

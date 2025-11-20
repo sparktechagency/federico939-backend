@@ -6,10 +6,7 @@ import { PushNotification } from './pushNotification.model';
 import QueryBuilder from '../../builder/QueryBuilder';
 import { cleanQuery } from '../Doctors/doctor.utils';
 
-
 const sendPushNotificationController = catchAsync(async (req, res) => {
-
-
   const { topic, title, body } = req.body;
   const result = await sendToTopic({
     topic,
@@ -25,28 +22,26 @@ const sendPushNotificationController = catchAsync(async (req, res) => {
   });
 });
 
-
 const getAllPushNotifications = catchAsync(async (req, res) => {
-
-  console.log('req?.query push', req?.query)
+  console.log('req?.query push', req?.query);
   const query = cleanQuery(req?.query);
   const resultQuery = new QueryBuilder(
     PushNotification.find().sort({ createdAt: -1 }),
     req?.query,
   )
-    .filter()    
+    .filter()
     .paginate()
     .limit()
     .fields();
 
   const result = await resultQuery.modelQuery;
-  console.log(' result', result?.length)
+  console.log(' result', result?.length);
   const meta = await resultQuery.countTotal();
 
   sendResponse(res, {
     success: true,
     statusCode: StatusCodes.OK,
-    message: "Push notifications retrieved successfully",
+    message: 'Push notifications retrieved successfully',
     data: result,
     meta,
   });
@@ -54,5 +49,5 @@ const getAllPushNotifications = catchAsync(async (req, res) => {
 
 export const PushNotificationControllers = {
   sendPushNotificationController,
-  getAllPushNotifications
+  getAllPushNotifications,
 };
