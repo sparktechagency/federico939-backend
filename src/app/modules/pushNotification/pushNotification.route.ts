@@ -8,6 +8,7 @@ import { USER_ROLES } from '../../enums/user';
 
 const router = express.Router();
 
+router.get('/', auth( USER_ROLES.SUPER_ADMIN), PushNotificationControllers.getAllPushNotifications)
 router.post(
     '/send',
     auth( USER_ROLES.SUPER_ADMIN),

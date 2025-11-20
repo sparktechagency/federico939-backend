@@ -114,21 +114,35 @@ const updateProfileToDB = async (
 };
 
 const getAllUsersFromDB = async (query: any) => {
-  const baseQuery = User.find();
+  let baseQuery;
+
+  // 🔥 If ?role=admin → exclude USER and SUPER_ADMIN
+  if (query.role === "ADMIN") {
+    baseQuery = User.find({
+      $and: [
+        { role: { $ne: "USER" } },
+        { role: { $ne: "SUPER_ADMIN" } },
+      ],
+    });
+
+    // remove role from query so QueryBuilder.filter() does NOT override it
+    delete query.role;
+  } else {
+    baseQuery = User.find();
+  }
 
   const queryBuilder = new QueryBuilder(baseQuery, query)
-    .search(['name', 'email'])
+    .search(["name", "email"])
     .sort()
     .fields()
     .filter()
     .paginate();
 
   const users = await queryBuilder.modelQuery;
-
   const meta = await queryBuilder.countTotal();
 
   if (!users || users.length === 0) {
-    throw new AppError(404, 'No users are found in the database');
+    throw new AppError(404, "No users are found in the database");
   }
 
   return {
