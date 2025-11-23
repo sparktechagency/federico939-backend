@@ -28,7 +28,7 @@ export const getImages = (app: any) => {
   });
 
   // ✅ Route 2: List all uploaded image files (recursively)
-  app.get('/uploads', auth(USER_ROLES.ADMIN), (req: Request, res: Response) => {
+  app.get('/uploads', auth(USER_ROLES.SUPER_ADMIN), (req: Request, res: Response) => {
     const imageFiles: string[] = [];
 
     const readRecursive = (dir: string, basePath = '') => {
@@ -61,7 +61,7 @@ export const getImages = (app: any) => {
   // ✅ Route 3: Delete file (supports nested paths)
   app.delete(
     '/uploads/*',
-    auth(USER_ROLES.ADMIN),
+    auth(USER_ROLES.SUPER_ADMIN),
     (req: Request, res: Response) => {
       const relativePath = req.params[0];
       if (!relativePath) return res.status(400).send('File path is required');
