@@ -27,6 +27,7 @@ app.use(
     allowedHeaders: [
       'Content-Type',
       'Authorization',
+      'authorization',
       'ngrok-skip-browser-warning',
       'resettoken',
     ],
