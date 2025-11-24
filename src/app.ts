@@ -28,8 +28,8 @@ app.use(
       'Content-Type',
       'Authorization',
       'authorization',
-      'ngrok-skip-browser-warning',
       'resettoken',
+      'ngrok-skip-browser-warning',
     ],
   }),
 );
