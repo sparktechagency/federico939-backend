@@ -36,56 +36,73 @@ const createAudio = async (payload: IAudio) => {
 
 // 🧾 Get All with pagination, category filtering
 const getAllAudio = async (query: Record<string, unknown>) => {
-  const { page = 1, limit = 10, audio_category } = query;
-  const skip = (Number(page) - 1) * Number(limit);
+  const page = Number(query.page) || 1;
+  const limit = Number(query.limit) || 10;
+  const skip = (page - 1) * limit;
 
-  const filter: Record<string, unknown> = {};
+  const audioCategory = query.audio_category as string | undefined;
 
-  if (audio_category && audio_category !== AudioCategory.LATEST_AUDIO) {
-    filter.audio_category = audio_category;
-  }
+  /**
+   * 🎵 LATEST AUDIO
+   */
+  if (audioCategory === AudioCategory.LATEST_AUDIO) {
+    const latestCount = Number(query.latestCount) || 3;
 
-  let result;
-
-  // 🌀 Handle LATEST_AUDIO
-  if (audio_category === AudioCategory.LATEST_AUDIO) {
-    const latestCount = query.latestCount ? Number(query.latestCount) : 3;
-    result = await Audio.find({})
+    const data = await Audio.find()
       .sort({ createdAt: -1 })
       .limit(latestCount)
       .lean();
+
+    return { meta: null, data };
   }
-  // 🎧 Handle DAILY_AUDIO random logic (simplified)
-  else if (audio_category === AudioCategory.DAILY_AUDIO) {
-    // Check if dashboard audio available (pseudo logic)
-    const dashboardAudio = await Audio.findOne({
-      audio_category: 'DAILY_AUDIO',
-    });
-    if (dashboardAudio) {
-      result = [dashboardAudio];
-    } else {
-      const count = await Audio.countDocuments({});
-      const random = Math.floor(Math.random() * count);
-      result = await Audio.find({}).skip(random).limit(1);
+
+  /**
+   * 🎧 DAILY AUDIO
+   */
+  if (audioCategory === AudioCategory.DAILY_AUDIO) {
+    const fixedAudio = await Audio.findOne({
+      category: AudioCategory.DAILY_AUDIO,
+    }).lean();
+
+    if (fixedAudio) {
+      return { meta: null, data: [fixedAudio] };
     }
-  } else {
-    result = await Audio.find(filter)
-      .skip(skip)
-      .limit(Number(limit))
-      .sort({ createdAt: -1 });
+
+    const total = await Audio.countDocuments();
+    const randomSkip = Math.floor(Math.random() * total);
+
+    const randomAudio = await Audio.find()
+      .skip(randomSkip)
+      .limit(1)
+      .lean();
+
+    return { meta: null, data: randomAudio };
   }
+
+  /**
+   * 📀 NORMAL LIST
+   */
+  const filter: Record<string, unknown> = {};
+
+  if (audioCategory) {
+    filter.category = audioCategory; // ✅ FIXED
+  }
+
+  const data = await Audio.find(filter)
+    .sort({ createdAt: -1 })
+    .skip(skip)
+    .limit(limit)
+    .lean();
 
   const total = await Audio.countDocuments(filter);
 
   return {
-    meta: {
-      page: Number(page),
-      limit: Number(limit),
-      total,
-    },
-    data: result,
+    meta: { page, limit, total },
+    data,
   };
 };
+
+
 
 // 🔍 Get Single
 const getSingleAudio = async (id: string) => {

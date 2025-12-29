@@ -29,4 +29,5 @@ export interface IDoctor extends Document {
   phone: string;
   whatsapp: string;
   email: string;
+  isBestDoctor?: boolean;
 }

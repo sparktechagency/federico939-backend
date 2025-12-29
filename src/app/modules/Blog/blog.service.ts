@@ -1,4 +1,5 @@
 import QueryBuilder from '../../builder/QueryBuilder';
+import { USER_ROLES } from '../../enums/user';
 import AppError from '../../errors/AppError';
 import { sendNotifications } from '../../helpers/notificationHelper';
 import { BlogBookmark } from '../BlogBookmark/blogBookmark.model';
@@ -78,8 +79,65 @@ const getLatestBlogFromDB = async (userId: string) => {
   };
 };
 
+// const getAllBLogsFromDB = async (userId: string, query: any) => {
+//   const baseQuery = Blog.find({ isLatest: false });
+
+//   const queryBuilder = new QueryBuilder(baseQuery, query)
+//     .search(['title', 'authorName', 'category'])
+//     .sort()
+//     .fields()
+//     .filter()
+//     .paginate();
+
+//   const blogs = await queryBuilder.modelQuery.lean();
+
+//   const meta = await queryBuilder.countTotal();
+
+//   if (!blogs || blogs.length === 0) {
+//     return [];
+//   }
+
+//   const withBookmark = await Promise.all(
+//     blogs.map(async (blog) => {
+//       const isBookmarked = await BlogBookmark.exists({
+//         userId,
+//         referenceId: blog._id,
+//       });
+
+//       return {
+//         ...blog,
+//         isBookmarked: !!isBookmarked,
+//       };
+//     }),
+//   );
+
+//   return {
+//     data: withBookmark,
+//     meta,
+//   };
+// };
+
 const getAllBLogsFromDB = async (userId: string, query: any) => {
-  const baseQuery = Blog.find({ isLatest: false });
+  // user role fetch (single DB hit)
+  const user = await User.findById(userId)
+    .select('role')
+    .lean();
+
+  if (!user) {
+    throw new Error('User not found');
+  }
+
+  // role-based filter
+  const filter: any = {};
+  console.log(filter)
+
+  if (user.role !== USER_ROLES.SUPER_ADMIN && USER_ROLES.BLOG_ADMIN) {
+    filter.isLatest = false;
+  }
+  
+
+  //  base query
+  const baseQuery = Blog.find(filter);
 
   const queryBuilder = new QueryBuilder(baseQuery, query)
     .search(['title', 'authorName', 'category'])
@@ -89,32 +147,35 @@ const getAllBLogsFromDB = async (userId: string, query: any) => {
     .paginate();
 
   const blogs = await queryBuilder.modelQuery.lean();
-
   const meta = await queryBuilder.countTotal();
 
-  if (!blogs || blogs.length === 0) {
-    return [];
+  if (!blogs.length) {
+    return { data: [], meta };
   }
 
-  const withBookmark = await Promise.all(
-    blogs.map(async (blog) => {
-      const isBookmarked = await BlogBookmark.exists({
-        userId,
-        referenceId: blog._id,
-      });
+  //  bookmark optimization (no N+1)
+  const blogIds = blogs.map(b => b._id);
 
-      return {
-        ...blog,
-        isBookmarked: !!isBookmarked,
-      };
-    }),
+  const bookmarks = await BlogBookmark.find({
+    userId,
+    referenceId: { $in: blogIds },
+  }).select('referenceId');
+
+  const bookmarkedSet = new Set(
+    bookmarks.map(b => b.referenceId.toString())
   );
+
+  const withBookmark = blogs.map(blog => ({
+    ...blog,
+    isBookmarked: bookmarkedSet.has(blog._id.toString()),
+  }));
 
   return {
     data: withBookmark,
     meta,
   };
 };
+
 
 const getBlogByIdFromDB = async (userId: string, id: string) => {
   const blog = await Blog.findById(id).lean();

@@ -79,6 +79,10 @@ const DoctorSchema = new Schema<IDoctor>(
       lowercase: true,
       trim: true,
     },
+    isBestDoctor:{
+      type: Boolean,
+      default: false,
+    }
   },
   { timestamps: true, versionKey: false },
 );

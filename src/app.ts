@@ -13,21 +13,28 @@ import { getImages } from './app/utils/ImageController';
 
 const app: Application = express();
 
+// app.use(
+//   cors({
+//     origin: [
+//       'https://appspectra.cloud',
+//       'https://federico-dashboard-tx1e.vercel.app',
+//       'http://10.10.7.48:3003',
+//       'https://federico-dashboard.vercel.app',
+//     ],
+//     credentials: true,
+//     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+//     allowedHeaders: [
+//       'Content-Type',
+//       'Authorization',
+//       'ngrok-skip-browser-warning',
+//     ],
+//   }),
+// );
+
 app.use(
   cors({
-    origin: [
-      'https://appspectra.cloud',
-      'https://federico-dashboard-tx1e.vercel.app',
-      'http://10.10.7.48:3003',
-      'https://federico-dashboard.vercel.app',
-    ],
+    origin: 'http://10.10.7.46:3003',
     credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-    allowedHeaders: [
-      'Content-Type',
-      'Authorization',
-      'ngrok-skip-browser-warning',
-    ],
   }),
 );
 
