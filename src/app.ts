@@ -33,7 +33,6 @@ const app: Application = express();
 
 app.use(
   cors({
-
     // origin: 'http://10.10.7.46:3003',
     // credentials: true,
 
@@ -53,7 +52,6 @@ app.use(
       'resettoken',
       'ngrok-skip-browser-warning',
     ],
-
   }),
 );
 

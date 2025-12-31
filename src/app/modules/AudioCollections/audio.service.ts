@@ -71,10 +71,7 @@ const getAllAudio = async (query: Record<string, unknown>) => {
     const total = await Audio.countDocuments();
     const randomSkip = Math.floor(Math.random() * total);
 
-    const randomAudio = await Audio.find()
-      .skip(randomSkip)
-      .limit(1)
-      .lean();
+    const randomAudio = await Audio.find().skip(randomSkip).limit(1).lean();
 
     return { meta: null, data: randomAudio };
   }
@@ -101,8 +98,6 @@ const getAllAudio = async (query: Record<string, unknown>) => {
     data,
   };
 };
-
-
 
 // 🔍 Get Single
 const getSingleAudio = async (id: string) => {

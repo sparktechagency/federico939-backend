@@ -119,9 +119,7 @@ const getLatestBlogFromDB = async (userId: string) => {
 
 const getAllBLogsFromDB = async (userId: string, query: any) => {
   // user role fetch (single DB hit)
-  const user = await User.findById(userId)
-    .select('role')
-    .lean();
+  const user = await User.findById(userId).select('role').lean();
 
   if (!user) {
     throw new Error('User not found');
@@ -129,12 +127,11 @@ const getAllBLogsFromDB = async (userId: string, query: any) => {
 
   // role-based filter
   const filter: any = {};
-  console.log(filter)
+  console.log(filter);
 
   if (user.role !== USER_ROLES.SUPER_ADMIN && USER_ROLES.BLOG_ADMIN) {
     filter.isLatest = false;
   }
-  
 
   //  base query
   const baseQuery = Blog.find(filter);
@@ -154,18 +151,16 @@ const getAllBLogsFromDB = async (userId: string, query: any) => {
   }
 
   //  bookmark optimization (no N+1)
-  const blogIds = blogs.map(b => b._id);
+  const blogIds = blogs.map((b) => b._id);
 
   const bookmarks = await BlogBookmark.find({
     userId,
     referenceId: { $in: blogIds },
   }).select('referenceId');
 
-  const bookmarkedSet = new Set(
-    bookmarks.map(b => b.referenceId.toString())
-  );
+  const bookmarkedSet = new Set(bookmarks.map((b) => b.referenceId.toString()));
 
-  const withBookmark = blogs.map(blog => ({
+  const withBookmark = blogs.map((blog) => ({
     ...blog,
     isBookmarked: bookmarkedSet.has(blog._id.toString()),
   }));
@@ -175,7 +170,6 @@ const getAllBLogsFromDB = async (userId: string, query: any) => {
     meta,
   };
 };
-
 
 const getBlogByIdFromDB = async (userId: string, id: string) => {
   const blog = await Blog.findById(id).lean();

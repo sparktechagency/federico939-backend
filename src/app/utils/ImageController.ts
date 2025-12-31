@@ -28,35 +28,39 @@ export const getImages = (app: any) => {
   });
 
   // ✅ Route 2: List all uploaded image files (recursively)
-  app.get('/uploads', auth(USER_ROLES.SUPER_ADMIN), (req: Request, res: Response) => {
-    const imageFiles: string[] = [];
+  app.get(
+    '/uploads',
+    auth(USER_ROLES.SUPER_ADMIN),
+    (req: Request, res: Response) => {
+      const imageFiles: string[] = [];
 
-    const readRecursive = (dir: string, basePath = '') => {
-      const items = fs.readdirSync(dir, { withFileTypes: true });
-      items.forEach((item) => {
-        const fullPath = path.join(dir, item.name);
-        const relative = path.join(basePath, item.name);
-        if (item.isDirectory()) {
-          readRecursive(fullPath, relative);
-        } else {
-          const ext = path.extname(item.name).toLowerCase();
-          if (
-            ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg'].includes(ext)
-          ) {
-            imageFiles.push(relative);
+      const readRecursive = (dir: string, basePath = '') => {
+        const items = fs.readdirSync(dir, { withFileTypes: true });
+        items.forEach((item) => {
+          const fullPath = path.join(dir, item.name);
+          const relative = path.join(basePath, item.name);
+          if (item.isDirectory()) {
+            readRecursive(fullPath, relative);
+          } else {
+            const ext = path.extname(item.name).toLowerCase();
+            if (
+              ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg'].includes(ext)
+            ) {
+              imageFiles.push(relative);
+            }
           }
-        }
-      });
-    };
+        });
+      };
 
-    try {
-      readRecursive(uploadDir);
-      res.json({ files: imageFiles });
-    } catch (err) {
-      console.error('Failed to read uploads:', (err as Error).message);
-      res.status(500).send('Failed to read uploads');
-    }
-  });
+      try {
+        readRecursive(uploadDir);
+        res.json({ files: imageFiles });
+      } catch (err) {
+        console.error('Failed to read uploads:', (err as Error).message);
+        res.status(500).send('Failed to read uploads');
+      }
+    },
+  );
 
   // ✅ Route 3: Delete file (supports nested paths)
   app.delete(
