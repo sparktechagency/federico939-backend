@@ -4,7 +4,7 @@ import { DOCTOR_CATEGORY, IDoctor } from './doctor.interface';
 import { Doctor } from './doctor.model';
 import { cleanQuery } from './doctor.utils';
 
-// 🩺 Create Doctor
+// create Doctor
 const createDoctor = async (payload: IDoctor) => {
   const categoryMap = {
     [DOCTOR_CATEGORY.BUSINESS_DOCTOR]: 'Business',
@@ -15,6 +15,8 @@ const createDoctor = async (payload: IDoctor) => {
     [DOCTOR_CATEGORY.SPECIAL_DOCTOR]: 'Special',
   };
 
+  console.log(payload.category);
+
   const categoryName = categoryMap[payload.category];
 
   payload.categoryName = categoryName;
@@ -23,7 +25,7 @@ const createDoctor = async (payload: IDoctor) => {
   return result;
 };
 
-// 📋 Get All Doctors
+// get All Doctors
 const getAllDoctors = async (rawQuery: any) => {
   const query = cleanQuery(rawQuery);
   const resultQuery = new QueryBuilder(
@@ -54,13 +56,13 @@ const getAllDoctors = async (rawQuery: any) => {
   return { data: result, meta };
 };
 
-// 🔍 Get Single Doctor by ID
+// get Single Doctor by ID
 const getDoctorById = async (id: string) => {
   const result = await Doctor.findById(id);
   return result;
 };
 
-// 🌟 Get Special Doctors (filter by category)
+// get Special Doctors (filter by category)
 const getSpecialDoctor = async (rawQuery: any) => {
   const query = cleanQuery(rawQuery);
   const resultQuery = new QueryBuilder(
@@ -124,7 +126,9 @@ const updateDoctor = async (id: string, payload: Partial<IDoctor>) => {
   return result;
 };
 
-// 🗑️ Delete Doctor
+
+
+// delete Doctor
 const deleteDoctor = async (id: string) => {
   const result = await Doctor.findByIdAndDelete(id);
   return result;

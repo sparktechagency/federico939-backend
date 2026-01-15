@@ -128,4 +128,5 @@ userSchema.pre('save', async function (next) {
   );
   next();
 });
+
 export const User = model<IUser, UserModel>('User', userSchema);

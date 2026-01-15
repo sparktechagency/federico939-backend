@@ -4,7 +4,7 @@ import sendResponse from '../../utils/sendResponse';
 import { DoctorServices } from './doctor.service';
 import { DOCTOR_CATEGORY } from './doctor.interface';
 
-// 🩺 Create Doctor
+// create Doctor
 const createDoctor = catchAsync(async (req, res) => {
   const result = await DoctorServices.createDoctor(req.body);
 
@@ -16,7 +16,7 @@ const createDoctor = catchAsync(async (req, res) => {
   });
 });
 
-// 📋 Get All Doctors
+// get All Doctors
 const getAllDoctors = catchAsync(async (req, res) => {
   const result = await DoctorServices.getAllDoctors(req.query);
 
@@ -29,7 +29,7 @@ const getAllDoctors = catchAsync(async (req, res) => {
   });
 });
 
-// 🔍 Get Single Doctor
+// get Single Doctor
 const getDoctorById = catchAsync(async (req, res) => {
   const { id } = req.params;
   const result = await DoctorServices.getDoctorById(id);
@@ -42,7 +42,7 @@ const getDoctorById = catchAsync(async (req, res) => {
   });
 });
 
-// 🌟 Get Special Doctor (by category)
+// get Special Doctor (by category)
 const getSpecialDoctor = catchAsync(async (req, res) => {
   const result = await DoctorServices.getSpecialDoctor(req.query);
   sendResponse(res, {
@@ -53,7 +53,7 @@ const getSpecialDoctor = catchAsync(async (req, res) => {
   });
 });
 
-// ✏️ Update Doctor
+// update Doctor
 const updateDoctor = catchAsync(async (req, res) => {
   const { id } = req.params;
   const result = await DoctorServices.updateDoctor(id, req.body);
@@ -66,7 +66,7 @@ const updateDoctor = catchAsync(async (req, res) => {
   });
 });
 
-// 🗑️ Delete Doctor
+// delete Doctor
 const deleteDoctor = catchAsync(async (req, res) => {
   const { id } = req.params;
   const result = await DoctorServices.deleteDoctor(id);

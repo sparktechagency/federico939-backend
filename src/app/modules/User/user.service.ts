@@ -78,6 +78,8 @@ const createUserToDB = async (payload: any) => {
     // user: createUser,
   };
 
+  // website a thakbe left side a nicher dike ja kon user signup korse
+
   return result;
 };
 
@@ -192,6 +194,15 @@ const deleteUserByIdFromD = async (id: string) => {
   return result;
 };
 
+const verifyUserPassword = async (userId: string, password: string) => {
+  const user = await User.findById(userId).select('+password');
+  if (!user) {
+    throw new AppError(StatusCodes.NOT_FOUND, 'User not found.');
+  }
+  const isPasswordValid = User.isMatchPassword(password, user.password || '');
+  return isPasswordValid;
+};
+
 const deleteProfileFromDB = async (id: string) => {
   const isExistUser = await User.isExistUserById(id);
   if (!isExistUser) {
@@ -206,14 +217,27 @@ const deleteProfileFromDB = async (id: string) => {
   return result;
 };
 
+const deleteUser = async (id: string) => {
+     const isExistUser = await User.isExistUserById(id);
+     if (!isExistUser) {
+          throw new AppError(StatusCodes.BAD_REQUEST, "User doesn't exist!");
+     }
+
+    const result = await User.findByIdAndDelete(id);
+
+     return result;
+};
+
 export const UserService = {
   createUserToDB,
   getUserProfileFromDB,
   updateProfileToDB,
   createAdminToDB,
   getAllUsersFromDB,
+  verifyUserPassword,
   getUserByIdFromDB,
   updateUserStatusByIdToDB,
   deleteUserByIdFromD,
   deleteProfileFromDB,
+  deleteUser
 };

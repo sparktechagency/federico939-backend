@@ -28,9 +28,8 @@ router
       USER_ROLES.AUDIO_ADMIN,
       USER_ROLES.BLOG_ADMIN,
       USER_ROLES.DOCTOR_ADMIN,
-      USER_ROLES.SUPER_ADMIN,
     ),
-    UserController.deleteProfile,
+    UserController.deleteAccount,
   );
 
 router.post(

@@ -1,0 +1,11 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.BLOG_CATEGORY = void 0;
+var BLOG_CATEGORY;
+(function (BLOG_CATEGORY) {
+    BLOG_CATEGORY["SLEEP_BLOG"] = "SLEEP_BLOG";
+    BLOG_CATEGORY["FEAR_BLOG"] = "FEAR_BLOG";
+    BLOG_CATEGORY["STRESS_BLOG"] = "STRESS_BLOG";
+    BLOG_CATEGORY["ANXITY_BLOG"] = "ANXITY_BLOG";
+    BLOG_CATEGORY["PRODUCTIVITY_BLOG"] = "PRODUCTIVITY_BLOG";
+})(BLOG_CATEGORY || (exports.BLOG_CATEGORY = BLOG_CATEGORY = {}));

@@ -120,17 +120,25 @@ const deleteUserById = catchAsync(async (req, res) => {
   });
 });
 
-const deleteProfile = catchAsync(async (req, res) => {
-  const { id }: any = req.user;
+const deleteAccount = catchAsync(async (req, res) => {
+     const { id } = req.user as { id: string };
+     const { password } = req.body;
+     const isUserVerified = await UserService.verifyUserPassword(id, password);
+     if (!isUserVerified) {
+          return sendResponse(res, {
+               success: false,
+               statusCode: StatusCodes.UNAUTHORIZED,
+               message: 'Incorrect password. Please try again.',
+          });
+     }
+     const result = await UserService.deleteUser(id);
 
-  const result = await UserService.deleteProfileFromDB(id);
-
-  sendResponse(res, {
-    success: true,
-    statusCode: StatusCodes.OK,
-    message: 'Profile deleted successfully',
-    data: result,
-  });
+     sendResponse(res, {
+          success: true,
+          statusCode: StatusCodes.OK,
+          message: 'User account deleted successfully',
+          data: result,
+     });
 });
 
 export const UserController = {
@@ -142,5 +150,6 @@ export const UserController = {
   getUserById,
   updateUserStatusById,
   deleteUserById,
-  deleteProfile,
+  // deleteProfile,
+  deleteAccount
 };

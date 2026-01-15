@@ -13,6 +13,7 @@ import { AnalyticsRoutes } from '../modules/Analytics/analytics.route';
 import { UserPromptRoutes } from '../modules/UserPrompt/userPrompt.route';
 import { RuleRoutes } from '../modules/Rule/rule.route';
 import { PushNotificationRoutes } from '../modules/pushNotification/pushNotification.route';
+import { SettingRoutes } from '../modules/settings/settings.route';
 
 const router = Router();
 
@@ -72,6 +73,10 @@ const moduleRoutes = [
   {
     path: '/push-notifications',
     route: PushNotificationRoutes,
+  },
+  {
+    path: '/settings',
+    route: SettingRoutes,
   },
 ];
 
